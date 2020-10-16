@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 import datetime
 import jwt
 import pprint
+import hashlib
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'asdfklasjdfl;sahfdasjlkhfkjalrelka;sjdfl;sakhfdla;skhdfjklsa;jfdas'
 
@@ -45,6 +46,15 @@ def jwt_private(func):
                 resp = decode_auth_token(auth_token)
                 if resp:
                     pprint.pprint(resp)
+                    pprint.pprint(request.cookies)
+                    session = request.cookies.get('session')
+                    m = hashlib.sha256()
+                    if session is not None:
+                        m.update(session.encode('utf-8'))
+                        if m.hexdigest() != resp['session']:
+                            return jsonify({'status':'error','error':'Invalid session'}),401
+                    else:
+                        return jsonify({'status':'error','error':'Null session'}),401
                     if request.path in role_routes and 'role_required' in role_routes[request.path]:
                         minrole = role_routes[request.path]['role_required']
                         foundrole = False
@@ -103,13 +113,18 @@ def auth():
     post_data = request.get_json()
     print('User: ' + post_data.get('username'))
     print('Pass: ' + post_data.get('password'))
+    session = request.cookies.get('session')
+    m = hashlib.sha256()
+    m.update(session.encode('utf-8'))
+    
     roleobj = {
         'user': post_data.get('username'),
         'roles': [
             'admin',
             'member-i',
             'member-iv'
-        ]
+        ],
+        'session': m.hexdigest()
     }
     return jsonify({'status':'success','access_token':encode_auth_token(roleobj).decode('utf-8')})
 
