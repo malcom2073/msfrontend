@@ -5,7 +5,9 @@ import LoginForm from '../components/loginform'
 
 
 
-export default function Login({navBar}) {
+export default function Login({navBar,query}) {
+  console.log('Query');
+  console.log(query);
     return (
     <>
     <Container fluid>
@@ -14,7 +16,7 @@ export default function Login({navBar}) {
       <Col></Col>
       <Col></Col>
           <Col align-items="center">
-            <LoginForm></LoginForm>
+            <LoginForm next={query.next}></LoginForm>
 </Col>
 <Col></Col>
 <Col></Col>
@@ -23,12 +25,13 @@ export default function Login({navBar}) {
     </>
     )
 }
-export async function getServerSideProps(context) {
+export async function getServerSideProps({query}) {
     const navBar = await getUserNavbar()
     return {
       props: {
         // props for your component
-        navBar
+        navBar,
+        query
       }
     }
   }

@@ -79,10 +79,10 @@ export default function MsNavbar({navBar}) {
 }
 export async function getUserNavbar() {
     const api = create({
-      baseURL: 'http://localhost:5000',
+      baseURL: 'http://localhost:3000',
       headers: { Accept: 'application/vnd.github.v3+json' },
     })
-    const response = await api.get('/getNavbar');
+    const response = await api.get('/api/getNavbar');
     switch (response.problem) {
       case 'CLIENT_ERROR':
         if (response.status == 401)

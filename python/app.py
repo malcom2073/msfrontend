@@ -4,6 +4,8 @@ import datetime
 import jwt
 import pprint
 import hashlib
+import random
+import string
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'asdfklasjdfl;sahfdasjlkhfkjalrelka;sjdfl;sakhfdla;skhdfjklsa;jfdas'
 
@@ -108,6 +110,15 @@ role_routes = {
     }
 }
 
+
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    print("Random string of length", length, "is:", result_str)
+    return result_str
+
+
+
 @app.route('/auth', methods=['POST'])
 def auth():
     post_data = request.get_json()
@@ -115,8 +126,9 @@ def auth():
     print('Pass: ' + post_data.get('password'))
     session = request.cookies.get('session')
     m = hashlib.sha256()
+    if session is None:
+        session = get_random_string(24)
     m.update(session.encode('utf-8'))
-    
     roleobj = {
         'user': post_data.get('username'),
         'roles': [
@@ -126,7 +138,9 @@ def auth():
         ],
         'session': m.hexdigest()
     }
-    return jsonify({'status':'success','access_token':encode_auth_token(roleobj).decode('utf-8')})
+    resp = jsonify({'status':'success','access_token':encode_auth_token(roleobj).decode('utf-8')})
+    resp.set_cookie("mspysid", value = session, httponly = True)
+    return resp
 
 @app.route('/private')
 @jwt_private

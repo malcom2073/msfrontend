@@ -2,7 +2,7 @@ import {Form, Button} from 'react-bootstrap';
 import { create } from 'apisauce'
 import { AuthToken } from "../services/auth_token";
 import { useRouter } from 'next/router'
-
+import Router from 'next/router'
 
 export default class LoginForm extends React.Component {
     onChange = (e) => {
@@ -36,15 +36,18 @@ export default class LoginForm extends React.Component {
               break;
         }
         console.log(response.data)
-        console.log(this.props.query);    
+        console.log(this.props.next);    
         localStorage.setItem('jwt_auth',response.data.access_token);
         AuthToken.storeToken(response.data.access_token);
+        Router.push(this.props.next);
+        
     
         return;
     
     }
     
     render() {
+      this.nextUrl = this.props.next;
         return (
             <Form onSubmit={this.onSubmit}>
             <Form.Group controlId="formBasicUsername">
@@ -67,8 +70,5 @@ export default class LoginForm extends React.Component {
             </Button>
           </Form>          
         );
-      }
-      static getInitialProps({query}) {
-        return {query}
       }
 }

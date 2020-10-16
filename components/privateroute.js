@@ -21,7 +21,7 @@ export function privateRoute(WrappedComponent) {
       const initialProps = {auth: auth , token: auth.token};
       // if the token is expired, that means the user is no longer (or never was) authenticated
       // and if we allow the request to continue, they will reach a page they should not be at.
-      if (auth.isExpired) {
+      if (auth.isExpired()) {
           console.log("hey! server says you shouldnt be here! you are not logged in!");
           res.writeHead(302, {location: '/login?next=' + req.url})
           res.end()

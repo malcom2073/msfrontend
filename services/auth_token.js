@@ -54,7 +54,7 @@ export class AuthToken {
 }
 
   static fromNext(req) {
-    if (req) {
+    if (req && req.headers.cookie) {
         var authcookie = AuthToken.getCookie(TOKEN_STORAGE_KEY,req.headers.cookie);
         return new AuthToken(authcookie);
     }
