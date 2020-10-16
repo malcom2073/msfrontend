@@ -1,11 +1,5 @@
-import { NextPageContext } from "next";
 import React, { Component } from "react";
 import { AuthToken } from "../services/auth_token";
-//import { redirectToLogin } from "../services/redirect_service";
-
-//export type AuthProps = {
-//  token: string
-//}
 
 export function privateRoute(WrappedComponent) {
   return class extends Component{
@@ -14,42 +8,35 @@ export function privateRoute(WrappedComponent) {
     };
 
     static async getInitialProps({req,res}) {
-      // create AuthToken
-      //const auth = localStorage.getItem('jwt_token');
+      // Grab the auth token from the cookies. req only exists on server
+      // TODO: Make this work on client for <Link> redirects.
       const auth = AuthToken.fromNext(req);
-      console.log(auth);
       const initialProps = {auth: auth , token: auth.token};
-      // if the token is expired, that means the user is no longer (or never was) authenticated
-      // and if we allow the request to continue, they will reach a page they should not be at.
+      //Check for expired auth. This should likely be replaced with valid
+      //We can do some logic here for refresh tokens if we want to handle "remember me" boxes.
       if (auth.isExpired()) {
           console.log("hey! server says you shouldnt be here! you are not logged in!");
           res.writeHead(302, {location: '/login?next=' + req.url})
           res.end()
+          return {}; // Return nothing, since we should be redirecting.
       }
       if (WrappedComponent.getInitialProps) {
         const wrappedProps = await WrappedComponent.getInitialProps(initialProps);
-        // make sure our `auth: AuthToken` is always returned
         return { ...wrappedProps, auth };
       }
       return initialProps;
     }
 
     componentDidMount() {
-        console.log('We loaded!');
-        console.log(this.props);
-      // since getInitialProps returns our props after they've JSON.stringify
-      // we need to reinitialize it as an AuthToken to have the full class
-      // with all instance methods available
+      //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
       this.setState({ auth: new AuthToken(this.props.auth.token) })
     }
 
     render() {
-      // we want to hydrate the WrappedComponent with a full instance method of
-      // AuthToken, the existing props.auth is a flattened auth, we want to use
-      // the state instance of auth that has been rehydrated in browser after mount
+      //Grab auth from this.state instead of from props, this ensures we get an actual instance of AuthToken instead of a JSON representation of it
+      //We may not need to do this...
       const { auth, ...propsWithoutAuth } = this.props;
       return <WrappedComponent auth={this.state.auth} {...propsWithoutAuth} />;
-      //return <WrappedComponent {...this.props} />;
     }
   };
 }
