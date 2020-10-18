@@ -25,12 +25,13 @@ export default function Login({navBar,query}) {
     </>
     )
 }
-export async function getServerSideProps({query}) {
-    const navBar = await getUserNavbar()
+export async function getServerSideProps(ctx) {
+    const navBar = await getUserNavbar(ctx);
+    var query = ctx.query;
     return {
       props: {
         // props for your component
-        navBar,
+        navBar, 
         query
       }
     }

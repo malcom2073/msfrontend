@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
+import { AuthToken } from "../services/auth_token";
 
 
 export default function MsNavbar({navBar}) {
@@ -77,16 +78,32 @@ export default function MsNavbar({navBar}) {
         </Navbar>
     )
 }
-export async function getUserNavbar() {
+export async function getUserNavbar(ctx) {
+    console.log(ctx);
+    var token = ''
+    if (ctx && 'req' in ctx) {
+        console.log('CTX in server is valid!');
+        token = AuthToken.fromNext(ctx.req)
+    }
+    else
+    {
+        token = AuthToken.fromNext(null)
+        
+    }
+    var headers = { Accept: 'application/vnd.github.v3+json'}
+    if (token) {
+        headers.Authorization = token.authorizationString();
+    }
     const api = create({
       baseURL: 'http://localhost:3000',
-      headers: { Accept: 'application/vnd.github.v3+json' },
+      headers: headers,
     })
     const response = await api.get('/api/getNavbar');
     switch (response.problem) {
       case 'CLIENT_ERROR':
         if (response.status == 401)
         {
+            console.log('Bad Auth');
           return {}
           //Bad authentication!
         }
