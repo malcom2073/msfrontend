@@ -38,41 +38,54 @@ def getAuthToken(request):
             pass
     return None
 
+def getJwt(request):
+    auth_token = getAuthToken(request)
+    pprint.pprint(auth_token)
+    if auth_token:
+        try:
+            resp = decode_auth_token(auth_token)
+            pprint.pprint(resp)
+            print("Cookies")
+            pprint.pprint(request.cookies)
+            if resp:
+                if 'mspysid' in request.cookies:
+                    session = request.cookies['mspysid']
+                    m = hashlib.sha256()
+                    if session is not None:
+                        m.update(session.encode('utf-8'))
+                        if m.hexdigest() != resp['session']:
+                            print('Invalid hex')
+                            return None
+                    else:
+                        print('No session var')
+                        return None
+                    return resp
+        except:
+            print('Exception')
+            return None
+    return None
+
+
 def jwt_private(func):
     def wrapper_jwt_private(*args, **kwargs):
         print('Path:')
         pprint.pprint(request.path)
         auth_token = getAuthToken(request)
-        if auth_token:
-            try:
-                resp = decode_auth_token(auth_token)
-                if resp:
-                    pprint.pprint(resp)
-                    pprint.pprint(request.cookies)
-                    session = request.cookies.get('session')
-                    m = hashlib.sha256()
-                    if session is not None:
-                        m.update(session.encode('utf-8'))
-                        if m.hexdigest() != resp['session']:
-                            return jsonify({'status':'error','error':'Invalid session'}),401
-                    else:
-                        return jsonify({'status':'error','error':'Null session'}),401
-                    if request.path in role_routes and 'role_required' in role_routes[request.path]:
-                        minrole = role_routes[request.path]['role_required']
-                        foundrole = False
-                        for role in resp['roles']:
-                            if checkRole(role,minrole):
-                                foundrole = True
-                                break
-                        if foundrole:
-                            return func(*args, **kwargs)
-                        else:
-                            return jsonify({'status':'error','error':'Invalid permissions'}),401
-            except jwt.ExpiredSignatureError:
-                return jsonify({'status':'error','error':'Expired Signature'}),401
-            except jwt.InvalidTokenError:
-                return jsonify({'status':'error','error':'Invalid Token'}),401
-        return jsonify({'status':'error','error':'Invalid Auth'}),401
+        jwt = getJwt(request)
+        if jwt is None:
+            return jsonify({'status':'error','error':'Null session'}),401
+        pprint.pprint(jwt)
+        if request.path in role_routes and 'role_required' in role_routes[request.path]:
+            minrole = role_routes[request.path]['role_required']
+            foundrole = False
+            for role in jwt['roles']:
+                if checkRole(role,minrole):
+                    foundrole = True
+                    break
+            if foundrole:
+                return func(*args, **kwargs)
+            else:
+                return jsonify({'status':'error','error':'Invalid permissions'}),401
     wrapper_jwt_private.__name__ = func.__name__
     return wrapper_jwt_private
     
@@ -173,6 +186,7 @@ def getAllPostIds():
     
 @app.route('/getNavbar')
 def getNavbar():
+    print("test2")
     menuleftlist = [
         {
             'title':  'Home',
@@ -189,11 +203,16 @@ def getNavbar():
             'link': '/status',
             'type':'link'
         },
+        {
+            'title':  'Private',
+            'link': '/private',
+            'type':'link'
+        },
     ]
-    auth_token = getAuthToken(request)
-    print("auth")
-    print(auth_token)
-    if auth_token:
+    print("test")
+    jwt = getJwt(request)
+    pprint.pprint(jwt)
+    if jwt is not None:
         menurightlist = [
         {
                 'title':  'User',
