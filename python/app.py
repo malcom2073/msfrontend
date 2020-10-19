@@ -75,17 +75,20 @@ def jwt_private(func):
         if jwt is None:
             return jsonify({'status':'error','error':'Null session'}),401
         pprint.pprint(jwt)
-        if request.path in role_routes and 'role_required' in role_routes[request.path]:
-            minrole = role_routes[request.path]['role_required']
-            foundrole = False
-            for role in jwt['roles']:
-                if checkRole(role,minrole):
-                    foundrole = True
-                    break
-            if foundrole:
-                return func(*args, **kwargs)
-            else:
-                return jsonify({'status':'error','error':'Invalid permissions'}),401
+        if request.path in role_routes:
+            if 'role_required' in role_routes[request.path]:
+                minrole = role_routes[request.path]['role_required']
+                foundrole = False
+                for role in jwt['roles']:
+                    if checkRole(role,minrole):
+                        foundrole = True
+                        break
+                if foundrole:
+                    return func(*args, **kwargs)
+                else:
+                    return jsonify({'status':'error','error':'Invalid permissions'}),401
+        else:
+            return func(*args,**kwargs)
     wrapper_jwt_private.__name__ = func.__name__
     return wrapper_jwt_private
     
@@ -155,6 +158,14 @@ def auth():
     resp.set_cookie("mspysid", value = session, httponly = True)
     return resp
 
+@app.route('/logout',methods=['POST'])
+@jwt_private
+def logout():
+    print('LOGGING OUT*****************')
+    resp = jsonify({'status':'success'})
+    resp.set_cookie('mspysid', '', expires=0)
+    return resp
+
 @app.route('/private')
 @jwt_private
 def private():
@@ -221,7 +232,7 @@ def getNavbar():
                     {
                         'title': 'Logout',
                         'type':'link',
-                        'link' : '/Logout'
+                        'link' : '/logout'
                     },
                     {
                         'title': '',

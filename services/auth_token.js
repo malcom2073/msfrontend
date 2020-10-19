@@ -79,4 +79,9 @@ export class AuthToken {
     Cookie.set(TOKEN_STORAGE_KEY, token);
   }
 
+  static clearToken()
+  {
+    Cookie.set(TOKEN_STORAGE_KEY, '');
+  }
+
 }
