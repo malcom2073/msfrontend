@@ -39,7 +39,12 @@ export default class LoginForm extends React.Component {
         console.log(this.props.next);    
         localStorage.setItem('jwt_auth',response.data.access_token);
         AuthToken.storeToken(response.data.access_token);
-        Router.push(this.props.next);
+        if (this.props.next) {
+          Router.push(this.props.next);
+        }
+        else {
+          Router.push('/');
+        }
         
     
         return;

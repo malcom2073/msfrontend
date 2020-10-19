@@ -1,17 +1,16 @@
 import {Container, Row, Col} from 'react-bootstrap';
-import MsNavbar from '../components/navbar'
-import {getUserNavbar} from '../components/navbar'
+import MSNavbar from '../components/navbar'
 import LoginForm from '../components/loginform'
 
 
 
-export default function Login({navBar,query}) {
+export default function Login({query}) {
   console.log('Query');
   console.log(query);
     return (
     <>
     <Container fluid>
-      <MsNavbar navBar={navBar}/>
+      <MSNavbar/>
       <Row>
       <Col></Col>
       <Col></Col>
@@ -26,12 +25,10 @@ export default function Login({navBar,query}) {
     )
 }
 export async function getServerSideProps(ctx) {
-    const navBar = await getUserNavbar(ctx);
     var query = ctx.query;
     return {
       props: {
         // props for your component
-        navBar, 
         query
       }
     }

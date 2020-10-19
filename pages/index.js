@@ -4,8 +4,7 @@ import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
 import Date from '../components/date'
 import { create } from 'apisauce'
-import MsNavbar from '../components/navbar'
-import {getUserNavbar} from '../components/navbar'
+import MSNavbar from '../components/navbar'
 import {Container, Row, Col} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
@@ -15,13 +14,13 @@ import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 
 
-export default function Home({ allPostsData,navBar}) {
+export default function Home({allPostsData}) {
   return (
     <>
     <Container fluid>
       <Row>
         <Col>
-          <MsNavbar navBar={navBar}/>
+          <MSNavbar/>
         </Col>
       </Row>
     </Container>
@@ -30,13 +29,11 @@ export default function Home({ allPostsData,navBar}) {
 }
 
 export async function getServerSideProps(context) {
-  const navBar = await getUserNavbar()
   const allPostsData = await getSortedPostsData()
   return {
     props: {
       // props for your component
-      allPostsData,
-      navBar
+      allPostsData
     }
   }
 }

@@ -8,14 +8,59 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import { AuthToken } from "../services/auth_token";
 
 
-export default function MsNavbar({navBar}) {
+class MSNavBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {isLoading: true};
+    }
+    componentDidMount = async () => {
+        const navBar = await MSNavBar.getUserNavbar(null);
+        this.setState({navBar:navBar,isLoading: false});
+      }
+    static getUserNavbar = async (ctx) => {
+        console.log(ctx);
+        var token = ''
+        if (ctx && 'req' in ctx) {
+            console.log('CTX in server is valid!');
+            token = AuthToken.fromNext(ctx.req)
+        }
+        else
+        {
+            token = AuthToken.fromNext(null)
+            
+        }
+        var headers = { Accept: 'application/vnd.github.v3+json'}
+        if (token) {
+            headers.Authorization = token.authorizationString();
+        }
+        const api = create({
+          baseURL: 'http://localhost:3000',
+          headers: headers,
+        })
+        const response = await api.get('/api/getNavbar');
+        switch (response.problem) {
+          case 'CLIENT_ERROR':
+            if (response.status == 401)
+            {
+                console.log('Bad Auth');
+              return {}
+              //Bad authentication!
+            }
+            break;
+          default:
+              break;
+        }
+        return response.data;
+      }
+      render() {
     return (
         <Navbar bg="light" expand="sm">
             <Navbar.Brand href="#">MikesShop.net</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                {navBar.menuleft.map((value, index) => {
+                    
+                { (this.state && !this.state.isLoading) ? (this.state.navBar.menuleft.map((value, index) => {
                     if (value.type == "link") {
                         return (
                             <Link key={value.title} href={value.link} passHref>
@@ -39,10 +84,13 @@ export default function MsNavbar({navBar}) {
                         </NavDropdown>
                     )
                     }
-                })}
+                })
+                ) : (
+                    <></>
+                )}
                 </Nav>
                 <Nav className="justify-content-end">
-                {navBar.menuright.map((value, index) => {
+                { (this.state && !this.state.isLoading) ? (this.state.navBar.menuright.map((value, index) => {
                     if (value.type == "link") {
                     return (
                         <Link key={value.title} href={value.link} passHref>
@@ -66,7 +114,10 @@ export default function MsNavbar({navBar}) {
                         </NavDropdown>
                     )
                     }
-                })}
+                })
+                ) : (
+                    <></>
+                )}
                 </Nav>
                 {
                 //<Form inline>
@@ -78,39 +129,6 @@ export default function MsNavbar({navBar}) {
         </Navbar>
     )
 }
-export async function getUserNavbar(ctx) {
-    console.log(ctx);
-    var token = ''
-    if (ctx && 'req' in ctx) {
-        console.log('CTX in server is valid!');
-        token = AuthToken.fromNext(ctx.req)
-    }
-    else
-    {
-        token = AuthToken.fromNext(null)
-        
-    }
-    var headers = { Accept: 'application/vnd.github.v3+json'}
-    if (token) {
-        headers.Authorization = token.authorizationString();
-    }
-    const api = create({
-      baseURL: 'http://localhost:3000',
-      headers: headers,
-    })
-    const response = await api.get('/api/getNavbar');
-    switch (response.problem) {
-      case 'CLIENT_ERROR':
-        if (response.status == 401)
-        {
-            console.log('Bad Auth');
-          return {}
-          //Bad authentication!
-        }
-        break;
-      default:
-          break;
-    }
-    return response.data;
-  }
-  
+}
+
+  export default MSNavBar;

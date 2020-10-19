@@ -7,7 +7,6 @@ export function privateRoute(WrappedComponent) {
     state = {
       auth: new AuthToken(this.props.token)
     };
-
     static async getInitialProps({pathname,query,req,res}) {
       // Grab the auth token from the cookies. req only exists on server
       // TODO: Make this work on client for <Link> redirects.
@@ -19,8 +18,8 @@ export function privateRoute(WrappedComponent) {
           console.log("hey! server says you shouldnt be here! you are not logged in!");
           if (res)
           {
-          res.writeHead(302, {location: '/login?next=' + req.url})
-          res.end()
+            res.writeHead(302, {location: '/login?next=' + req.url})
+            res.end()
           return {}; // Return nothing, since we should be redirecting.
           }
           else
