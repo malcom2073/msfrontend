@@ -13,122 +13,126 @@ class MSNavBar extends React.Component {
         super(props);
         this.state = {isLoading: true};
     }
+
+    // Ensure we grab the navbar upon loading from the backend
     componentDidMount = async () => {
         const navBar = await MSNavBar.getUserNavbar(null);
         this.setState({navBar:navBar,isLoading: false});
-      }
+    }
+
     static getUserNavbar = async (ctx) => {
         console.log(ctx);
         var token = ''
+        // This can be run from server or client. Server grabs the auth token from serverside storage,
+        // the browser grabs it from a cookie.
         if (ctx && 'req' in ctx) {
             console.log('CTX in server is valid!');
             token = AuthToken.fromNext(ctx.req)
         }
         else
         {
-            token = AuthToken.fromNext(null)
-            
+            token = AuthToken.fromNext(null)     
         }
+        
+        // Call into our API, with the token
+        // TODO: Wrap the apisauce stuff into a class
         var headers = { Accept: 'application/vnd.github.v3+json'}
         if (token) {
             headers.Authorization = token.authorizationString();
         }
         const api = create({
-          baseURL: 'http://localhost:3000',
-          headers: headers,
+            baseURL: 'http://localhost:3000',
+            headers: headers,
         })
         const response = await api.get('/api/getNavbar');
         switch (response.problem) {
-          case 'CLIENT_ERROR':
-            if (response.status == 401)
-            {
-                console.log('Bad Auth');
-              return {}
-              //Bad authentication!
-            }
-            break;
-          default:
-              break;
+            case 'CLIENT_ERROR':
+                if (response.status == 401)
+                {
+                    //TODO: Handle this, it should never happen, but other errors may?
+                    console.log('Bad Auth');
+                    return {}
+                    //Bad authentication!
+                }
+                break;
+            default:
+                break;
         }
         return response.data;
-      }
-      render() {
-    return (
-        <Navbar bg="light" expand="sm">
-            <Navbar.Brand href="#">MikesShop.net</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                    
-                { (this.state && !this.state.isLoading) ? (this.state.navBar.menuleft.map((value, index) => {
-                    if (value.type == "link") {
-                        return (
-                            <Link key={value.title} href={value.link} passHref>
-                                <Nav.Link href={value.link}>{value.title}</Nav.Link>
-                            </Link>
-                        )
-                    } else if (value.type == "dropdown") {
-                    return (
-                        <NavDropdown title={value.title} id="basic-nav-dropdown">
-                        {value.links.map((value2,index) => {
-                            if (value2.type == "link") {
-                            return (
-                                <Link key={value2.title} href={value2.link} passHref>
-                                    <NavDropdown.Item href={value2.link}>{value2.title}</NavDropdown.Item>
-                                </Link>
+    }
+    render() {
+        // Navbar has two link groups, left and right.
+        // Left is usually used for common links: Home, Status, Forums, etc
+        // Right would be used for a user dropdown, or settings menu
+        return (
+            <Navbar bg="light" expand="sm">
+                <Navbar.Brand href="#">MikesShop.net</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="mr-auto">
+                        {(this.state && !this.state.isLoading) ? (this.state.navBar.menuleft.map((value, index) => {
+                            if (value.type == "link") {
+                                return (
+                                    <Link key={value.title} href={value.link} passHref>
+                                        <Nav.Link href={value.link}>{value.title}</Nav.Link>
+                                    </Link>
                                 )
-                            } else if (value2.type == "divider") {
-                            return <NavDropdown.Divider />
-                            }
-                        })}
-                        </NavDropdown>
-                    )
-                    }
-                })
-                ) : (
-                    <></>
-                )}
-                </Nav>
-                <Nav className="justify-content-end">
-                { (this.state && !this.state.isLoading) ? (this.state.navBar.menuright.map((value, index) => {
-                    if (value.type == "link") {
-                    return (
-                        <Link key={value.title} href={value.link} passHref>
-                            <Nav.Link href={value.link}>{value.title}</Nav.Link>
-                        </Link>  
-                        )
-                    } else if (value.type == "dropdown") {
-                    return (
-                        <NavDropdown key={value.title} title={value.title} id="basic-nav-dropdown">
-                        {value.links.map((value2,index) => {
-                            if (value2.type == "link") {
+                            } else if (value.type == "dropdown") {
                             return (
-                                <Link key={value2.title} href={value2.link} passHref>
-                                    <NavDropdown.Item href={value2.link}>{value2.title}</NavDropdown.Item>
-                                </Link>
+                                <NavDropdown title={value.title} id="basic-nav-dropdown">
+                                {value.links.map((value2,index) => {
+                                    if (value2.type == "link") {
+                                    return (
+                                        <Link key={value2.title} href={value2.link} passHref>
+                                            <NavDropdown.Item href={value2.link}>{value2.title}</NavDropdown.Item>
+                                        </Link>
+                                        )
+                                    } else if (value2.type == "divider") {
+                                    return <NavDropdown.Divider />
+                                    }
+                                })}
+                                </NavDropdown>
                             )
-                            } else if (value2.type == "divider") {
-                            return <NavDropdown.Divider key={value.title} />
                             }
-                        })}
-                        </NavDropdown>
-                    )
-                    }
-                })
-                ) : (
-                    <></>
-                )}
-                </Nav>
-                {
-                //<Form inline>
-                //<FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                //<Button variant="outline-success">Search</Button>
-                //</Form>
-                }
-            </Navbar.Collapse>
-        </Navbar>
-    )
-}
+                        })
+                        ) : (
+                            <></>
+                        )}
+                    </Nav>
+                    <Nav className="justify-content-end">
+                        { (this.state && !this.state.isLoading) ? (this.state.navBar.menuright.map((value, index) => {
+                            if (value.type == "link") {
+                            return (
+                                <Link key={value.title} href={value.link} passHref>
+                                    <Nav.Link href={value.link}>{value.title}</Nav.Link>
+                                </Link>  
+                                )
+                            } else if (value.type == "dropdown") {
+                            return (
+                                <NavDropdown key={value.title} title={value.title} id="basic-nav-dropdown">
+                                {value.links.map((value2,index) => {
+                                    if (value2.type == "link") {
+                                    return (
+                                        <Link key={value2.title} href={value2.link} passHref>
+                                            <NavDropdown.Item href={value2.link}>{value2.title}</NavDropdown.Item>
+                                        </Link>
+                                    )
+                                    } else if (value2.type == "divider") {
+                                    return <NavDropdown.Divider key={value.title} />
+                                    }
+                                })}
+                                </NavDropdown>
+                            )
+                            }
+                        })
+                        ) : (
+                            <></>
+                        )}
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        )
+    }
 }
 
-  export default MSNavBar;
+export default MSNavBar;

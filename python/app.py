@@ -7,6 +7,7 @@ import hashlib
 import random
 import string
 app = Flask(__name__)
+# Obv this will need to be changed for production.
 app.config['SECRET_KEY'] = 'asdfklasjdfl;sahfdasjlkhfkjalrelka;sjdfl;sakhfdla;skhdfjklsa;jfdas'
 
 def encode_auth_token(user_id):
@@ -66,6 +67,14 @@ def getJwt(request):
     return None
 
 
+# Wrapper function for needing jwt
+# This checks the JWT expiration, as well as making sure that there is a 
+# cookie (should check httponly and secure) matching the sha256 of the session ID
+# Is this a good way to prevent XSS? Someone would have to hijack both the JWT, as well
+# as the session cookie, which if the latter is stored in httponly, that should be impossible?
+# We should invalidate tokens used with either no session, or an invalid session as an
+# additional security measure.
+ 
 def jwt_private(func):
     def wrapper_jwt_private(*args, **kwargs):
         print('Path:')
@@ -126,7 +135,7 @@ role_routes = {
     }
 }
 
-
+# Be sure to return 4, I rolled 3d8 to get that.
 def get_random_string(length):
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
@@ -134,7 +143,11 @@ def get_random_string(length):
     return result_str
 
 
-
+# Post to here to authenticate, get your httponly cookie, and get your jwt matching it.
+# Any credentials work.
+# TODO: Add a database backend to this for credential, role, etc storage.
+# Do we need a separate jwt for role storage? Should the auth cookie be purely for auth?
+# Cookies have size limitations to them...
 @app.route('/auth', methods=['POST'])
 def auth():
     post_data = request.get_json()
@@ -158,6 +171,8 @@ def auth():
     resp.set_cookie("mspysid", value = session, httponly = True)
     return resp
 
+# Log out, this clears out the session cookie so future requests fail. 
+# TODO: Also invalidate the jwt and keep it in the invalidation store until expiration.
 @app.route('/logout',methods=['POST'])
 @jwt_private
 def logout():
