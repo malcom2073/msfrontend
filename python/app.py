@@ -237,13 +237,20 @@ def getNavbar():
     ]
     print("test")
     jwt = getJwt(request)
+    print('jwt')
     pprint.pprint(jwt)
+    print('Donejwt')
     if jwt is not None:
         menurightlist = [
         {
-                'title':  'User',
+                'title':  jwt['user'],
                 'type':'dropdown',
                 'links': [
+                    {
+                        'title': 'Profile',
+                        'type':'link',
+                        'link' : '/profile'
+                    },
                     {
                         'title': 'Logout',
                         'type':'link',
