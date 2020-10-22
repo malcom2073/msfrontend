@@ -6,10 +6,14 @@ import pprint
 import hashlib
 import random
 import string
+from . import config
+from . import db
 app = Flask(__name__)
+
 # Obv this will need to be changed for production.
-app.config['SECRET_KEY'] = 'asdfklasjdfl;sahfdasjlkhfkjalrelka;sjdfl;sakhfdla;skhdfjklsa;jfdas'
-app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.sqlite3'
+app.config['SECRET_KEY'] = config.SECRET_KEY
+
+main_table_list = {}
 
 def encode_auth_token(user_id):
     payload = {
