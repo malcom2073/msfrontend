@@ -24,16 +24,21 @@ export default class LoginForm extends React.Component {
         })
         const response = await api.post('/api/auth',{ username: this.state['user'], password: this.state['pass']});
         console.log(response);
-        switch (response.problem) {
-          case 'CLIENT_ERROR':
-            if (response.status == 401)
-            {
-              return {}
-              //Bad authentication!
-            }
-            break;
-          default:
+        // TODO: Handle more of these errors.
+        if (response.problem) {
+          switch (response.problem) {
+            case 'CLIENT_ERROR':
+              if (response.status == 401)
+              {
+                alert('Invalid credentials');
+                return {}
+                //Bad authentication!
+              }
               break;
+            default:
+                break;
+          }
+          alert('Unknown error');
         }
         console.log(response.data)
         console.log(this.props.next);    

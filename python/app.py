@@ -9,6 +9,7 @@ import string
 app = Flask(__name__)
 # Obv this will need to be changed for production.
 app.config['SECRET_KEY'] = 'asdfklasjdfl;sahfdasjlkhfkjalrelka;sjdfl;sakhfdla;skhdfjklsa;jfdas'
+app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.sqlite3'
 
 def encode_auth_token(user_id):
     payload = {
@@ -153,6 +154,9 @@ def auth():
     post_data = request.get_json()
     print('User: ' + post_data.get('username'))
     print('Pass: ' + post_data.get('password'))
+    if not (post_data.get('username') == 'mike' and post_data.get('password') == 'asdfasdf'):
+        return jsonify({'status':'failure','error':'invalid credentials'}),401
+
     session = request.cookies.get('session')
     m = hashlib.sha256()
     if session is None:
