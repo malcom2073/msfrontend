@@ -6,7 +6,7 @@
 from app import db
 from app import main_table_list
 from datetime import datetime
-from . import Group
+from . import group as Group
 from dataclasses import dataclass
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import ForeignKey, Column, Integer, String, DateTime
