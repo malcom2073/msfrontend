@@ -59,24 +59,24 @@ except Exception as e:
     print("Failed to load groups")
     db.session.rollback()
     
-#try:
-print("Trying to load test user")
-with open('output.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-            line_count += 1
-        else:
-            db.session.add(User.User(id=row[0],name=row[1],password=row[3],email=row[9],timezone='edt',lastip=row[11],nickname=row[2],primary_group_id=row[7],registered_date=datetime.datetime.now()))
-            line_count += 1
-    print(f'Processed {line_count} lines.')
-db.session.commit()
-#except:
-#  print("Failed to load test user")
-#  db.session.rollback()
-#  pass
-#print("Done loading")
+try:
+    print("Trying to load test user")
+    with open('output.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                line_count += 1
+            else:
+                db.session.add(User.User(id=row[0],name=row[1],password=row[3],email=row[9],timezone='edt',lastip=row[11],nickname=row[2],primary_group_id=row[7],registered_date=datetime.datetime.now()))
+                line_count += 1
+        print(f'Processed {line_count} lines.')
+    db.session.commit()
+except:
+    print("Failed to load test user")
+    db.session.rollback()
+    pass
+print("Done loading")
 
 def decode_auth_token(auth_token):
     payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
@@ -208,8 +208,19 @@ def auth():
     post_data = request.get_json()
     print('User: ' + post_data.get('username'))
     print('Pass: ' + post_data.get('password'))
-    if not (post_data.get('username') == 'mike' and post_data.get('password') == 'asdfasdf'):
+    dbsession = db.Session()
+    user = dbsession.query(User.User).filter(User.User.name == post_data.get('username')).first()
+    pprint.pprint(user)
+    dbsession.close()
+    if user is None:
+        print("No user")
         return jsonify({'status':'failure','error':'invalid credentials'}),401
+    if user is None or not user.check_password(post_data.get('password')):
+        print("Invalid user/pass")
+        return jsonify({'status':'failure','error':'invalid credentials'}),401
+    print("GTG!")
+    #if not (post_data.get('username') == 'mike' and post_data.get('password') == 'asdfasdf'):
+    #    return jsonify({'status':'failure','error':'invalid credentials'}),401
 
     session = request.cookies.get('session')
     m = hashlib.sha256()
