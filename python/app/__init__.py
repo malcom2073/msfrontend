@@ -199,8 +199,7 @@ def get_random_string(length):
 
 
 # Post to here to authenticate, get your httponly cookie, and get your jwt matching it.
-# Any credentials work.
-# TODO: Add a database backend to this for credential, role, etc storage.
+# TODO: Add roles to this? We now have database backend.
 # Do we need a separate jwt for role storage? Should the auth cookie be purely for auth?
 # Cookies have size limitations to them...
 @app.route('/auth', methods=['POST'])
@@ -218,15 +217,13 @@ def auth():
     if user is None or not user.check_password(post_data.get('password')):
         print("Invalid user/pass")
         return jsonify({'status':'failure','error':'invalid credentials'}),401
-    print("GTG!")
-    #if not (post_data.get('username') == 'mike' and post_data.get('password') == 'asdfasdf'):
-    #    return jsonify({'status':'failure','error':'invalid credentials'}),401
-
     session = request.cookies.get('session')
     m = hashlib.sha256()
     if session is None:
         session = get_random_string(24)
     m.update(session.encode('utf-8'))
+
+    # TODO: These are hardcoded at the moment.
     roleobj = {
         'user': post_data.get('username'),
         'roles': [
@@ -249,6 +246,20 @@ def logout():
     resp = jsonify({'status':'success'})
     resp.set_cookie('mspysid', '', expires=0)
     return resp
+
+@app.route('/userinfo')
+@jwt_private
+def userinfo():
+    jwt = getJwt(request)
+    dbsession = db.Session()
+    user = dbsession.query(User.User).filter(User.User.name == jwt['user']).first()
+    pprint.pprint(user)
+    dbsession.close()
+    if user is None:
+        print("No user")
+        return jsonify({'status':'failure','error':'No User'})
+    return jsonify({'status':'success','data': {'user':user.name,'email':user.email,'lastip':user.lastip}})
+
 
 @app.route('/private')
 @jwt_private
