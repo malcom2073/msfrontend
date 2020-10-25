@@ -1,4 +1,4 @@
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container, Row, Col, Table} from 'react-bootstrap';
 import MSNavbar from '../components/navbar'
 import {getUserNavbar} from '../components/navbar'
 import LoginForm from '../components/loginform'
@@ -7,7 +7,6 @@ import { privateRoute } from "../components/privateroute";
 import { render } from 'react-dom';
 import { AuthToken } from "../services/auth_token";
 import MsApi from '../lib/msapi';
-import Router from 'next/router'
 
 class Profile extends React.Component {
     constructor(props)
@@ -25,16 +24,36 @@ class Profile extends React.Component {
           <Col>
           </Col>
           <Col>
-          User profile {this.props ? ( this.props.user.user ) : ( 'No User' ) }
+            <Table striped bordered hover>
+              <tbody>
+                <tr>
+                  <td>User</td>
+                  <td>{this.props ? ( this.props.user.user ) : ( 'No User' ) }</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>{ (this.state.profile) ? (this.state.profile.email) : ("Loading...")}</td>
+                </tr>
+                <tr>
+                  <td>Last IP</td>
+                  <td>{ (this.state.profile) ? (this.state.profile.lastip) : ("Loading...")}</td>
+                </tr>
+                <tr>
+                  <td>Group</td>
+                  <td>{ (this.state.profile) ? (this.state.profile.group.name) : ("Loading...")}</td>
+                </tr>
+                <tr>
+                  <td>Registered</td>
+                  <td>{ (this.state.profile) ? (this.state.profile.registered) : ("Loading...")}</td>
+                </tr>
+              </tbody>
+            </Table>
           </Col>
           <Col>
           </Col>
       </Row>
       <Row>
       <Col>
-      Email: { (this.state.profile) ? (this.state.profile.email) : ("Loading...")}<br/>
-      Last IP : { (this.state.profile) ? (this.state.profile.lastip) : ("Loading...")}<br/>
-      
       </Col>
       </Row>
     </Container>
