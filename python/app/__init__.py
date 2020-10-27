@@ -328,6 +328,4 @@ def getNavbar():
         ]
     return jsonify({'menuleft' : menuleftlist,'menuright' : menurightlist})
 
-app.run()
-
 

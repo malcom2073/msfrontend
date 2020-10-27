@@ -1,6 +1,12 @@
 from app import app
 from app import db
 
+from app.models import user as User
+from app.models import group as Group
+from app.models import userprofilefield as UserProfileField
+import csv
+import pprint
+import datetime
 try:
     db.Model.metadata.create_all(db.engine)
     db.session.commit()
@@ -36,11 +42,12 @@ try:
             if line_count == 0:
                 line_count += 1
             else:
-                db.session.add(User.User(id=row[0],name=row[1],password=row[3],email=row[9],timezone='edt',lastip=row[11],nickname=row[2],primary_group_id=row[7],registered_date=datetime.datetime.now()))
+                db.session.add(User.User(id=row[0],name=row[1],password=row[3],email=row[9],timezone='edt',lastip=row[11],nickname=row[2],primary_group_id=row[7],registered_date=datetime.datetime.utcfromtimestamp(int(row[6]))))
                 line_count += 1
         print(f'Processed {line_count} lines.')
     db.session.commit()
-except:
+except Exception as e:
+    pprint.pprint(e)
     print("Failed to load test user")
     db.session.rollback()
     pass
