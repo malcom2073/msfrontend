@@ -7,11 +7,13 @@ export function privateRoute(WrappedComponent) {
     state = {
       auth: new AuthToken(this.props.token)
     };
+    props = {};
+    apichecktimer = null;
     static async getInitialProps({pathname,query,req,res}) {
       // Grab the auth token from the cookies. req only exists on server
       // TODO: Make this work on client for <Link> redirects.
       const auth = AuthToken.fromNext(req);
-      const initialProps = {auth: auth, token: auth.token};
+      const initialProps = {auth: auth, token: auth.token, pathname: pathname};
       //console.log(initialProps);
       //Check for expired auth. This should likely be replaced with valid
       //We can do some logic here for refresh tokens if we want to handle "remember me" boxes.
@@ -47,6 +49,27 @@ export function privateRoute(WrappedComponent) {
       console.log(this.props.auth);
       //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
       this.setState({ auth: new AuthToken(this.props.auth.token) })
+      console.log('ComponentDidMount*****************');
+      console.log(this.props);
+      this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),1000);
+    }
+    componentWillUnmount() {
+      clearInterval(this.apichecktimer);
+    }
+    checkAuth() {
+      if (this.props && this.props.auth && new Date() > new Date(this.props.auth.decodedToken.exp * 1000)) {
+        Router.push('/login?next=' + this.props.pathname);
+      }
+      else
+      {
+        if (this.props && this.props.auth) {
+        console.log(new Date(this.props.auth.decodedToken.exp * 1000));
+        }
+        else
+        {
+          Router.push('/login?next=' + this.props.pathname);
+        }
+      }
     }
 
     render() {
