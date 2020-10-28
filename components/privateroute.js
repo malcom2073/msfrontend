@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { AuthToken } from "../services/auth_token";
 import Router from 'next/router'
+import MsApi from '../lib/msapi'
 
 export function privateRoute(WrappedComponent) {
   return class extends Component{
@@ -57,17 +58,26 @@ export function privateRoute(WrappedComponent) {
       clearInterval(this.apichecktimer);
     }
     checkAuth() {
-      if (this.props && this.props.auth && new Date() > new Date(this.props.auth.decodedToken.exp * 1000)) {
-        Router.push('/login?next=' + this.props.pathname);
+      const token = AuthToken.fromNext();
+      var currdate = new Date();
+      var tokendate = new Date(token.decodedToken.exp * 1000)
+      if (token &&  currdate > tokendate) {
+        Router.push('/login?next=' + this.state.pathname);
       }
       else
       {
-        if (this.props && this.props.auth) {
-        console.log(new Date(this.props.auth.decodedToken.exp * 1000));
+        if (token) {
+          tokendate.setSeconds(tokendate.getSeconds() - 60);
+          if (currdate > tokendate) {
+            // Token is not yet expired, but is within 1 minute of expiring. Refresh it.
+            var api = new MsApi();
+            api.refreshToken();
+          }
+        console.log(new Date(token.decodedToken.exp * 1000));
         }
         else
         {
-          Router.push('/login?next=' + this.props.pathname);
+          Router.push('/login?next=' + this.state.pathname);
         }
       }
     }

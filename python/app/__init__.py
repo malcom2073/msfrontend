@@ -18,7 +18,7 @@ main_table_list = {}
 
 def encode_auth_token(user_id):
     payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=300),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=120),
         'iat': datetime.datetime.utcnow(),
         'sub': user_id
     }
@@ -152,6 +152,22 @@ def get_random_string(length):
     print("Random string of length", length, "is:", result_str)
     return result_str
 
+# This method is used for refreshing a token. It will also change and refresh the sessionid cookie
+@app.route('/refresh',methods=['POST'])
+@jwt_private
+def refresh():
+    jwt_token = getJwt(request) # This is always valid due to @jwt_private decorator
+    session = request.cookies.get('session')
+    m = hashlib.sha256()
+    if session is None:
+        session = get_random_string(24)
+    m.update(session.encode('utf-8'))
+
+    # TODO: These are hardcoded at the moment.
+    jwt_token['session'] = m.hexdigest()
+    resp = jsonify({'status':'success','access_token':encode_auth_token(jwt_token).decode('utf-8')})
+    resp.set_cookie("mspysid", value = session, httponly = True)
+    return resp
 
 # Post to here to authenticate, get your httponly cookie, and get your jwt matching it.
 # TODO: Add roles to this? We now have database backend.
