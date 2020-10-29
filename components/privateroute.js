@@ -52,7 +52,7 @@ export function privateRoute(WrappedComponent) {
       this.setState({ auth: new AuthToken(this.props.auth.token) })
       console.log('ComponentDidMount*****************');
       console.log(this.props);
-      this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),1000);
+      this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),5000); //Check every 5 seconds
     }
     componentWillUnmount() {
       clearInterval(this.apichecktimer);
