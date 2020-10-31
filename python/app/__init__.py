@@ -229,7 +229,7 @@ def userinfo():
     if user is None:
         print("No user")
         return jsonify({'status':'failure','error':'No User'})
-    return jsonify({'status':'success','data': {'user':user.name,'email':user.email,'lastip':user.lastip,'group':user.primary_group,'registered':user.registered_date}})
+    return jsonify({'status':'success','data': user})
 
 
 @app.route('/private')

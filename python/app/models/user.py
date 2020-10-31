@@ -26,6 +26,7 @@ class User(db.Model):
     lastip: str
     nickname: str
     primary_group: Group
+    registered_date: datetime
 
     id = Column(Integer, primary_key=True)
     name = Column(String)

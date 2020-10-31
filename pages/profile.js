@@ -40,11 +40,11 @@ class Profile extends React.Component {
                 </tr>
                 <tr>
                   <td>Group</td>
-                  <td>{ (this.state.profile) ? (this.state.profile.group.name) : ("Loading...")}</td>
+                  <td>{ (this.state.profile) ? (this.state.profile.primary_group.name) : ("Loading...")}</td>
                 </tr>
                 <tr>
                   <td>Registered</td>
-                  <td>{ (this.state.profile) ? (this.state.profile.registered) : ("Loading...")}</td>
+                  <td>{ (this.state.profile) ? (this.state.profile.registered_date) : ("Loading...")}</td>
                 </tr>
               </tbody>
             </Table>
@@ -64,6 +64,7 @@ class Profile extends React.Component {
     console.log(this.state.auth);
     var msapi = new MsApi();
     var profileobj = await msapi.getUserInfo();
+    console.log(profileobj);
     //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
     this.setState({ auth: new AuthToken(this.props.auth.token) ,profile:profileobj })
   }
