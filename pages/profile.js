@@ -26,9 +26,13 @@ class Profile extends React.Component {
           <Col>
             <Table striped bordered hover>
               <tbody>
-                <tr>
+              <tr>
                   <td>User</td>
-                  <td>{this.props ? ( this.props.user.user ) : ( 'No User' ) }</td>
+                  <td>{this.state.profile ? ( this.state.profile.name ) : ( 'No User' ) }</td>
+                </tr>
+                <tr>
+                  <td>Nickname</td>
+                  <td>{this.state.profile ? ( this.state.profile.nickname ) : ( 'Loading...' ) }</td>
                 </tr>
                 <tr>
                   <td>Email</td>
@@ -61,10 +65,8 @@ class Profile extends React.Component {
   )
   }
   async componentDidMount() {
-    console.log(this.state.auth);
     var msapi = new MsApi();
     var profileobj = await msapi.getUserInfo();
-    console.log(profileobj);
     //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
     this.setState({ auth: new AuthToken(this.props.auth.token) ,profile:profileobj })
   }

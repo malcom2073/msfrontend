@@ -17,7 +17,7 @@ class MSNavBar extends React.Component {
     // Ensure we grab the navbar upon loading from the backend
     componentDidMount = async () => {
         const navBar = await MSNavBar.getUserNavbar(null);
-        this.setState({navBar:navBar,isLoading: false});
+        this.setState({navBar:navBar,isLoading: false,auth: AuthToken.fromNext(null)});
     }
 
     static getUserNavbar = async (ctx) => {
@@ -99,6 +99,7 @@ class MSNavBar extends React.Component {
                             <></>
                         )}
                     </Nav>
+                    Expires: { this.state  && this.state.auth ? (this.state.auth.expiresAt() - new Date()).toString() : <></>}
                     <Nav className="justify-content-end">
                         { (this.state && !this.state.isLoading) ? (this.state.navBar.menuright.map((value, index) => {
                             if (value.type == "link") {

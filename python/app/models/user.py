@@ -24,7 +24,6 @@ class User(db.Model):
     email: str
     timezone: str
     lastip: str
-    nickname: str
     primary_group: Group
     registered_date: datetime
 
