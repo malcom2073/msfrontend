@@ -64,12 +64,8 @@ export class AuthToken {
     }
     else
     {
-      console.log(TOKEN_STORAGE_KEY);
-      console.log('Getting cookie for client:' + Cookie.get(TOKEN_STORAGE_KEY));
         //return new AuthToken(AuthToken.getCookie(TOKEN_STORAGE_KEY,document.cookie));
         return new AuthToken(Cookie.get(TOKEN_STORAGE_KEY));
-        console.log('Bad! No server!');
-        return new AuthToken(null);
     }
   }
 

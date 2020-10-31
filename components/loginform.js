@@ -8,16 +8,10 @@ export default class LoginForm extends React.Component {
     onChange = (e) => {
         // Because we named the inputs to match their corresponding values in state, it's
         // super easy to update the state
-      
-        console.log(`${e.target.name} = ${e.target.value}`);
         this.setState({[e.target.name]: e.target.value});
-        console.log(this.state);
       }
     onSubmit = async e => {
         e.preventDefault();
-        console.log(e);
-        console.log(this.state['user']);
-        console.log(this.state['pass']);
         const api = create({
           baseURL: 'http://localhost:3000',
           headers: { Accept: 'application/vnd.github.v3+json' },

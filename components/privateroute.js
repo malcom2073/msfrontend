@@ -19,7 +19,6 @@ export function privateRoute(WrappedComponent) {
       //Check for expired auth. This should likely be replaced with valid
       //We can do some logic here for refresh tokens if we want to handle "remember me" boxes.
       if (auth.isExpired()) {
-          console.log("hey! server says you shouldnt be here! you are not logged in!");
           if (res)
           {
             res.writeHead(302, {location: '/login?next=' + req.url})
@@ -28,10 +27,6 @@ export function privateRoute(WrappedComponent) {
           }
           else
           {
-            console.log('inital props query');
-            console.log(req);
-            console.log(res);
-            console.log(pathname);
             //We're on client
             Router.push('/login?next=' + pathname)
           }
@@ -47,11 +42,8 @@ export function privateRoute(WrappedComponent) {
     }
 
     componentDidMount() {
-      console.log(this.props.auth);
       //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
       this.setState({ auth: new AuthToken(this.props.auth.token) })
-      console.log('ComponentDidMount*****************');
-      console.log(this.props);
       this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),5000); //Check every 5 seconds
     }
     componentWillUnmount() {
@@ -73,7 +65,6 @@ export function privateRoute(WrappedComponent) {
             var api = new MsApi();
             api.refreshToken();
           }
-        console.log(new Date(token.decodedToken.exp * 1000));
         }
         else
         {
