@@ -232,6 +232,20 @@ def userinfo():
     return jsonify({'status':'success','data': user})
 
 
+@app.route('/userlist')
+@jwt_private
+def userlist():
+    jwt = getJwt(request)
+    dbsession = db.Session()
+    users = dbsession.query(User.User).all()
+    pprint.pprint(users)
+    dbsession.close()
+    if users is None:
+        print("No users")
+        return jsonify({'status':'failure','error':'No User'})
+    return jsonify({'status':'success','data': users})
+
+
 @app.route('/private')
 @jwt_private
 def private():
