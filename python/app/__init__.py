@@ -299,6 +299,11 @@ def getNavbar():
             'link': '/private',
             'type':'link'
         },
+        {
+            'title':  'Admin',
+            'link': '/admin',
+            'type':'link'
+        },
     ]
     print("test")
     jwt = getJwt(request)
