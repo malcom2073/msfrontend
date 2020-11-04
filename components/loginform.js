@@ -1,22 +1,29 @@
-import {Form, Button} from 'react-bootstrap';
 import { create } from 'apisauce'
 import { AuthToken } from "../services/auth_token";
 import { useRouter } from 'next/router'
 import Router from 'next/router'
-
+import { Form, Input, Button, Checkbox } from 'antd';
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 export default class LoginForm extends React.Component {
+  
     onChange = (e) => {
         // Because we named the inputs to match their corresponding values in state, it's
         // super easy to update the state
         this.setState({[e.target.name]: e.target.value});
       }
     onSubmit = async e => {
-        e.preventDefault();
+      console.log(e);
         const api = create({
           baseURL: 'http://localhost:3000',
-          headers: { Accept: 'application/vnd.github.v3+json' },
+          headers: { Accept: 'application/json' },
         })
-        const response = await api.post('/api/auth',{ username: this.state['user'], password: this.state['pass']});
+        const response = await api.post('/api/auth',{ username: e.username, password: e.password});
         console.log(response);
         // TODO: Handle more of these errors.
         if (response.problem) {
@@ -53,25 +60,32 @@ export default class LoginForm extends React.Component {
     render() {
       this.nextUrl = this.props.next;
         return (
-            <Form onSubmit={this.onSubmit}>
-            <Form.Group controlId="formBasicUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control name="user" type="text" onChange={this.onChange} placeholder="Enter Username" />
-              {/*<Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>*/}
-            </Form.Group>
-          
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control name="pass" type="password" onChange={this.onChange} placeholder="Password" />
-            </Form.Group>
-            <Form.Group controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Remember Me" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
+            <Form name="basic" onFinish={this.onSubmit}>
+            <Form.Item
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+        <Checkbox>Remember me</Checkbox>
+      </Form.Item>
+
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
           </Form>          
         );
       }

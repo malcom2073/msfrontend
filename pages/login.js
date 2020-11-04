@@ -1,36 +1,28 @@
-import {Container, Row, Col} from 'react-bootstrap';
 import MSNavbar from '../components/navbar'
 import LoginForm from '../components/loginform'
-
+import { Space, Row, Col} from 'antd';
 
 
 export default function Login({query}) {
-  console.log('Query');
-  console.log(query);
+    console.log('Query');
+    console.log(query);
     return (
     <>
-    <Container fluid>
-      <MSNavbar/>
-      <Row>
-      <Col></Col>
-      <Col></Col>
-          <Col align-items="center">
+    <Row justify="space-around" align="middle">
+        <Col span={4} align-items="center">
             <LoginForm next={query.next}></LoginForm>
-</Col>
-<Col></Col>
-<Col></Col>
-      </Row>
-    </Container>
+        </Col>
+    </Row>
     </>
     )
 }
 export async function getServerSideProps(ctx) {
     var query = ctx.query;
     return {
-      props: {
-        // props for your component
-        query
-      }
+        props: {
+            // props for your component
+            query
+        }
     }
-  }
+}
   
