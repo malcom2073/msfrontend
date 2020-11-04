@@ -7,6 +7,7 @@ import { privateRoute } from "../components/privateroute";
 import { render } from 'react-dom';
 import { AuthToken } from "../services/auth_token";
 import MsApi from '../lib/msapi';
+import pageLayout from '../components/pagelayout'
 
 class Profile extends React.Component {
     constructor(props)
@@ -19,7 +20,6 @@ class Profile extends React.Component {
   return (
     <>
     <Container fluid>
-        <MSNavbar/>
       <Row>
           <Col>
           </Col>
@@ -78,5 +78,4 @@ class Profile extends React.Component {
   //  return {}
   }
 }
-
-export default privateRoute(Profile);
+export default privateRoute(pageLayout(Profile));

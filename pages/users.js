@@ -7,6 +7,7 @@ import { privateRoute } from "../components/privateroute";
 import { render } from 'react-dom';
 import { AuthToken } from "../services/auth_token";
 import MsApi from '../lib/msapi';
+import pageLayout from '../components/pagelayout'
 
 class Users extends React.Component {
     constructor(props)
@@ -20,37 +21,27 @@ class Users extends React.Component {
         console.log(this.props);
         return (
             <>
-            <Container fluid>
-                <MSNavbar/>
-                <Row>
-                    <Col>
-                        <Table striped bordered hover>
-                        <tbody>
-                        {(this.state && !this.state.isLoading) ? (this.state.profile.map((value, index) => {
-                            return (
-                                <tr>
-                                    <td>{value.name}</td>
-                                    <td>{value.email}</td>
-                                    <td>{value.timezone}</td>
-                                    <td>{value.lastip}</td>
-                                    <td>{value.primary_group.name}</td>
-                                    <td>{value.registered_date}</td>
-                                </tr>
-                            )
-                        })
-                        ) : (
-                            <></>
-                        )}
-                        </tbody>
-                        </Table>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                    </Col>
-                </Row>
-            </Container>
-            </>
+
+            <Table striped bordered hover>
+            <tbody>
+            {(this.state && !this.state.isLoading) ? (this.state.profile.map((value, index) => {
+                return (
+                    <tr>
+                        <td>{value.name}</td>
+                        <td>{value.email}</td>
+                        <td>{value.timezone}</td>
+                        <td>{value.lastip}</td>
+                        <td>{value.primary_group.name}</td>
+                        <td>{value.registered_date}</td>
+                    </tr>
+                )
+            })
+            ) : (
+                <></>
+            )}
+            </tbody>
+            </Table>
+        </>
         )
     }
     async componentDidMount() {
@@ -68,4 +59,4 @@ class Users extends React.Component {
     }
 }
 
-export default privateRoute(Users);
+export default privateRoute(pageLayout(Users));
