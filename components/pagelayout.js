@@ -14,8 +14,10 @@ import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 import MSAdminSideBar from '../components/adminsidebar'
 import { Layout, Menu, Breadcrumb } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { UserOutlined, LaptopOutlined, NotificationOutlined,SettingOutlined } from '@ant-design/icons';
 import Link from 'next/link'
+import MsApi from '../lib/msapi'
+import { AuthToken } from "../services/auth_token";
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
@@ -27,22 +29,79 @@ export default function pageLayout(WrappedComponent) {
         <Layout>
             <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
                 <div style={{height: '32px', width: '120px', background: '#ffffff' ,margin: '2px', float: 'left'}} className="logo"/>
-                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                    <Menu.Item key="1">
-                        <Link key="Home" href="/" passHref>
-                            <Nav.Link href="/">Home</Nav.Link>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Link key="Users" href="/users" passHref>
-                                <Nav.Link href="/users">Users</Nav.Link>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Link key="Profile" href="/profile" passHref>
-                                <Nav.Link href="/profile">Profile</Nav.Link>
-                        </Link>
-                    </Menu.Item>
+                <Menu style={{float: 'left'}} theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                {(this.state && !this.state.isLoading) ? (this.state.navBar.menuleft.map((value, index) => {
+                            if (value.type == "link") {
+                                console.log(value.title);
+                                return (
+                                    <Menu.Item key={value.title}>
+                                        <Link key={value.title+"link"} href={value.link} passHref>
+                                            <Nav.Link href={value.link}>{value.title}</Nav.Link>
+                                        </Link>
+                                    </Menu.Item>
+                                )
+                            } else if (value.type == "dropdown") {
+                                console.log("Dropdown: " + value.title);
+                            return (
+                                <SubMenu key={value.title} icon={<SettingOutlined />} title={value.title}>
+                                {value.links.map((value2,index2) => {
+                                    if (value2.type == "link") {
+                                        console.log(value.title + value2.title);
+                                    return (
+                                        <Menu.Item key={value.title + value2.title}>
+                                        <Link key={value.title + value2.title+"link"} href={value2.link} passHref>
+                                            <Nav.Link href={value2.link}>{value2.title}</Nav.Link>
+                                        </Link>
+                                        </Menu.Item>
+                                        )
+                                    } else if (value2.type == "divider") {
+                                    return <></>
+                                    }
+                                })}                                    
+                                </SubMenu>
+                            )
+                            }
+                        })
+                        ) : (
+                            <></>
+                        )}
+                </Menu>
+                <Menu style={{float: 'right'}} theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                {(this.state && !this.state.isLoading) ? (this.state.navBar.menuright.map((value, index) => {
+                            if (value.type == "link") {
+                                console.log(value.title);
+                                return (
+                                    <Menu.Item key={value.title}>
+                                        <Link key={value.title+"link"} href={value.link} passHref>
+                                            <Nav.Link href={value.link}>{value.title}</Nav.Link>
+                                        </Link>
+                                    </Menu.Item>
+                                )
+                            } else if (value.type == "dropdown") {
+                                console.log("Dropdown: " + value.title);
+                            return (
+                                <SubMenu key={value.title} icon={<SettingOutlined />} title={value.title}>
+                                {value.links.map((value2,index2) => {
+                                    if (value2.type == "link") {
+                                        console.log(value.title + value2.title);
+                                    return (
+                                        <Menu.Item key={value.title + value2.title}>
+                                        <Link key={value.title + value2.title+"link"} href={value2.link} passHref>
+                                            <Nav.Link href={value2.link}>{value2.title}</Nav.Link>
+                                        </Link>
+                                        </Menu.Item>
+                                        )
+                                    } else if (value2.type == "divider") {
+                                    return <></>
+                                    }
+                                })}                                    
+                                </SubMenu>
+                            )
+                            }
+                        })
+                        ) : (
+                            <></>
+                        )}
                 </Menu>
             </Header>
             
@@ -69,5 +128,14 @@ export default function pageLayout(WrappedComponent) {
         </Layout>
         </>)
         }
+        async componentDidMount() {
+            var msapi = new MsApi();
+            const navBar = await msapi.getUserNavbar(null);
+            this.setState({navBar:navBar,isLoading: false,auth: AuthToken.fromNext(null)});
+            //var profileobj = await msapi.getUserList();
+            //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
+            //this.setState({ isLoading: false,auth: new AuthToken(this.props.auth.token) ,profile:profileobj })
+        }
     }
+    
 }

@@ -300,8 +300,13 @@ def getNavbar():
             'type':'link'
         },
         {
-            'title':  'Admin',
-            'link': '/admin',
+            'title':  'Profile',
+            'link': '/profile',
+            'type':'link'
+        },
+        {
+            'title':  'Users',
+            'link': '/users',
             'type':'link'
         },
     ]
