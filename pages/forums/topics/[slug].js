@@ -61,11 +61,12 @@ class Topic extends React.Component {
                     <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
                         <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
                             <Row>
-                                {value}
+                                <Col span={4}>{value.title}</Col>
+                                <Col span={20}></Col>
                             </Row>
                             <Row>
-                                <Col span={4}>Topic name</Col>
-                                <Col span={20}>Description of the forums</Col>
+                                <Col span={4}></Col>
+                                <Col span={20}>{value.summary}</Col>
 
                             </Row>
                         </Col>

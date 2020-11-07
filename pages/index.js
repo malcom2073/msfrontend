@@ -26,12 +26,7 @@ function Home({allPostsData}) {
 }
 
 export default pageLayout(Home);
-export async function getServerSideProps(context) {
-  return {
-    props: {
-    }
-  }
-}
+
 
 //export async function getStaticProps() {
 //  const allPostsData = getSortedPostsData()

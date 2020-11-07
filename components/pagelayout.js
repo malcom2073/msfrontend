@@ -24,6 +24,8 @@ const { Header, Content, Sider } = Layout;
 export default function pageLayout(WrappedComponent) {
     return class extends React.Component {
         render() {
+            console.log("pageLayout::render");
+            console.log(this.props);
             return (
         <>
         <Layout>
@@ -36,8 +38,10 @@ export default function pageLayout(WrappedComponent) {
             <Layout style={{ padding: '0 24px 24px' }}>
                 <Breadcrumb style={{ margin: '16px 0' }}>
                 <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
+                {(this.props && this.props.pathname) ? (this.props.pathname.split("/").map((value) => {
+                return (<Breadcrumb.Item>{value}</Breadcrumb.Item>)
+
+                })) : (<></>)}
                 </Breadcrumb>
                 <Content
                 className="site-layout-background"
@@ -54,10 +58,13 @@ export default function pageLayout(WrappedComponent) {
         </Layout>
         </>)
         }
-        static async getInitialProps({query}) {
+
+          
+        static async getInitialProps({query,pathname}) {
             console.log("PageLayoutProps");
             console.log(query);
-            return {query}
+            console.log(pathname);
+            return {query:query,pathname:pathname}
         }
         async componentDidMount() {
             var msapi = new MsApi();
@@ -68,5 +75,6 @@ export default function pageLayout(WrappedComponent) {
             //this.setState({ isLoading: false,auth: new AuthToken(this.props.auth.token) ,profile:profileobj })
         }
     }
+
     
 }
