@@ -47,12 +47,17 @@ export default function pageLayout(WrappedComponent) {
                     minHeight: 280,
                 }}
                 >
-                <WrappedComponent {...this.props} />;
+                <WrappedComponent {...this.props} />
                 </Content>
             </Layout>
             </Layout>
         </Layout>
         </>)
+        }
+        static async getInitialProps({query}) {
+            console.log("PageLayoutProps");
+            console.log(query);
+            return {query}
         }
         async componentDidMount() {
             var msapi = new MsApi();

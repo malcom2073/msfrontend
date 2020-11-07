@@ -6,6 +6,7 @@ import LoginForm from '../components/loginform'
 import nextCookie from 'next-cookies'
 import { privateRoute } from "../components/privateroute";
 import { render } from 'react-dom';
+import pageLayout from '../components/pagelayout'
 
 
 class Private extends React.Component {
@@ -16,7 +17,6 @@ class Private extends React.Component {
   return (
   <>
   <Container fluid>
-      <MSNavbar/>
     <Row>
     Private stuff here!
     {this.props.auth.isValid() ?  'This is valid!' : 'Invalid'}
@@ -39,4 +39,4 @@ class Private extends React.Component {
   
 }
 
-export default privateRoute(Private);
+export default privateRoute(pageLayout(Private));

@@ -286,7 +286,7 @@ def getNavbar():
         },
         {
             'title':  'Forum',
-            'link': '/forum',
+            'link': '/forums',
             'type':'link'
         },
         {
