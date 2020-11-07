@@ -36,30 +36,27 @@ class MSNavBar extends React.Component {
             <Menu style={{float: 'left'}} theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
             {(this.state && !this.state.isLoading) ? (this.state.navBar.menuleft.map((value, index) => {
                 if (value.type == "link") {
-                    console.log(value.title);
                     return (
-                        <Menu.Item key={value.title}>
-                            <Link key={value.title+"link"} href={value.link} passHref>
+                        <Menu.Item key={"left"+value.title}>
+                            <Link key={"left"+value.title+"link"} href={value.link} passHref>
                                 <Nav.Link href={value.link}>{value.title}</Nav.Link>
                             </Link>
                         </Menu.Item>
                     )
                 } else if (value.type == "dropdown") {
-                    console.log("Dropdown: " + value.title);
                 return (
-                    <SubMenu key={value.title} icon={<SettingOutlined />} title={value.title}>
+                    <SubMenu key={"left"+value.title+"submenu"} icon={<SettingOutlined />} title={value.title}>
                     {value.links.map((value2,index2) => {
                         if (value2.type == "link") {
-                            console.log(value.title + value2.title);
                         return (
-                            <Menu.Item key={value.title + value2.title}>
-                                <Link key={value.title + value2.title+"link"} href={value2.link} passHref>
+                            <Menu.Item key={"left"+value.title + value2.title}>
+                                <Link key={"left"+value.title + value2.title+"link"} href={value2.link} passHref>
                                     <Nav.Link href={value2.link}>{value2.title}</Nav.Link>
                                 </Link>
                             </Menu.Item>
                             )
                         } else if (value2.type == "divider") {
-                        return <></>
+                        //return <></>
                         }
                     })}                                    
                     </SubMenu>
@@ -73,30 +70,27 @@ class MSNavBar extends React.Component {
             <Menu style={{float: 'right'}} theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
             {(this.state && !this.state.isLoading) ? (this.state.navBar.menuright.map((value, index) => {
                 if (value.type == "link") {
-                    console.log(value.title);
                     return (
-                        <Menu.Item key={value.title}>
-                            <Link key={value.title+"link"} href={value.link} passHref>
+                        <Menu.Item key={"right"+value.title}>
+                            <Link key={"right"+value.title+"link"} href={value.link} passHref>
                                 <Nav.Link href={value.link}>{value.title}</Nav.Link>
                             </Link>
                         </Menu.Item>
                     )
                 } else if (value.type == "dropdown") {
-                    console.log("Dropdown: " + value.title);
                 return (
-                    <SubMenu key={value.title} icon={<SettingOutlined />} title={value.title}>
+                    <SubMenu key={"right"+value.title+"submenu"} icon={<SettingOutlined />} title={value.title}>
                     {value.links.map((value2,index2) => {
                         if (value2.type == "link") {
-                            console.log(value.title + value2.title);
                         return (
-                            <Menu.Item key={value.title + value2.title}>
-                                <Link key={value.title + value2.title+"link"} href={value2.link} passHref>
+                            <Menu.Item key={"right"+value.title + value2.title}>
+                                <Link key={"right"+value.title + value2.title+"link"} href={value2.link} passHref>
                                     <Nav.Link href={value2.link}>{value2.title}</Nav.Link>
                                 </Link>
                             </Menu.Item>
                             )
                         } else if (value2.type == "divider") {
-                        return <></>
+                        //return <></>
                         }
                     })}                                    
                     </SubMenu>
