@@ -2,7 +2,8 @@ import { Row, Col } from 'antd';
 import ForumApi from '../../../modules/forum/lib/api'
 import { withRouter } from 'next/router'
 import pageLayout from '../../../components/pagelayout'
-class Topic extends React.Component {
+import Link from 'next/link'
+class ForumList extends React.Component {
 		constructor({query})
 		{
                 super();
@@ -28,7 +29,10 @@ class Topic extends React.Component {
             console.log("DidMount");
             console.log(topicdata);
             console.log(this.props);
+            if (topicdata)
+            {
             this.setState({topicdata: topicdata,loaded:true});
+            }
             //console.log("topicdata");
             //console.log(topicdata);
             
@@ -61,7 +65,11 @@ class Topic extends React.Component {
                     <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
                         <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
                             <Row>
-                                <Col span={4}>{value.title}</Col>
+                                <Col span={4}>
+                                <Link key={"/forums/topic/" + value.id} href={"/forums/topic/" + value.id}>
+                                        {value.title}
+                                    </Link>
+                                </Col>
                                 <Col span={20}></Col>
                             </Row>
                             <Row>
@@ -78,4 +86,4 @@ class Topic extends React.Component {
 	)
 	}
 }
-export default pageLayout(withRouter(Topic));
+export default withRouter(ForumList);

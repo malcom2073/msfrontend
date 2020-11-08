@@ -21,7 +21,7 @@ class Forum_Index extends React.Component {
                             <Row>
                                 <Col span={4}>
                                     
-                                    <Link key={"/forums/topics/" + value.id} href={"/forums/topics/" + value.id}>
+                                    <Link key={"/forums/forum/" + value.id} href={"/forums/forum/" + value.id}>
                                         {value.title}
                                     </Link>
                                 </Col>
