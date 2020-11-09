@@ -8,8 +8,6 @@ class Topic extends React.Component {
 		constructor({query})
 		{
                 super();
-                //this.api = new ForumApi();
-                //this.state = {loaded:false};
         }
 	render() {
 	return (
