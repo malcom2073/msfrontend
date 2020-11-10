@@ -39,34 +39,34 @@ export default class ForumApi extends Object {
                 {
                     "id":1,
                     "user":"Malcom",
-                    "date":12345678,
+                    "date":1605147640,
                     "text": "This is the text of the first post on this topic!"
                 },
                 {
                     "id":2,
                     "user":"Mike",
-                    "date":12345678,
+                    "date":1605147740,
                     "text": "First response! Yay!"
                 }
                 ,
                 {
                     "id":3,
                     "user":"Mike",
-                    "date":12345678,
+                    "date":1605147940,
                     "text": "I had some more to say. I had some more to say. I had some more to say. I had some more to say. I had some more to say. Lorum Ipsum or some stuff like that?"
                 }
                 ,
                 {
                     "id":4,
                     "user":"Malcom",
-                    "date":12345678,
+                    "date":1605148140,
                     "text": "What're you babbling about?"
                 }
                 ,
                 {
                     "id":5,
                     "user":"Mike",
-                    "date":12345678,
+                    "date":1605148240,
                     "text": "Nothing"
                 }
             ]
