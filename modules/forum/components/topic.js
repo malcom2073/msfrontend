@@ -2,6 +2,10 @@ import { Row, Col } from 'antd';
 import ForumApi from '../../../modules/forum/lib/api'
 import { withRouter } from 'next/router'
 import pageLayout from '../../../components/pagelayout'
+import { Comment, Avatar, Form, Button, List, Input } from 'antd';
+import { Typography, Space } from 'antd';
+
+const { Text, Link } = Typography;
 class TopicList extends React.Component {
     constructor({query})
     {
@@ -41,12 +45,14 @@ class TopicList extends React.Component {
                             <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
                                 <Row>
                                     <Col span={4}>{value.user}</Col>
-                                    <Col span={20}></Col>
-                                </Row>
-                                <Row>
-                                    <Col span={4}>{this.timeConverter(value.date)}</Col>
-                                    <Col span={20}>{value.text}</Col>
-
+                                    <Col span={8}>
+                                        <Row>
+                                            <Col>{value.text}</Col>
+                                        </Row>
+                                        <Row>
+                                            <Col><Text type="secondary">Posted {this.timeConverter(value.date)}</Text></Col>
+                                        </Row>
+                                    </Col>
                                 </Row>
                             </Col>
                         </Row>
