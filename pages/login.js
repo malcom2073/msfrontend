@@ -10,14 +10,17 @@ export default function Login({query}) {
     <>
     <Row justify="space-around" align="middle">
         <Col span={4} align-items="center">
+            {(query && query.next) ? (
             <LoginForm next={query.next}></LoginForm>
+            ) : (
+                <LoginForm></LoginForm>
+            )}
         </Col>
     </Row>
     </>
     )
 }
-export async function getServerSideProps(ctx) {
-    var query = ctx.query;
+export async function getInitialProps({server,pathname,query,req,res}) {
     return {
         props: {
             // props for your component

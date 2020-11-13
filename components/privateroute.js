@@ -10,7 +10,7 @@ export function privateRoute(WrappedComponent) {
     };
     props = {};
     apichecktimer = null;
-    static async getInitialProps({pathname,query,req,res}) {
+    static async getInitialProps({server,pathname,query,req,res}) {
       // Grab the auth token from the cookies. req only exists on server
       // TODO: Make this work on client for <Link> redirects.
       const auth = AuthToken.fromNext(req);
@@ -19,7 +19,7 @@ export function privateRoute(WrappedComponent) {
       //Check for expired auth. This should likely be replaced with valid
       //We can do some logic here for refresh tokens if we want to handle "remember me" boxes.
       if (auth.isExpired()) {
-          if (res)
+          if (server)
           {
             res.writeHead(302, {location: '/login?next=' + req.url})
             res.end()
@@ -28,7 +28,10 @@ export function privateRoute(WrappedComponent) {
           else
           {
             //We're on client
-            Router.push('/login?next=' + pathname)
+            if (typeof document !== 'undefined')
+            {
+            Router.push('/login?next=' + pathname);
+            }
           }
       }
       else {
