@@ -1,5 +1,5 @@
 import { Row, Col } from 'antd';
-import ForumApi from '../../modules/forum/lib/api'
+import ForumApi from '../modules/forum/lib/api'
 import Link from 'next/link'
 
 class Forum_Index extends React.Component {

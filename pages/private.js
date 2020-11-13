@@ -28,14 +28,6 @@ class Private extends React.Component {
   </>
   )
   }
-  //async componentDidMount() {
-  //}
-  static async getInitialProps(ctx) {
-    //const navBar = await getUserNavbar(ctx)
-    //this.setState({navBar:navBar});
-    //return { navBar: navBar }
-  //  return {}
-  }
   
 }
 
