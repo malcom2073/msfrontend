@@ -76,7 +76,86 @@ def getJwt(request):
             return None
     return None
 
+@app.route('/getForumTopics',methods=['GET'])
+def getForumTopics():
+    forumid = int(request.args.get('forumid'))
+    print('Forum ID Requested: ' + str(forumid))
+    if forumid == 0:
+        return jsonify([
+                {
+                    "id":0,
+                    "title":"GD - Topic1",
+                    "summary":"This is a summary of the first topic. It will contain the text form the topic..."
+                },
+                {
+                    "id":1,
+                    "title":"GD - Topic2",
+                    "summary":"This summary is for the second topic, it will be about the same length as the..."
+                }
+        ])
+    elif forumid == 1:
+        return jsonify([
+                {
+                    "id":2,
+                    "title":"Support - Topic 1",
+                    "summary":"Suport topic number 1, is the first support topic in the forums, and as such ..."
+                },
+                {
+                    "id":3,
+                    "title":"Support - Topic 2",
+                "summary":"Summary for support topic number 2! Second of the stupport topics, but just as help..."
+                }
+        ])
+    else:
+        print("Bad forum id:")
+        print(forumid)
+        return jsonify({})
+    #elif forumid == 2:
+    #    return jsonify([
+    #    {
+    #        return ["Tut - Topic 1","Tut - Topic 2", "Tut - Topic 3"];
+    #    }
 
+@app.route('/getPostList',methods=['GET'])
+def getPostList():
+    topicid = int(request.args.get('topicid'))
+    print('topicid ID Requested: ' + str(topicid))
+    if topicid == 0:
+        return jsonify([
+{
+                    "id":1,
+                    "user":"Malcom",
+                    "date":1605147640,
+                    "text": "This is the text of the first post on this topic!"
+                },
+                {
+                    "id":2,
+                    "user":"Mike",
+                    "date":1605147740,
+                    "text": "First response! Yay!"
+                }
+                ,
+                {
+                    "id":3,
+                    "user":"Mike",
+                    "date":1605147940,
+                    "text": "I had some more to say. I had some more to say. I had some more to say. I had some more to say. I had some more to say. Lorum Ipsum or some stuff like that?"
+                }
+                ,
+                {
+                    "id":4,
+                    "user":"Malcom",
+                    "date":1605148140,
+                    "text": "What're you babbling about?"
+                }
+                ,
+                {
+                    "id":5,
+                    "user":"Mike",
+                    "date":1605148240,
+                    "text": "Nothing"
+                }
+        ])
 # Wrapper function for needing jwt
 # This checks the JWT expiration, as well as making sure that there is a 
 # cookie (should check httponly and secure) matching the sha256 of the session ID

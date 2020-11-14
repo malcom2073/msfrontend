@@ -6,8 +6,10 @@ export default class ForumApi extends Object {
     constructor()
     {
         super();
+        var headers = { Accept: 'application/vnd.github.v3+json'}
         this.api = create({
-            baseURL: 'http://localhost:3000'
+            baseURL: 'http://localhost:3000',
+            headers: headers
         });
     }
     getForumList()
@@ -30,83 +32,46 @@ export default class ForumApi extends Object {
             }];
         return forumlist;
     }
-    getPostList(topicid)
+    async getPostList(topicid)
     {
-        if (topicid == 0)
-        {
-            //GD - Topic1
-            return [
+        const response = await this.api.get('/api/getPostList', {'topicid' : topicid});
+        console.log(response);
+        if (response.problem) {
+            switch (response.problem) {
+              case 'CLIENT_ERROR':
+                if (response.status == 401)
                 {
-                    "id":1,
-                    "user":"Malcom",
-                    "date":1605147640,
-                    "text": "This is the text of the first post on this topic!"
-                },
-                {
-                    "id":2,
-                    "user":"Mike",
-                    "date":1605147740,
-                    "text": "First response! Yay!"
+                  alert('Invalid credentials');
+                  return 
+                  //Bad authentication!
                 }
-                ,
-                {
-                    "id":3,
-                    "user":"Mike",
-                    "date":1605147940,
-                    "text": "I had some more to say. I had some more to say. I had some more to say. I had some more to say. I had some more to say. Lorum Ipsum or some stuff like that?"
-                }
-                ,
-                {
-                    "id":4,
-                    "user":"Malcom",
-                    "date":1605148140,
-                    "text": "What're you babbling about?"
-                }
-                ,
-                {
-                    "id":5,
-                    "user":"Mike",
-                    "date":1605148240,
-                    "text": "Nothing"
-                }
-            ]
+                break;
+              default:
+                  break;
+            }
+            alert('Unknown error');
         }
+        return response.data
     }
-    getTopicList(forumid)
+    async getTopicList(forumid)
     {
-        if (forumid == 0)
-        {
-            return [
+        const response = await this.api.get('/api/getForumTopics', {'forumid' : forumid});
+        console.log(response);
+        if (response.problem) {
+            switch (response.problem) {
+              case 'CLIENT_ERROR':
+                if (response.status == 401)
                 {
-                    "id":0,
-                    "title":"GD - Topic1",
-                    "summary":"This is a summary of the first topic. It will contain the text form the topic..."
-                },
-                {
-                    "id":1,
-                    "title":"GD - Topic2",
-                    "summary":"This summary is for the second topic, it will be about the same length as the..."
-                }];
-                    
+                  alert('Invalid credentials');
+                  return 
+                  //Bad authentication!
+                }
+                break;
+              default:
+                  break;
+            }
+            alert('Unknown error');
         }
-        else if (forumid == 1)
-        {
-            return [
-                {
-                    "id":2,
-                    "title":"Support - Topic 1",
-                    "summary":"Suport topic number 1, is the first support topic in the forums, and as such ..."
-                },
-                {
-                    "id":3,
-                    "title":"Support - Topic 2",
-                "summary":"Summary for support topic number 2! Second of the stupport topics, but just as help..."
-                }];
-        }
-        else if (forumid == 2)
-        {
-            return ["Tut - Topic 1","Tut - Topic 2", "Tut - Topic 3"];
-        }
-    }
-    
+        return response.data
+    }    
 }
