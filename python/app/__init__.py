@@ -1,38 +1,24 @@
 import json
 from flask import Flask, jsonify, request
-import datetime
-import jwt
 import pprint
-import hashlib
-import random
 import csv
-import string
 from . import config
 from . import db
 app = Flask(__name__)
-
 from .util import getJwt
-from .auth import jwt_private
 # Obv this will need to be changed for production.
 app.config['SECRET_KEY'] = config.SECRET_KEY
 
 main_table_list = {}
 
-def encode_auth_token(user_id):
-    payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=600),
-        'iat': datetime.datetime.utcnow(),
-        'sub': user_id
-    }
-    return jwt.encode(
-        payload,
-        app.config.get('SECRET_KEY'),
-        algorithm='HS256'
-    )
 
 from app.models import user as User
 from app.models import group as Group
 from app.models import userprofilefield as UserProfileField
+
+from .auth import auth_bp
+app.register_blueprint(auth_bp, url_prefix='/auth')
+from .auth import jwt_private
 
 
 @app.route('/getForumTopics',methods=['GET'])
