@@ -6,7 +6,7 @@ import string
 import datetime
 import jwt
 
-from ..util import getJwt
+from ..util import getJwt, getAuthToken
 auth_bp = Blueprint('auth_bp', __name__)
 from .. import db
 from .. import User
@@ -28,6 +28,39 @@ def encode_auth_token(user_id):
 
 
 
+def checkRole(role,roletocheck):
+    if role == roletocheck:
+        return True
+    if role in roles:
+        if 'parent' in roles[role]:
+            return checkRole(roles[role]['parent'],roletocheck)
+    return False
+roles = {
+    'admin' : {
+        'parent':'member3'
+    },
+    'member3' : {
+        'parent':'member2'
+    },
+    'member' : {
+        'parent':'guest'
+    },
+    'member2' : {
+        'parent':'member'
+    },
+    'guest' : {
+
+    }
+}
+role_routes = {
+    '/auth' : {
+        'role_required': None
+    },
+    '/private' : {
+        'role_required':'member'
+    }
+}
+
 # Wrapper function for needing jwt
 # This checks the JWT expiration, as well as making sure that there is a 
 # cookie (should check httponly and secure) matching the sha256 of the session ID
@@ -40,6 +73,7 @@ def jwt_private(func):
     def wrapper_jwt_private(*args, **kwargs):
         print('Path:')
         pprint.pprint(request.path)
+        print("Done",flush=True)
         auth_token = getAuthToken(request)
         jwt = getJwt(request)
         if jwt is None:

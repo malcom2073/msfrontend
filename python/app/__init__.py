@@ -102,39 +102,6 @@ def getPostList():
                 }
         ])
 
-def checkRole(role,roletocheck):
-    if role == roletocheck:
-        return True
-    if role in roles:
-        if 'parent' in roles[role]:
-            return checkRole(roles[role]['parent'],roletocheck)
-    return False
-roles = {
-    'admin' : {
-        'parent':'member3'
-    },
-    'member3' : {
-        'parent':'member2'
-    },
-    'member' : {
-        'parent':'guest'
-    },
-    'member2' : {
-        'parent':'member'
-    },
-    'guest' : {
-
-    }
-}
-role_routes = {
-    '/auth' : {
-        'role_required': None
-    },
-    '/private' : {
-        'role_required':'member'
-    }
-}
-
 @app.route('/userinfo')
 @jwt_private
 def userinfo():

@@ -1,7 +1,7 @@
 from . import app
 import jwt
 import pprint
-
+import hashlib
 def decode_auth_token(auth_token):
     payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
     return payload['sub']
@@ -45,8 +45,9 @@ def getJwt(request):
                         print('No session var')
                         return None
                     return resp
-        except:
+        except Exception as ex:
             print('Exception')
+            print(str(ex))
             return None
     return None
 
