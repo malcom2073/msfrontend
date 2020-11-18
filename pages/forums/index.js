@@ -13,6 +13,7 @@ class Forum extends React.Component {
 	render() {
 	return (
 		<>
+			Main Forum Index
 		<Container fluid>
 			<Forum_Index></Forum_Index>
 		</Container>

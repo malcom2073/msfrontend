@@ -59,6 +59,9 @@ class TopicList extends React.Component {
                     );
                 })) : (<></>)}
                 </div>
+                <div id="postpost">
+                    Post new post content here
+                </div>
             </>
         )
 	}

@@ -12,7 +12,7 @@ class Topic extends React.Component {
 	render() {
 	return (
 		<>
-			Forum List!s
+			Forum Slug Page
             <div id="uniq">
                 <ForumList query={this.props.query}/>
             </div>
