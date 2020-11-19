@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 main_table_list = {}
 
 
-from app.models import user as User
+from app.models.user import User
 from app.models import group as Group
 from app.models import userprofilefield as UserProfileField
 
@@ -107,7 +107,7 @@ def getPostList():
 def userinfo():
     jwt = getJwt(request)
     dbsession = db.Session()
-    user = dbsession.query(User.User).filter(User.User.name == jwt['user']).first()
+    user = dbsession.query(User).filter(User.name == jwt['user']).first()
     pprint.pprint(user)
     dbsession.close()
     if user is None:
@@ -121,7 +121,7 @@ def userinfo():
 def userlist():
     jwt = getJwt(request)
     dbsession = db.Session()
-    users = dbsession.query(User.User).all()
+    users = dbsession.query(User).all()
     pprint.pprint(users)
     dbsession.close()
     if users is None:

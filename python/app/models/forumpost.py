@@ -22,6 +22,8 @@ class ForumPost(db.Model):
     user = Column(Integer,ForeignKey('users.id'))
     text = Column(String)
 
+    forum = Column(Integer,ForeignKey('forums.id'))
+
     def __repr__(self):
         return "<User(id={}, name={}>".format(self.id, self.name)
 

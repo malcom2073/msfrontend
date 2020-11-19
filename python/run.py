@@ -1,9 +1,11 @@
 from app import app
 from app import db
 
-from app.models import user as User
+from app.models.user import User
 from app.models import group as Group
-from app.models import userprofilefield as UserProfileField
+from app.models.forum import Forum
+from app.models.forumpost import ForumPost
+from app.models.userprofilefield import UserProfileField
 import csv
 import pprint
 import datetime
@@ -42,7 +44,7 @@ try:
             if line_count == 0:
                 line_count += 1
             else:
-                db.session.add(User.User(id=row[0],name=row[1],password=row[3],email=row[9],timezone='edt',lastip=row[11],nickname=row[2],primary_group_id=row[7],registered_date=datetime.datetime.utcfromtimestamp(int(row[6]))))
+                db.session.add(User(id=row[0],name=row[1],password=row[3],email=row[9],timezone='edt',lastip=row[11],nickname=row[2],primary_group_id=row[7],registered_date=datetime.datetime.utcfromtimestamp(int(row[6]))))
                 line_count += 1
         print(f'Processed {line_count} lines.')
     db.session.commit()
@@ -51,6 +53,21 @@ except Exception as e:
     print("Failed to load test user")
     db.session.rollback()
     pass
+
+
+
+
+try:
+    db.session.add(Forum(id=0,title="General Discussion",desc="General discussion forum, for general topics"))
+    db.session.add(Forum(id=1,title="Support",desc="General support requests forum, for support for specific stuff"))
+    db.session.add(Forum(id=2,title="Suggestions",desc="Suggestion forum. Post your suggestions here!"))
+    db.session.commit()
+except Exception as e:
+    db.session.rollback()
+    pass
+
+
+
 print("Done loading")
 
 
