@@ -12,25 +12,27 @@ export default class ForumApi extends Object {
             headers: headers
         });
     }
-    getForumList()
+    async getForumList()
     {
-        var forumlist = [
-            {
-                "id":0,
-                "title":"General Discussion",
-                "description":"Discussion about anything that doesn't fall into other categories"
-            },
-            {
-                "id":1,
-                "title":"Support",
-                "description":"Support requests and help"
-            },
-            {
-                "id":2,
-                "title":"Tutorials",
-                "description":"Tutorials and self-help topics"
-            }];
-        return forumlist;
+        const response = await this.api.get('/api/getForumList');
+        console.log(response);
+        if (response.problem) {
+            switch (response.problem) {
+              case 'CLIENT_ERROR':
+                if (response.status == 401)
+                {
+                  alert('Invalid credentials');
+                  return 
+                  //Bad authentication!
+                }
+                break;
+              default:
+                  break;
+            }
+            alert('Unknown error');
+        }
+        return response.data.data
+
     }
     async getPostList(topicid)
     {

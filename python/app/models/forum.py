@@ -17,6 +17,7 @@ class Forum(db.Model):
 
     id: int
     title: str
+    desc: str
 
     id = Column(Integer, primary_key=True)
     title = Column(String)

@@ -14,6 +14,7 @@ main_table_list = {}
 
 from app.models.user import User
 from app.models import group as Group
+from app.models.forum import Forum
 from app.models import userprofilefield as UserProfileField
 
 from .auth import auth_bp
@@ -60,6 +61,18 @@ def getForumTopics():
     #    {
     #        return ["Tut - Topic 1","Tut - Topic 2", "Tut - Topic 3"];
     #    }
+
+
+@app.route('/getForumList',methods=['GET'])
+def getForumList():
+    jwt = getJwt(request)
+    dbsession = db.Session()
+    forums = dbsession.query(Forum).all()
+    dbsession.close()
+    if forums is None:
+        print("No users")
+        return jsonify({'status':'failure','error':'No User'})
+    return jsonify({'status':'success','data': forums})
 
 @app.route('/getPostList',methods=['GET'])
 def getPostList():

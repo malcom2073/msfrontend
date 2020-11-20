@@ -7,13 +7,26 @@ class Forum_Index extends React.Component {
 		{
 				super(props);
                 this.api = new ForumApi();
-		}
+                this.state = {loaded:false};
+        }
+        async componentDidMount() {
+        
+            var forumdata = await this.api.getForumList();
+            if (forumdata)
+            {
+                console.log("ForumData!");
+                console.log(forumdata);
+                this.setState({forumdata: forumdata,loaded:true});
+            }
+        }
 	render() {
+        console.log("State");
+        console.log(this.state);
 	return (
 		<>
 			FORUM INDEX!s
             <div id="uniq">
-            {(this.api.getForumList().map((value,index) => {
+            {this.state && this.state.loaded && (this.state.forumdata.map((value,index) => {
                 console.log("Newval: " + value);
                 return (
                     <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
@@ -31,7 +44,7 @@ class Forum_Index extends React.Component {
                             <Row>
                                 <Col span={4}></Col>
                                 <Col span={20}>
-                                    {value.description}
+                                    {value.desc}
                                 </Col>
 
                             </Row>
