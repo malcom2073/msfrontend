@@ -26,36 +26,15 @@ from .auth import jwt_private
 def getForumTopics():
     forumid = int(request.args.get('forumid'))
     print('Forum ID Requested: ' + str(forumid))
-    if forumid == 0:
-        return jsonify([
-                {
-                    "id":0,
-                    "title":"GD - Topic1",
-                    "summary":"This is a summary of the first topic. It will contain the text form the topic..."
-                },
-                {
-                    "id":1,
-                    "title":"GD - Topic2",
-                    "summary":"This summary is for the second topic, it will be about the same length as the..."
-                }
-        ])
-    elif forumid == 1:
-        return jsonify([
-                {
-                    "id":2,
-                    "title":"Support - Topic 1",
-                    "summary":"Suport topic number 1, is the first support topic in the forums, and as such ..."
-                },
-                {
-                    "id":3,
-                    "title":"Support - Topic 2",
-                "summary":"Summary for support topic number 2! Second of the stupport topics, but just as help..."
-                }
-        ])
-    else:
-        print("Bad forum id:")
-        print(forumid)
-        return jsonify({})
+    jwt = getJwt(request)
+    dbsession = db.Session()
+    #user = dbsession.query(User).filter(User.name == jwt['user']).first()
+    forums = dbsession.query(ForumPost).filter(ForumPost.forum == forumid).all()
+    dbsession.close()
+    if forums is None:
+        print("No users")
+        return jsonify({'status':'failure','error':'No User'})
+    return jsonify({'status':'success','data': forums})
     #elif forumid == 2:
     #    return jsonify([
     #    {
@@ -67,7 +46,8 @@ def getForumTopics():
 def getForumList():
     jwt = getJwt(request)
     dbsession = db.Session()
-    forums = dbsession.query(Forum).all()
+    #user = dbsession.query(User).filter(User.name == jwt['user']).first()
+    forums = dbsession.query(Forum).filter(Forum.parent == 0).all()
     dbsession.close()
     if forums is None:
         print("No users")

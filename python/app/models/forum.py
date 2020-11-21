@@ -20,6 +20,7 @@ class Forum(db.Model):
     desc: str
 
     id = Column(Integer, primary_key=True)
+    parent = Column(Integer,ForeignKey('forums.id'))
     title = Column(String)
     desc = Column(String)
 
