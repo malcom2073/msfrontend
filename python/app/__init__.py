@@ -16,6 +16,7 @@ from app.models.user import User
 from app.models import group as Group
 from app.models.forum import Forum
 from app.models.forumpost import ForumPost
+from app.models.forumcomment import ForumComment
 from app.models import userprofilefield as UserProfileField
 
 from .auth import auth_bp
@@ -59,42 +60,13 @@ def getForumList():
 def getPostList():
     topicid = int(request.args.get('topicid'))
     print('topicid ID Requested: ' + str(topicid))
-    if topicid == 0:
-        return jsonify([
-{
-                    "id":1,
-                    "user":"Malcom",
-                    "date":1605147640,
-                    "text": "This is the text of the first post on this topic!"
-                },
-                {
-                    "id":2,
-                    "user":"Mike",
-                    "date":1605147740,
-                    "text": "First response! Yay!"
-                }
-                ,
-                {
-                    "id":3,
-                    "user":"Mike",
-                    "date":1605147940,
-                    "text": "I had some more to say. I had some more to say. I had some more to say. I had some more to say. I had some more to say. Lorum Ipsum or some stuff like that?"
-                }
-                ,
-                {
-                    "id":4,
-                    "user":"Malcom",
-                    "date":1605148140,
-                    "text": "What're you babbling about?"
-                }
-                ,
-                {
-                    "id":5,
-                    "user":"Mike",
-                    "date":1605148240,
-                    "text": "Nothing"
-                }
-        ])
+    dbsession = db.Session()
+    topic = dbsession.query(ForumPost).filter(ForumPost.id == topicid).all()
+    if topic is None:
+        return jsonify({'status':'failure','error':'Invalid topic'})
+    posts = dbsession.query(ForumComment).filter(ForumComment.forumpost == topicid).all()
+    #dbsession.close()
+    return jsonify({'status':'success','data':topic + posts})
 
 @app.route('/userinfo')
 @jwt_private

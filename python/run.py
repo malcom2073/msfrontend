@@ -70,23 +70,23 @@ except Exception as e:
 
 
 try:
-    db.session.add(ForumPost(id=0,forum=0,user=0,title="This is the text of the first post",text="This is the text of the post!"))
-    db.session.add(ForumPost(id=1,forum=0,user=0,title="This is the text of the second post",text="This is the text of the post!"))
-    db.session.add(ForumPost(id=2,forum=1,user=0,title="This is the text of the First post on this forum!",text="This is the text of the post!"))
-    db.session.add(ForumPost(id=3,forum=1,user=0,title="This is the text of the second psot on this forum!",text="This is the text of the post!"))
-    db.session.add(ForumPost(id=4,forum=1,user=0,title="This is the text of the third post on this forum!",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=0,forum=1,user_id=1,title="This is the title text of the first post",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=1,forum=1,user_id=3,title="This is the title text of the second post",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=2,forum=2,user_id=1,title="This is the title text of the First post on this forum!",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=3,forum=2,user_id=1,title="This is the title text of the second psot on this forum!",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=4,forum=2,user_id=1,title="This is the title text of the third post on this forum!",text="This is the text of the post!"))
     db.session.commit()
 except Exception as e:
     db.session.rollback()
     pass
 
 try:
-    db.session.add(ForumComment(id=0,forumpost=0,user=0,text="This is the text of the first post"))
-    db.session.add(ForumComment(id=1,forumpost=0,user=0,text="This is a second comment on the first post"))
-    db.session.add(ForumComment(id=2,forumpost=0,user=0,text="This is a third comment on the first post"))
-    db.session.add(ForumComment(id=3,forumpost=1,user=0,text="This is the text of the second post"))
-    db.session.add(ForumComment(id=4,forumpost=1,user=0,text="This is a second comment on the second post"))
-    db.session.add(ForumComment(id=5,forumpost=1,user=0,text="This is a third comment on the second post"))
+    db.session.add(ForumComment(id=0,forumpost=0,user_id=16,text="This is the text of the first comment on the first post"))
+    db.session.add(ForumComment(id=1,forumpost=0,user_id=3,text="This is a second comment on the first post"))
+    db.session.add(ForumComment(id=2,forumpost=0,user_id=4,text="This is a third comment on the first post"))
+    db.session.add(ForumComment(id=3,forumpost=1,user_id=1,text="This is the text of the first  comment on the second post"))
+    db.session.add(ForumComment(id=4,forumpost=1,user_id=7,text="This is a second comment on the second post"))
+    db.session.add(ForumComment(id=5,forumpost=1,user_id=9,text="This is a third comment on the second post"))
     db.session.commit()
 except Exception as e:
     db.session.rollback()

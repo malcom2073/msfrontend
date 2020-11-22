@@ -7,7 +7,7 @@ from sqlalchemy import ForeignKey, Column, Integer, String
 from sqlalchemy.orm import relationship
 from app import db
 from app import main_table_list
-from . import user as User
+from .user import User
 from datetime import datetime
 from dataclasses import dataclass
 
@@ -18,9 +18,11 @@ class ForumPost(db.Model):
     id: int
     title: str
     text: str
+    user: User
 
     id = Column(Integer, primary_key=True)
-    user = Column(Integer,ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User",backref="forumposts")
     text = Column(String)
     title = Column(String)
 
