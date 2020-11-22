@@ -53,7 +53,7 @@ export default class ForumApi extends Object {
             }
             alert('Unknown error');
         }
-        return response.data
+        return response.data.data
     }
     async getTopicList(forumid)
     {
