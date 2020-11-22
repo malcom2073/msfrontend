@@ -15,6 +15,7 @@ main_table_list = {}
 from app.models.user import User
 from app.models import group as Group
 from app.models.forum import Forum
+from app.models.forumpost import ForumPost
 from app.models import userprofilefield as UserProfileField
 
 from .auth import auth_bp

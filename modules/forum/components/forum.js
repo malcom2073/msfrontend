@@ -38,7 +38,7 @@ class ForumList extends React.Component {
                                 </Row>
                                 <Row>
                                     <Col span={4}></Col>
-                                    <Col span={20}>{value.summary}</Col>
+                                    <Col span={20}>{value.text}</Col>
 
                                 </Row>
                             </Col>

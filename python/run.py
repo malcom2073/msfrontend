@@ -70,11 +70,11 @@ except Exception as e:
 
 
 try:
-    db.session.add(ForumPost(id=0,forum=0,user=0,text="This is the text of the first post"))
-    db.session.add(ForumPost(id=1,forum=0,user=0,text="This is the text of the second post"))
-    db.session.add(ForumPost(id=2,forum=1,user=0,text="This is the text of the First post on this forum!"))
-    db.session.add(ForumPost(id=3,forum=1,user=0,text="This is the text of the second psot on this forum!"))
-    db.session.add(ForumPost(id=4,forum=1,user=0,text="This is the text of the third post on this forum!"))
+    db.session.add(ForumPost(id=0,forum=0,user=0,title="This is the text of the first post",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=1,forum=0,user=0,title="This is the text of the second post",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=2,forum=1,user=0,title="This is the text of the First post on this forum!",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=3,forum=1,user=0,title="This is the text of the second psot on this forum!",text="This is the text of the post!"))
+    db.session.add(ForumPost(id=4,forum=1,user=0,title="This is the text of the third post on this forum!",text="This is the text of the post!"))
     db.session.commit()
 except Exception as e:
     db.session.rollback()

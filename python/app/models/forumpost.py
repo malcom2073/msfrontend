@@ -16,11 +16,13 @@ class ForumPost(db.Model):
     __tablename__ = "forumposts"
 
     id: int
+    title: str
     text: str
 
     id = Column(Integer, primary_key=True)
     user = Column(Integer,ForeignKey('users.id'))
     text = Column(String)
+    title = Column(String)
 
     forum = Column(Integer,ForeignKey('forums.id'))
 
