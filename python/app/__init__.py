@@ -32,11 +32,12 @@ def getForumTopics():
     dbsession = db.Session()
     #user = dbsession.query(User).filter(User.name == jwt['user']).first()
     forums = dbsession.query(ForumPost).filter(ForumPost.forum == forumid).all()
+    jsonresponse = jsonify({'status':'success','data': forums})
     dbsession.close()
     if forums is None:
         print("No users")
         return jsonify({'status':'failure','error':'No User'})
-    return jsonify({'status':'success','data': forums})
+    return jsonresponse
     #elif forumid == 2:
     #    return jsonify([
     #    {
@@ -50,11 +51,12 @@ def getForumList():
     dbsession = db.Session()
     #user = dbsession.query(User).filter(User.name == jwt['user']).first()
     forums = dbsession.query(Forum).filter(Forum.parent == 0).all()
+    jsonresponse = jsonify({'status':'success','data': forums})
     dbsession.close()
     if forums is None:
         print("No users")
         return jsonify({'status':'failure','error':'No User'})
-    return jsonify({'status':'success','data': forums})
+    return jsonresponse
 
 @app.route('/getPostList',methods=['GET'])
 def getPostList():
@@ -63,10 +65,12 @@ def getPostList():
     dbsession = db.Session()
     topic = dbsession.query(ForumPost).filter(ForumPost.id == topicid).all()
     if topic is None:
+        dbsession.close()
         return jsonify({'status':'failure','error':'Invalid topic'})
     posts = dbsession.query(ForumComment).filter(ForumComment.forumpost == topicid).all()
-    #dbsession.close()
-    return jsonify({'status':'success','data':topic + posts})
+    jsonresponse = jsonify({'status':'success','data':topic + posts}) # Grab response before closing database, this fixes lazy-loading errors.
+    dbsession.close()
+    return jsonresponse
 
 @app.route('/userinfo')
 @jwt_private
