@@ -50,7 +50,7 @@ class TopicList extends React.Component {
                                             <Col>{value.text}</Col>
                                         </Row>
                                         <Row>
-                                            <Col><Text type="secondary">Posted {this.timeConverter(value.date)}</Text></Col>
+                                            <Col><Text type="secondary">Posted {this.timeConverter(value.timestamp)}</Text></Col>
                                         </Row>
                                     </Col>
                                 </Row>

@@ -3,7 +3,7 @@
 
 #from sqlalchemy.ext.declarative import declarative_base
 #from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey, Column, Integer, String
+from sqlalchemy import ForeignKey, Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from app import db
 from app import main_table_list
@@ -19,12 +19,14 @@ class ForumPost(db.Model):
     title: str
     text: str
     user: User
+    timestamp: int
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User",backref="forumposts")
     text = Column(String)
     title = Column(String)
+    timestamp = Column(Integer)
 
     forum = Column(Integer,ForeignKey('forums.id'))
 
