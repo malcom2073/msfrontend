@@ -3,9 +3,9 @@ from app import db
 
 from app.models.user import User
 from app.models import group as Group
-from app.models.forum import Forum
-from app.models.forumpost import ForumPost
-from app.models.forumcomment import ForumComment
+from app.models.msforumsforum import MSForumsForum
+from app.models.msforumsthread import MSForumsThread
+from app.models.msforumscomment import MSForumsComment
 from app.models.userprofilefield import UserProfileField
 import csv
 import pprint
@@ -59,26 +59,27 @@ except Exception as e:
 
 
 try:
-    db.session.add(Forum(id=0,parent=-1,title="Main Forum",desc=""))
-    db.session.add(Forum(id=1,parent=0,title="General Discussion",desc="General discussion forum, for general topics"))
-    db.session.add(ForumPost(id=0,forum=1,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),title="This is the title text of the first post",text="This is the text of the post!"))
-    db.session.add(ForumComment(id=0,forumpost=0,user_id=16,timestamp=(datetime.datetime.now()-datetime.timedelta(days=4)).timestamp(),text="This is the text of the first comment on the first post"))
-    db.session.add(ForumComment(id=1,forumpost=0,user_id=3,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),text="This is a second comment on the first post"))
-    db.session.add(ForumComment(id=2,forumpost=0,user_id=4,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),text="This is a third comment on the first post"))
-    db.session.add(ForumPost(id=1,forum=1,user_id=3,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),title="This is the title text of the second post",text="This is the text of the post!"))
-    db.session.add(ForumComment(id=3,forumpost=1,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=4)).timestamp(),text="This is the text of the first  comment on the second post"))
-    db.session.add(ForumComment(id=4,forumpost=1,user_id=7,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),text="This is a second comment on the second post"))
-    db.session.add(ForumComment(id=5,forumpost=1,user_id=9,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),text="This is a third comment on the second post"))
+    db.session.add(MSForumsForum(id=0,parent=-1,title="Main Forum",desc=""))
+    db.session.add(MSForumsForum(id=1,parent=0,title="General Discussion",desc="General discussion forum, for general topics"))
+    db.session.add(MSForumsThread(id=0,forum_id=1,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),title="This is the title text of the first post",text="This is the text of the post!"))
+    db.session.add(MSForumsComment(id=0,thread_id=0,user_id=16,timestamp=(datetime.datetime.now()-datetime.timedelta(days=4)).timestamp(),text="This is the text of the first comment on the first post"))
+    db.session.add(MSForumsComment(id=1,thread_id=0,user_id=3,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),text="This is a second comment on the first post"))
+    db.session.add(MSForumsComment(id=2,thread_id=0,user_id=4,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),text="This is a third comment on the first post"))
+    db.session.add(MSForumsThread(id=1,forum_id=1,user_id=3,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),title="This is the title text of the second post",text="This is the text of the post!"))
+    db.session.add(MSForumsComment(id=3,thread_id=1,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=4)).timestamp(),text="This is the text of the first  comment on the second post"))
+    db.session.add(MSForumsComment(id=4,thread_id=1,user_id=7,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),text="This is a second comment on the second post"))
+    db.session.add(MSForumsComment(id=5,thread_id=1,user_id=9,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),text="This is a third comment on the second post"))
 
 
-    db.session.add(Forum(id=2,parent=0,title="Support",desc="General support requests forum, for support for specific stuff"))
-    db.session.add(ForumPost(id=2,forum=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="This is the title text of the First post on this forum!",text="This is the text of the post!"))
-    db.session.add(ForumPost(id=3,forum=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),title="This is the title text of the second psot on this forum!",text="This is the text of the post!"))
-    db.session.add(ForumPost(id=4,forum=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=1)).timestamp(),title="This is the title text of the third post on this forum!",text="This is the text of the post!"))
+    db.session.add(MSForumsForum(id=2,parent=0,title="Support",desc="General support requests forum, for support for specific stuff"))
+    db.session.add(MSForumsThread(id=2,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="This is the title text of the First post on this forum!",text="This is the text of the post!"))
+    db.session.add(MSForumsThread(id=3,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),title="This is the title text of the second psot on this forum!",text="This is the text of the post!"))
+    db.session.add(MSForumsThread(id=4,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=1)).timestamp(),title="This is the title text of the third post on this forum!",text="This is the text of the post!"))
 
-    db.session.add(Forum(id=3,parent=0,title="Suggestions",desc="Suggestion forum. Post your suggestions here!"))
+    db.session.add(MSForumsForum(id=3,parent=0,title="Suggestions",desc="Suggestion forum. Post your suggestions here!"))
     db.session.commit()
 except Exception as e:
+    print(str(e))
     db.session.rollback()
     pass
 
