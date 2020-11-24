@@ -12,19 +12,19 @@ from datetime import datetime
 from dataclasses import dataclass
 
 @dataclass
-class Forum(db.Model):
-    __tablename__ = "forums"
+class MSForumsForum(db.Model):
+    __tablename__ = "msforums_forums"
 
     id: int
     title: str
     desc: str
 
     id = Column(Integer, primary_key=True)
-    parent = Column(Integer,ForeignKey('forums.id'))
+    parent = Column(Integer,ForeignKey('msforums_forums.id'))
     title = Column(String)
     desc = Column(String)
 
     def __repr__(self):
         return "<Forum(id={}, title={}>".format(self.id, self.title)
 
-main_table_list[Forum.__tablename__] = Forum
+main_table_list[MSForumsForum.__tablename__] = MSForumsForum

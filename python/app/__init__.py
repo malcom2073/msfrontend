@@ -14,9 +14,9 @@ main_table_list = {}
 
 from app.models.user import User
 from app.models import group as Group
-from app.models.forum import Forum
-from app.models.forumpost import ForumPost
-from app.models.forumcomment import ForumComment
+from app.models.msforumsforum import MSForumsForum
+from app.models.msforumsthread import MSForumsThread
+from app.models.msforumscomment import MSForumsComment
 from app.models import userprofilefield as UserProfileField
 
 from .auth import auth_bp
@@ -31,7 +31,7 @@ def getForumTopics():
     jwt = getJwt(request)
     dbsession = db.Session()
     #user = dbsession.query(User).filter(User.name == jwt['user']).first()
-    forums = dbsession.query(ForumPost).filter(ForumPost.forum == forumid).all()
+    forums = dbsession.query(MSForumsThread).filter(MSForumsThread.forum_id == forumid).all()
     jsonresponse = jsonify({'status':'success','data': forums})
     dbsession.close()
     if forums is None:
@@ -50,7 +50,7 @@ def getForumList():
     jwt = getJwt(request)
     dbsession = db.Session()
     #user = dbsession.query(User).filter(User.name == jwt['user']).first()
-    forums = dbsession.query(Forum).filter(Forum.parent == 0).all()
+    forums = dbsession.query(MSForumsForum).filter(MSForumsForum.parent == 0).all()
     jsonresponse = jsonify({'status':'success','data': forums})
     dbsession.close()
     if forums is None:
@@ -63,11 +63,11 @@ def getPostList():
     topicid = int(request.args.get('topicid'))
     print('topicid ID Requested: ' + str(topicid))
     dbsession = db.Session()
-    topic = dbsession.query(ForumPost).filter(ForumPost.id == topicid).all()
+    topic = dbsession.query(MSForumsThread).filter(MSForumsThread.id == topicid).all()
     if topic is None:
         dbsession.close()
         return jsonify({'status':'failure','error':'Invalid topic'})
-    posts = dbsession.query(ForumComment).filter(ForumComment.forumpost == topicid).all()
+    posts = dbsession.query(MSForumsComment).filter(MSForumsComment.thread_id == topicid).all()
     jsonresponse = jsonify({'status':'success','data':topic + posts}) # Grab response before closing database, this fixes lazy-loading errors.
     dbsession.close()
     return jsonresponse

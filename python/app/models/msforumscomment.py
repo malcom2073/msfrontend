@@ -12,25 +12,24 @@ from datetime import datetime
 from dataclasses import dataclass
 
 @dataclass
-class ForumPost(db.Model):
-    __tablename__ = "forumposts"
+class MSForumsComment(db.Model):
+    __tablename__ = "msforums_comments"
 
     id: int
-    title: str
     text: str
     user: User
     timestamp: int
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User",backref="forumposts")
+    user = relationship("User",backref="msforums_comments")
     text = Column(String)
-    title = Column(String)
     timestamp = Column(Integer)
 
-    forum = Column(Integer,ForeignKey('forums.id'))
+    thread_id = Column(Integer,ForeignKey('msforums_threads.id'))
+    thread = relationship("MSForumsThread",backref="msforums_comments")
 
     def __repr__(self):
         return "<User(id={}, name={}>".format(self.id, self.name)
 
-main_table_list[ForumPost.__tablename__] = ForumPost
+main_table_list[MSForumsComment.__tablename__] = MSForumsComment
