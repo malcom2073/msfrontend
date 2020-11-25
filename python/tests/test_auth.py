@@ -10,15 +10,9 @@ from app import db
 import requests
 import json
 import os
-PASSWORD = "TestPassword"
-PASSWORD = os.getenv("MSPW")
-@pytest.fixture
-def client():
-    #db.Model.metadata.create_all(db.engine)
-    #db.session.commit()
-    loadDatabase('../output.csv')
-    return app.test_client()
 
+from conftest import client
+from conftest import PASSWORD
 
 
 def test_empty_db(client):
