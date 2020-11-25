@@ -37,7 +37,7 @@ import pprint
 import hashlib
 from flask import Request
 def decode_auth_token(auth_token):
-    payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+    payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'),algorithms=['HS256'])
     return payload['sub']
 
 
