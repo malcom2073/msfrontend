@@ -10,7 +10,7 @@ from app.models.userprofilefield import UserProfileField
 import csv
 import pprint
 import datetime
-def loadDatabase():
+def loadDatabase(usercsv):
     try:
         db.Model.metadata.create_all(db.engine)
         db.session.commit()
@@ -39,7 +39,7 @@ def loadDatabase():
         
     try:
         print("Trying to load test user")
-        with open('../output.csv') as csv_file:
+        with open(usercsv) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
             for row in csv_reader:
@@ -88,5 +88,5 @@ def loadDatabase():
     print("Done loading")
 
 if __name__ == '__main__':
-    loadDatabase()
+    loadDatabase('output.csv')
     app.run(host='0.0.0.0', port=5000, debug=True)

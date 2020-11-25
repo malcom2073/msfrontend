@@ -13,7 +13,7 @@ PASSWORD = "TestPassword"
 def client():
     #db.Model.metadata.create_all(db.engine)
     #db.session.commit()
-    loadDatabase()
+    loadDatabase('../output.csv')
     return app.test_client()
 
 
