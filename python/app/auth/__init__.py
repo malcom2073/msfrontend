@@ -132,15 +132,15 @@ def auth():
     print('User: ' + post_data.get('username'))
     print('Pass: ' + post_data.get('password'))
     dbsession = db.Session()
-    user = dbsession.query(User.User).filter(User.User.name == post_data.get('username')).first()
+    user = dbsession.query(User).filter(User.name == post_data.get('username')).first()
     pprint.pprint(user)
     dbsession.close()
     if user is None:
         print("No user")
-        return jsonify({'status':'failure','error':'invalid credentials'}),401
+        return jsonify({'status':'error','error':'invalid credentials'}),401
     if user is None or not user.check_password(post_data.get('password')):
         print("Invalid user/pass")
-        return jsonify({'status':'failure','error':'invalid credentials'}),401
+        return jsonify({'status':'error','error':'invalid credentials'}),401
     session = request.cookies.get('session')
     m = hashlib.sha256()
     if session is None:
