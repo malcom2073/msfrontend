@@ -61,7 +61,23 @@ def addForum():
         return jsonify({'status':'error','error':'Unknown error'})
     return jsonify({'status':'success'})
 
-
+@app.route('/addThread',methods=['POST'])
+@jwt_private
+def addThread():
+    jwt = getJwt(request)
+    post_data = request.get_json()
+    print('Index: ' + str(post_data.get('index')))
+    print('Parent: ' + str(post_data.get('parent')))
+    print('Title: ' + post_data.get('title'))
+    print('text: ' + post_data.get('text'))
+    try:
+        dbsession = db.Session()
+        dbsession.add(MSForumsThread(id=post_data.get('index'),forum_id=post_data.get('parent'),title=post_data.get('title'),text=post_data.get('text')))
+        dbsession.commit()
+        dbsession.close()
+    except Exception as e:
+        return jsonify({'status':'error','error':str(e)})
+    return jsonify({'status':'success'})
 
 @app.route('/getForumList',methods=['GET'])
 def getForumList():
