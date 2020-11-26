@@ -83,25 +83,8 @@ topicindex = [
     }    
 ]
 
-def test_forums_noauth(client):
-    rv = client.get('/private')
-    jsonresponse = json.loads(rv.data)
-    assert (jsonresponse['status'] == 'error' and jsonresponse['error'] == 'Null session')
-
-def test_forums_withgoodauth(client):
-    rv = client.get('/private')
-    jsonresponse = json.loads(rv.data)
-    # Verify we get a null session
-    assert (jsonresponse['status'] == 'error' and jsonresponse['error'] == 'Null session')
-    rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
-    print("Auth:")
-    print(rv.data)
-    jsonresponse = json.loads(rv.data)
-    # Verify the password worked.
-    assert jsonresponse['status'] == 'success'
-
 # Test inserting forums based on the forumindex variable above!
-def test_forums_insert(client):
+def test_forums_addForum(client):
     # Grab a token and cookie
     rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     jsonresponse = json.loads(rv.data)
@@ -126,7 +109,7 @@ def test_forums_insert(client):
     #assert False
 
 
-def util_getForumList(client):
+def test_forums_getForumList(client):
     rv = client.get('/getForumList')
     pprint.pprint(rv.data)
     jsonresponse = json.loads(rv.data)
@@ -136,7 +119,7 @@ def util_getForumList(client):
 # Test to make sure the index in the database matches the test forumindex
 def test_forum_index(client):
     #assert jsonresponse['data'] == forumindex
-    test_forums_insert(client)
+    test_forums_addForum(client)
     forumList = util_getForumList(client)
     for index in forumindex:
         print(index)
@@ -153,7 +136,7 @@ def test_forum_index(client):
         pprint.pprint(obj)
 
 # Test inserting posts based on the topicindex variable above!
-def test_forums_insert_posts(client):
+def test_forums_addThread(client):
     # Grab a token and cookie
     rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     jsonresponse = json.loads(rv.data)
@@ -180,8 +163,8 @@ def test_forums_insert_posts(client):
 
 # Test to make sure the index in the database matches the test topicindex
 def test_forum_threads(client):
-    test_forums_insert(client)
-    test_forums_insert_posts(client)
+    test_forums_addForum(client)
+    test_forums_addThread(client)
     forumList = util_getForumList(client)
     foundcount = 0
     for obj in forumList:
