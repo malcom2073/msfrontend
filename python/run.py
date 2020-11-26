@@ -14,7 +14,7 @@ import datetime
 def clearDatabase():
     for tbl in reversed(db.Model.metadata.sorted_tables):
         try:
-            dbl.drop(db.engine)
+            tbl.drop(db.engine)
         except:
             pass
 def loadDatabase(usercsv, fakedata=False):

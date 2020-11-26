@@ -7,6 +7,12 @@ import pprint
 
 forumindex = [
     {
+        'id' : 0,
+        'parent':-1,
+        'title' : "Forums",
+        'desc': "Top Level Forum Object"
+    },
+    {
         'id' : 1,
         'parent':0,
         'title' : "General Discussion",
@@ -120,17 +126,22 @@ def test_forums_insert(client):
     #assert False
 
 
-# Test to make sure the index in the database matches the test forumindex
-def test_forum_index(client):
+def util_getForumList(client):
     rv = client.get('/getForumList')
     pprint.pprint(rv.data)
     jsonresponse = json.loads(rv.data)
     assert 'data' in jsonresponse and 'status' in jsonresponse and jsonresponse['status'] == 'success'
+    return jsonresponse['data']
+
+# Test to make sure the index in the database matches the test forumindex
+def test_forum_index(client):
     #assert jsonresponse['data'] == forumindex
+    test_forums_insert(client)
+    forumList = util_getForumList(client)
     for index in forumindex:
         print(index)
         found = False
-        for obj in jsonresponse['data']:
+        for obj in forumList:
             print("Object")
             print(obj)
             if obj['id'] == index['id']:
@@ -169,15 +180,11 @@ def test_forums_insert_posts(client):
 
 # Test to make sure the index in the database matches the test topicindex
 def test_forum_threads(client):
-    #test_forums_insert(client)
-    rv = client.get('/getForumList')
-    print("/getForumList response")
-    pprint.pprint(rv.data)
-    jsonresponse = json.loads(rv.data)
-    assert 'data' in jsonresponse and 'status' in jsonresponse and jsonresponse['status'] == 'success'
-    #assert jsonresponse['data'] == forumindex
+    test_forums_insert(client)
+    test_forums_insert_posts(client)
+    forumList = util_getForumList(client)
     foundcount = 0
-    for obj in jsonresponse['data']:
+    for obj in forumList:
         print("Forum" + str(obj))
         rv = client.get('/getForumTopics?forumid=' + str(obj['id']))
         jsonresponse = json.loads(rv.data)
@@ -197,4 +204,4 @@ def test_forum_threads(client):
                     pprint.pprint(prethread)
                 assert found
     assert foundcount == len(topicindex)
-
+    
