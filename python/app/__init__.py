@@ -44,6 +44,24 @@ def getForumTopics():
     #        return ["Tut - Topic 1","Tut - Topic 2", "Tut - Topic 3"];
     #    }
 
+@app.route('/addForum',methods=['POST'])
+@jwt_private
+def addForum():
+    jwt = getJwt(request)
+    post_data = request.get_json()
+    print('Index: ' + str(post_data.get('index')))
+    print('Title: ' + post_data.get('title'))
+    print('Desc: ' + post_data.get('desc'))
+    try:
+        dbsession = db.Session()
+        dbsession.add(MSForumsForum(id=post_data.get('index'),parent=0,title=post_data.get('title'),desc=post_data.get('desc')))
+        dbsession.commit()
+        dbsession.close()
+    except:
+        return jsonify({'status':'error','error':'Unknown error'})
+    return jsonify({'status':'success'})
+
+
 
 @app.route('/getForumList',methods=['GET'])
 def getForumList():
