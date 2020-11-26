@@ -1,5 +1,6 @@
 from conftest import client
 from conftest import PASSWORD
+from conftest import USER
 import json
 import pprint
 
@@ -7,18 +8,33 @@ import pprint
 forumindex = [
     {
         'id' : 1,
+        'parent':0,
         'title' : "General Discussion",
         'desc': "General discussion forum, for general topics"
     },
     {
         'id' : 2,
+        'parent':0,
         'title' : "Support",
         'desc': "General support requests forum, for support for specific stuff"
     },
     {
         'id' : 3,
+        'parent':0,
         'title' : "Suggestions",
         'desc': "Suggestion forum. Post your suggestions here!"
+    },
+    {
+        'id' : 4,
+        'parent':1,
+        'title' : "General Subforum #1",
+        'desc': "It's a general forum, but in subforum format!"
+    },
+    {
+        'id' : 5,
+        'parent':1,
+        'title' : "General Subforum #2",
+        'desc': "It's another subforum in the general forum format"
     }
 ]
 
@@ -71,7 +87,7 @@ def test_forums_withgoodauth(client):
     jsonresponse = json.loads(rv.data)
     # Verify we get a null session
     assert (jsonresponse['status'] == 'error' and jsonresponse['error'] == 'Null session')
-    rv = client.post('/auth/auth',json={ 'username': 'Malcom', 'password': PASSWORD })
+    rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     print("Auth:")
     print(rv.data)
     jsonresponse = json.loads(rv.data)
@@ -81,7 +97,7 @@ def test_forums_withgoodauth(client):
 # Test inserting forums based on the forumindex variable above!
 def test_forums_insert(client):
     # Grab a token and cookie
-    rv = client.post('/auth/auth',json={ 'username': 'Malcom', 'password': PASSWORD })
+    rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     jsonresponse = json.loads(rv.data)
     assert jsonresponse['status'] == 'success'
     assert 'access_token' in jsonresponse
@@ -92,7 +108,7 @@ def test_forums_insert(client):
     pprint.pprint(rv.data)
     jsonresponse = json.loads(rv.data)
     assert 'data' in jsonresponse
-    assert 'name' in jsonresponse['data'] and jsonresponse['data']['name'] == 'Malcom'
+    assert 'name' in jsonresponse['data'] and jsonresponse['data']['name'] == USER
     # We're good now to request to add forums!
     for obj in forumindex:
         rv = client.post('/addForum',
@@ -128,7 +144,7 @@ def test_forum_index(client):
 # Test inserting posts based on the topicindex variable above!
 def test_forums_insert_posts(client):
     # Grab a token and cookie
-    rv = client.post('/auth/auth',json={ 'username': 'Malcom', 'password': PASSWORD })
+    rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     jsonresponse = json.loads(rv.data)
     assert jsonresponse['status'] == 'success'
     assert 'access_token' in jsonresponse
@@ -139,7 +155,7 @@ def test_forums_insert_posts(client):
     pprint.pprint(rv.data)
     jsonresponse = json.loads(rv.data)
     assert 'data' in jsonresponse
-    assert 'name' in jsonresponse['data'] and jsonresponse['data']['name'] == 'Malcom'
+    assert 'name' in jsonresponse['data'] and jsonresponse['data']['name'] == USER
     # We're good now to request to add forums!
     for obj in topicindex:
         rv = client.post('/addThread',
@@ -153,6 +169,7 @@ def test_forums_insert_posts(client):
 
 # Test to make sure the index in the database matches the test topicindex
 def test_forum_threads(client):
+    #test_forums_insert(client)
     rv = client.get('/getForumList')
     print("/getForumList response")
     pprint.pprint(rv.data)

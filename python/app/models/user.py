@@ -47,7 +47,9 @@ class User(db.Model):
     registered_date = Column(DateTime, nullable=False,default=datetime.utcnow)
 
     def set_password(self, password):
-        self.password = generate_password_hash(password)
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password.encode('utf-8'),salt)
+        self.password = hashed.decode('utf-8')
 
     def check_password(self, password):
         # This makes us comaptible with PHP's 'default' verify_password function.

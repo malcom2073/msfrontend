@@ -50,6 +50,7 @@ def addForum():
     jwt = getJwt(request)
     post_data = request.get_json()
     print('Index: ' + str(post_data.get('index')))
+    print('Parent: ' + str(post_data.get('parent')))
     print('Title: ' + post_data.get('title'))
     print('Desc: ' + post_data.get('desc'))
     try:
@@ -79,17 +80,39 @@ def addThread():
         return jsonify({'status':'error','error':str(e)})
     return jsonify({'status':'success'})
 
+
+@app.route('/delThread',methods=['POST'])
+@jwt_private
+def delThread():
+    jwt = getJwt(request)
+    post_data = request.get_json()
+    print('Index: ' + str(post_data.get('index')))
+    try:
+        dbsession = db.Session()
+        forumthread = dbsession.query(MSforumsThread).filter(MSForumsThread.id == post_data.get('index')).get()
+        result = dbsession.query(MSForumsComment).filter(MSForumsComment.thread_id == forumthread.id).all()
+        for comment in result:
+            dbsession.delete(comment)
+        dbsession.delete(forumthread)
+        dbsession.commit()
+        dbsession.close()
+    except Exception as e:
+        return jsonify({'status':'error','error':str(e)})
+    return jsonify({'status':'success'})
+
+
 @app.route('/getForumList',methods=['GET'])
 def getForumList():
     jwt = getJwt(request)
     dbsession = db.Session()
     #user = dbsession.query(User).filter(User.name == jwt['user']).first()
     forums = dbsession.query(MSForumsForum).filter(MSForumsForum.parent == 0).all()
-    jsonresponse = jsonify({'status':'success','data': forums})
-    dbsession.close()
-    if forums is None:
+    if forums is None or len(forums) == 0:
+        dbsession.close()
         print("No users")
         return jsonify({'status':'failure','error':'No User'})
+    jsonresponse = jsonify({'status':'success','data': forums})
+    dbsession.close()
     return jsonresponse
 
 @app.route('/getPostList',methods=['GET'])
