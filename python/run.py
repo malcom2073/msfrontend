@@ -21,7 +21,9 @@ def loadDatabase(usercsv, fakedata=False):
     try:
         db.Model.metadata.create_all(db.engine)
         db.session.commit()
-        user = User(id=0,name="admin")
+        db.session.add(Group.Group(id=0,name="Admin"))
+        db.session.commit()
+        user = User(id=0,name="admin",primary_group_id=0)
         user.set_password("testpassword")
         db.session.add(user)
         db.session.commit()
@@ -98,5 +100,5 @@ def loadDatabase(usercsv, fakedata=False):
         print("Done loading")
 
 if __name__ == '__main__':
-    loadDatabase('output.csv',True)
+    loadDatabase('output.csv',False)
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -14,7 +14,7 @@ export function privateRoute(WrappedComponent) {
       // Grab the auth token from the cookies. req only exists on server
       // TODO: Make this work on client for <Link> redirects.
       const auth = AuthToken.fromNext(req);
-      const initialProps = {auth: auth, token: auth.token, pathname: pathname};
+      const initialProps = {auth: auth, token: auth.token, pathname: pathname, query: query};
       //console.log(initialProps);
       //Check for expired auth. This should likely be replaced with valid
       //We can do some logic here for refresh tokens if we want to handle "remember me" boxes.

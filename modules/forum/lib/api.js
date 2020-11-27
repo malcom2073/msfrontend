@@ -14,7 +14,7 @@ export default class ForumApi extends Object {
     }
     async getForumList()
     {
-        const response = await this.api.get('/api/getForumList');
+        const response = await this.api.get('/api/getForums');
         console.log(response);
         if (response.problem) {
             switch (response.problem) {
@@ -36,7 +36,7 @@ export default class ForumApi extends Object {
     }
     async getPostList(topicid)
     {
-        const response = await this.api.get('/api/getPostList', {'topicid' : topicid});
+        const response = await this.api.get('/api/getComments', {'topicid' : topicid});
         console.log(response);
         if (response.problem) {
             switch (response.problem) {
@@ -57,7 +57,7 @@ export default class ForumApi extends Object {
     }
     async getTopicList(forumid)
     {
-        const response = await this.api.get('/api/getForumTopics', {'forumid' : forumid});
+        const response = await this.api.get('/api/getThreads', {'forumid' : forumid});
         console.log(response);
         if (response.problem) {
             switch (response.problem) {

@@ -1,13 +1,13 @@
 import {Container, Row, Col, Table} from 'react-bootstrap';
-import MSNavbar from '../components/navbar'
-import {getUserNavbar} from '../components/navbar'
-import LoginForm from '../components/loginform'
+import MSNavbar from '../../components/navbar'
+import {getUserNavbar} from '../../components/navbar'
+import LoginForm from '../../components/loginform'
 import nextCookie from 'next-cookies'
-import { privateRoute } from "../components/privateroute";
+import { privateRoute } from "../../components/privateroute";
 import { render } from 'react-dom';
-import { AuthToken } from "../services/auth_token";
-import MsApi from '../lib/msapi';
-import pageLayout from '../components/pagelayout'
+import { AuthToken } from "../../services/auth_token";
+import MsApi from '../../lib/msapi';
+import pageLayout from '../../components/pagelayout'
 
 class Users extends React.Component {
     constructor(props)

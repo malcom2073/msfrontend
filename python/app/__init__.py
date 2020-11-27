@@ -142,7 +142,7 @@ def delForum():
 
 
 
-@app.route('/getPostList',methods=['GET'])
+@app.route('/getComments',methods=['GET'])
 def getPostList():
     topicid = int(request.args.get('topicid'))
     print('topicid ID Requested: ' + str(topicid))
