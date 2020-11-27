@@ -109,8 +109,8 @@ def test_forums_addForum(client):
     #assert False
 
 
-def util_forums_getForumList(client):
-    rv = client.get('/getForumList')
+def util_forums_getForums(client):
+    rv = client.get('/getForums')
     pprint.pprint(rv.data)
     jsonresponse = json.loads(rv.data)
     assert 'status' in jsonresponse and jsonresponse['status'] == 'success' and  'data' in jsonresponse
@@ -120,7 +120,7 @@ def util_forums_getForumList(client):
 def test_forum_index(client):
     #assert jsonresponse['data'] == forumindex
     test_forums_addForum(client)
-    forumList = util_forums_getForumList(client)
+    forumList = util_forums_getForums(client)
     for index in forumindex:
         print(index)
         found = False
@@ -165,13 +165,13 @@ def test_forums_addThread(client):
 def test_forum_threads(client):
     test_forums_addForum(client)
     test_forums_addThread(client)
-    forumList = util_forums_getForumList(client)
+    forumList = util_forums_getForums(client)
     foundcount = 0
     for obj in forumList:
         print("Forum" + str(obj))
-        rv = client.get('/getForumTopics?forumid=' + str(obj['id']))
+        rv = client.get('/getThreads?forumid=' + str(obj['id']))
         jsonresponse = json.loads(rv.data)
-        print("/getForumTopics response")
+        print("/getThreads response")
         pprint.pprint(rv.data)
         assert 'status' in jsonresponse and jsonresponse['status'] == 'success' and 'data' in jsonresponse
         for prethread in topicindex:
