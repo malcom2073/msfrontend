@@ -109,18 +109,18 @@ def test_forums_addForum(client):
     #assert False
 
 
-def test_forums_getForumList(client):
+def util_forums_getForumList(client):
     rv = client.get('/getForumList')
     pprint.pprint(rv.data)
     jsonresponse = json.loads(rv.data)
-    assert 'data' in jsonresponse and 'status' in jsonresponse and jsonresponse['status'] == 'success'
+    assert 'status' in jsonresponse and jsonresponse['status'] == 'success' and  'data' in jsonresponse
     return jsonresponse['data']
 
 # Test to make sure the index in the database matches the test forumindex
 def test_forum_index(client):
     #assert jsonresponse['data'] == forumindex
     test_forums_addForum(client)
-    forumList = util_getForumList(client)
+    forumList = util_forums_getForumList(client)
     for index in forumindex:
         print(index)
         found = False
@@ -165,7 +165,7 @@ def test_forums_addThread(client):
 def test_forum_threads(client):
     test_forums_addForum(client)
     test_forums_addThread(client)
-    forumList = util_getForumList(client)
+    forumList = util_forums_getForumList(client)
     foundcount = 0
     for obj in forumList:
         print("Forum" + str(obj))

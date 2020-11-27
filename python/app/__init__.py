@@ -36,7 +36,7 @@ def getForumTopics():
     dbsession.close()
     if forums is None:
         print("No users")
-        return jsonify({'status':'failure','error':'No User'})
+        return jsonify({'status':'error','error':'No User'})
     return jsonresponse
     #elif forumid == 2:
     #    return jsonify([
@@ -109,8 +109,8 @@ def getForumList():
     forums = dbsession.query(MSForumsForum).filter(MSForumsForum.parent == 0).all()
     if forums is None or len(forums) == 0:
         dbsession.close()
-        print("No users")
-        return jsonify({'status':'failure','error':'No User'})
+        print("No forums")
+        return jsonify({'status':'error','error':'No forums listed'})
     jsonresponse = jsonify({'status':'success','data': forums})
     dbsession.close()
     return jsonresponse
@@ -123,7 +123,7 @@ def getPostList():
     topic = dbsession.query(MSForumsThread).filter(MSForumsThread.id == topicid).all()
     if topic is None:
         dbsession.close()
-        return jsonify({'status':'failure','error':'Invalid topic'})
+        return jsonify({'status':'error','error':'Invalid topic'})
     posts = dbsession.query(MSForumsComment).filter(MSForumsComment.thread_id == topicid).all()
     jsonresponse = jsonify({'status':'success','data':topic + posts}) # Grab response before closing database, this fixes lazy-loading errors.
     dbsession.close()
@@ -139,7 +139,7 @@ def userinfo():
     dbsession.close()
     if user is None:
         print("No user")
-        return jsonify({'status':'failure','error':'No User'})
+        return jsonify({'status':'error','error':'No User'})
     return jsonify({'status':'success','data': user})
 
 
@@ -153,7 +153,7 @@ def userlist():
     dbsession.close()
     if users is None:
         print("No users")
-        return jsonify({'status':'failure','error':'No User'})
+        return jsonify({'status':'error','error':'No User'})
     return jsonify({'status':'success','data': users})
 
 
