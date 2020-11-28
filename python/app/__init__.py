@@ -112,6 +112,7 @@ def addForum():
         return jsonify({'status':'error','error':'Unknown error'})
     return jsonify({'status':'success'})
 
+
 @app.route('/getForums',methods=['GET'])
 def getForumList():
     jwt = getJwt(request)
@@ -140,6 +141,20 @@ def delForum():
     dbsession.close()
     return jsonresponse
 
+
+
+@app.route('/getUser',methods=['GET'])
+def getUser():
+    userid = int(request.args.get('userid'))
+    print('userid Requested: ' + str(userid))
+    dbsession = db.Session()
+    userobj = dbsession.query(User).filter(User.id == userid).first()
+    if userobj is None:
+        dbsession.close()
+        return jsonify({'status':'error','error':'Invalid user'})
+    jsonresponse = jsonify({'status':'success','data':userobj}) # Grab response before closing database, this fixes lazy-loading errors.
+    dbsession.close()
+    return jsonresponse
 
 
 @app.route('/getComments',methods=['GET'])
