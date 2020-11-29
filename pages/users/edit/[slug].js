@@ -2,6 +2,8 @@ import {Container, Row, Col, Table} from 'react-bootstrap';
 import MSNavbar from '../../../components/navbar'
 import {getUserNavbar} from '../../../components/navbar'
 import LoginForm from '../../../components/loginform'
+import Link from 'next/link'
+import { Form, Input, Checkbox } from 'antd';
 import nextCookie from 'next-cookies'
 import { privateRoute } from "../../../components/privateroute";
 import { render } from 'react-dom';
@@ -18,11 +20,48 @@ class EditUser extends React.Component {
         this.state = {isLoading: true};
 
     }
+    onFinish(values) {
+        console.log('Success:', values);
+      };
+    
+    onFinishFailed(errorInfo) {
+        console.log('Failed:', errorInfo);
+      };
     render() {
         console.log(this.props);
         return (
             <>
             Editing user {this.props.query.slug}
+            <br/>
+            <Form
+      name="basic"
+      initialValues={{ remember: true }}
+      onFinish={this.onFinish}
+      onFinishFailed={this.onFinishFailed}
+    >
+      <Form.Item
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+        value={this.state.userobj ? ( this.state.userobj.name ) : ( 'No User' ) }
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label="Nickname"
+        name="nickname"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item >
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+            <br/>
             <Table striped bordered hover>
 							<tbody>
 							<tr>
@@ -56,6 +95,7 @@ class EditUser extends React.Component {
 									<td>{ (this.state.userobj) ? (this.state.userobj.registered_date) : ("Loading...")}</td>
 								</tr>
 							</tbody>
+                            <Link href="/users">Cancel</Link>  <Link href="/users">Save</Link>
 						</Table>
         </>
         )

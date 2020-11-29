@@ -1,5 +1,6 @@
 import {Container, Row, Col, Table} from 'react-bootstrap';
 import MSNavbar from '../../components/navbar'
+import Link from 'next/link'
 import {getUserNavbar} from '../../components/navbar'
 import LoginForm from '../../components/loginform'
 import nextCookie from 'next-cookies'
@@ -33,6 +34,7 @@ class Users extends React.Component {
                         <td>{value.lastip}</td>
                         <td>{value.primary_group.name}</td>
                         <td>{value.registered_date}</td>
+                        <td><Link href={"/users/edit/" + value.id}>Edit</Link></td>
                     </tr>
                 )
             })
