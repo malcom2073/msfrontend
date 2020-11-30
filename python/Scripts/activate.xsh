@@ -28,7 +28,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"C:\Users\Michael\code\nextjs-blog\python"
+$VIRTUAL_ENV = r"C:\Users\Michael\code\mikesshop.net\python"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]
