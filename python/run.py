@@ -100,5 +100,5 @@ def loadDatabase(usercsv, fakedata=False):
         print("Done loading")
 
 if __name__ == '__main__':
-    loadDatabase('output.csv',False)
+    loadDatabase('output.csv',True)
     app.run(host='0.0.0.0', port=5000, debug=True)
