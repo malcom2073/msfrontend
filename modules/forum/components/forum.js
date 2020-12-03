@@ -46,9 +46,6 @@ class ForumList extends React.Component {
                     );
                 })) : (<></>)}
                 </div>
-                <div id="posttopic">
-                    Post new topic here
-                </div>
 
             </>
         )
