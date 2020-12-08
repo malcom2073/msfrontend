@@ -17,8 +17,8 @@ class Topic extends React.Component {
                 <ForumList query={this.props.query}/>
             </div>
 			<div id="posttopic">
-                    Post new topic here
-					<Link href="/forums/topic/create">Create Topic</Link>
+                    Post new topic here	
+					<Link href={"/forums/topic/create?forum="+ this.props.query.slug}>Create Topic</Link>
             </div>
 		</>
 	)
