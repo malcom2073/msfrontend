@@ -7,7 +7,7 @@ from sqlalchemy import ForeignKey, Column, Integer, String
 from sqlalchemy.orm import relationship
 from app import db
 from app import main_table_list
-from . import user as User
+from app.models.user import User
 from datetime import datetime
 from dataclasses import dataclass
 from typing import Type

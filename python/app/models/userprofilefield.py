@@ -7,12 +7,12 @@ from sqlalchemy.orm import relationship
 
 from app import db
 #Base = declarative_base()
-from . import user as User
+from app.models.user import User
 
 class UserProfileField(db.Model):
     __tablename__ = "user_profile_fields"
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.User.id))
+    user_id = Column(Integer, ForeignKey(User.id))
     user = relationship("User", back_populates="profilefields")
 
     key = Column(String)

@@ -1,3 +1,10 @@
+import sys
+
+sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net")
+sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app")
+sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app\\models")
+
+
 from app import app
 from app import db
 

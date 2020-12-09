@@ -6,7 +6,7 @@
 from app import db
 from app import main_table_list
 from datetime import datetime
-from . import group as Group
+from app.models.group import Group
 from dataclasses import dataclass
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import ForeignKey, Column, Integer, String, DateTime
@@ -36,7 +36,7 @@ class User(db.Model):
     lastip = Column(String)
     nickname = Column(String)
 
-    primary_group_id = Column(Integer, ForeignKey(Group.Group.id))
+    primary_group_id = Column(Integer, ForeignKey(Group.id))
     primary_group = relationship("Group",back_populates="users",lazy="joined")
 
     #secondary_groups = db.relationship("Group",secondary="user_secondary_group_assoc")

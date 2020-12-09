@@ -6,13 +6,13 @@ import string
 import datetime
 import jwt
 
-from ..util import getJwt, getAuthToken
+from util import getJwt, getAuthToken
 auth_bp = Blueprint('auth_bp', __name__)
-from .. import db
-from .. import User
-from .. import Group
-from .. import UserProfileField
-from .. import app
+import db
+from app.models.user import User
+from app.models.group import Group
+from app.models.userprofilefield import UserProfileField
+import app
 
 def encode_auth_token(user_id):
     payload = {
