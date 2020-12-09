@@ -51,19 +51,6 @@ def getUser():
     return jsonresponse
 
 
-@app.route('/getComments',methods=['GET'])
-def getPostList():
-    topicid = int(request.args.get('topicid'))
-    print('topicid ID Requested: ' + str(topicid))
-    dbsession = db.Session()
-    topic = dbsession.query(MSForumsThread).filter(MSForumsThread.id == topicid).all()
-    if topic is None:
-        dbsession.close()
-        return jsonify({'status':'error','error':'Invalid topic'})
-    posts = dbsession.query(MSForumsComment).filter(MSForumsComment.thread_id == topicid).all()
-    jsonresponse = jsonify({'status':'success','data':topic + posts}) # Grab response before closing database, this fixes lazy-loading errors.
-    dbsession.close()
-    return jsonresponse
 
 @app.route('/userinfo')
 @jwt_private
