@@ -48,38 +48,38 @@ topicindex = [
     {
         'id': 0,
         'parent': 1,
-        'title': "This is the title text of the first general post",
-        'text':"This is the body text of the first general post!"
+        'subject': "This is the title text of the first general post",
+        'content':"This is the body text of the first general post!"
     },
     {
         'id': 1,
         'parent': 1,
-        'title': "This is the title text of the second general post",
-        'text':"This is the body text of the second general post!"
+        'subject': "This is the title text of the second general post",
+        'content':"This is the body text of the second general post!"
     },
     {
         'id': 2,
         'parent': 1,
-        'title': "This is the title text of the third general post",
-        'text':"This is the body text of the third general post!"
+        'subject': "This is the title text of the third general post",
+        'content':"This is the body text of the third general post!"
     },
     {
         'id': 3,
         'parent': 2,
-        'title': "This is the title text of the first support post",
-        'text':"This is the body text of the first support post!"
+        'subject': "This is the title text of the first support post",
+        'content':"This is the body text of the first support post!"
     },
     {
         'id': 4,
         'parent': 2,
-        'title': "This is the title text of the second support post",
-        'text':"This is the body text of the second support post!"
+        'subject': "This is the title text of the second support post",
+        'content':"This is the body text of the second support post!"
     },
     {
         'id': 5,
         'parent': 3,
-        'title': "This is the title text of the first suggestions post",
-        'text':"This is the body text of the first suggestions post!"
+        'subject': "This is the title text of the first suggestions post",
+        'content':"This is the body text of the first suggestions post!"
     }    
 ]
 
@@ -154,7 +154,7 @@ def test_forums_addThread(client):
     for obj in topicindex:
         rv = client.post('/addThread',
             headers={'Set-Cookie':cookie,'Authorization':'Bearer ' + accesstoken},
-            json={'index':obj['id'],'parent':obj['parent'],'title':obj['title'],'text':obj['text']})
+            json={'index':obj['id'],'parent':obj['parent'],'subject':obj['subject'],'content':obj['content']})
         jsonresponse = json.loads(rv.data)
         assert 'status' in jsonresponse and jsonresponse['status'] == 'success'
         pprint.pprint(rv.data)
@@ -179,8 +179,8 @@ def test_forum_threads(client):
                 found = False
                 for thread in jsonresponse['data']:
                     if thread['id'] == prethread['id']:
-                        assert thread['title'] == prethread['title']
-                        assert thread['text'] == prethread['text']
+                        assert thread['subject'] == prethread['subject']
+                        assert thread['content'] == prethread['content']
                         foundcount+=1
                         found = True
                 if not found:

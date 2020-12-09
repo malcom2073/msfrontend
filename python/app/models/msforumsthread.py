@@ -15,18 +15,20 @@ from dataclasses import dataclass
 class MSForumsThread(db.Model):
     __tablename__ = "msforums_threads"
 
-    id: int
-    title: str
-    text: str
-    user: User
-    timestamp: int
+    id: int # Auto incremented ID
+    subject: str # Title of the thread post
+    content: str # Text of the thread post
+    user: User # User that created it
+    timestamp: int # UnixTime when posted
+    edited: int # UnixTime when edited, non zero if it has been edited.
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User",backref="msforums_threads")
-    text = Column(String)
-    title = Column(String)
+    subject = Column(String)
+    content = Column(String)
     timestamp = Column(Integer)
+    edited = Column(Integer)
 
     forum_id = Column(Integer,ForeignKey('msforums_forums.id'))
     forum = relationship("MSForumsForum",backref="forums")

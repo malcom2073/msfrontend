@@ -31,14 +31,14 @@ class ForumList extends React.Component {
                                 <Row>
                                     <Col span={4}>
                                     <Link key={"/forums/topic/" + value.id} href={"/forums/topic/" + value.id}>
-                                            {value.title}
+                                            {value.subject}
                                         </Link>
                                     </Col>
                                     <Col span={20}></Col>
                                 </Row>
                                 <Row>
                                     <Col span={4}></Col>
-                                    <Col span={20}>{value.text}</Col>
+                                    <Col span={20}>{value.content}</Col>
 
                                 </Row>
                             </Col>

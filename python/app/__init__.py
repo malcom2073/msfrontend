@@ -43,11 +43,11 @@ def addThread():
     post_data = request.get_json()
     print('Index: ' + str(post_data.get('index')))
     print('Parent: ' + str(post_data.get('parent')))
-    print('Title: ' + post_data.get('title'))
-    print('text: ' + post_data.get('text'))
+    print('Title: ' + post_data.get('subject'))
+    print('text: ' + post_data.get('content'))
     try:
         dbsession = db.Session()
-        dbsession.add(MSForumsThread(id=post_data.get('index'),forum_id=post_data.get('parent'),title=post_data.get('title'),text=post_data.get('text')))
+        dbsession.add(MSForumsThread(id=post_data.get('index'),forum_id=post_data.get('parent'),subject=post_data.get('subject'),content=post_data.get('content')))
         dbsession.commit()
         dbsession.close()
     except Exception as e:

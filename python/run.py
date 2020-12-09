@@ -74,20 +74,20 @@ def loadDatabase(usercsv, fakedata=False):
         try:
             db.session.add(MSForumsForum(id=0,parent=-1,title="Main Forum",desc=""))
             db.session.add(MSForumsForum(id=1,parent=0,title="General Discussion",desc="General discussion forum, for general topics"))
-            db.session.add(MSForumsThread(id=0,forum_id=1,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),title="This is the title text of the first post",text="This is the text of the post!"))
+            db.session.add(MSForumsThread(id=0,forum_id=1,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),subject="This is the title text of the first post",content="This is the text of the post!"))
             db.session.add(MSForumsComment(id=0,thread_id=0,user_id=16,timestamp=(datetime.datetime.now()-datetime.timedelta(days=4)).timestamp(),text="This is the text of the first comment on the first post"))
             db.session.add(MSForumsComment(id=1,thread_id=0,user_id=3,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),text="This is a second comment on the first post"))
             db.session.add(MSForumsComment(id=2,thread_id=0,user_id=4,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),text="This is a third comment on the first post"))
-            db.session.add(MSForumsThread(id=1,forum_id=1,user_id=3,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),title="This is the title text of the second post",text="This is the text of the post!"))
+            db.session.add(MSForumsThread(id=1,forum_id=1,user_id=3,timestamp=(datetime.datetime.now()-datetime.timedelta(days=5)).timestamp(),subject="This is the title text of the second post",content="This is the text of the post!"))
             db.session.add(MSForumsComment(id=3,thread_id=1,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=4)).timestamp(),text="This is the text of the first  comment on the second post"))
             db.session.add(MSForumsComment(id=4,thread_id=1,user_id=7,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),text="This is a second comment on the second post"))
             db.session.add(MSForumsComment(id=5,thread_id=1,user_id=9,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),text="This is a third comment on the second post"))
 
 
             db.session.add(MSForumsForum(id=2,parent=0,title="Support",desc="General support requests forum, for support for specific stuff"))
-            db.session.add(MSForumsThread(id=2,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="This is the title text of the First post on this forum!",text="This is the text of the post!"))
-            db.session.add(MSForumsThread(id=3,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),title="This is the title text of the second psot on this forum!",text="This is the text of the post!"))
-            db.session.add(MSForumsThread(id=4,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=1)).timestamp(),title="This is the title text of the third post on this forum!",text="This is the text of the post!"))
+            db.session.add(MSForumsThread(id=2,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),subject="This is the title text of the First post on this forum!",content="This is the text of the post!"))
+            db.session.add(MSForumsThread(id=3,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=2)).timestamp(),subject="This is the title text of the second psot on this forum!",content="This is the text of the post!"))
+            db.session.add(MSForumsThread(id=4,forum_id=2,user_id=1,timestamp=(datetime.datetime.now()-datetime.timedelta(days=1)).timestamp(),subject="This is the title text of the third post on this forum!",content="This is the text of the post!"))
 
             db.session.add(MSForumsForum(id=3,parent=0,title="Suggestions",desc="Suggestion forum. Post your suggestions here!"))
             db.session.commit()
