@@ -12,9 +12,6 @@ main_table_list = {}
 
 from app.models.user import User
 from app.models.group import Group
-from app.models.msforumsforum import MSForumsForum
-from app.models.msforumsthread import MSForumsThread
-from app.models.msforumscomment import MSForumsComment
 from app.models import userprofilefield as UserProfileField
 
 from .auth import auth_bp

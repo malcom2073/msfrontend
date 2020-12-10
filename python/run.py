@@ -10,9 +10,10 @@ from app import db
 
 from app.models.user import User
 from app.models import group as Group
-from app.models.msforumsforum import MSForumsForum
-from app.models.msforumsthread import MSForumsThread
-from app.models.msforumscomment import MSForumsComment
+from modules.forum.python.models.msforumsforum import MSForumsForum
+from modules.forum.python.models.msforumsthread import MSForumsThread
+from modules.forum.python.models.msforumscomment import MSForumsComment
+from modules.forum.python.models.msforumsforum import MSForumsForum
 from app.models.userprofilefield import UserProfileField
 import csv
 import pprint
