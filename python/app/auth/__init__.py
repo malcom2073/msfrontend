@@ -12,7 +12,7 @@ import db
 from app.models.user import User
 from app.models.group import Group
 from app.models.userprofilefield import UserProfileField
-import app
+from app.config import SECRET_KEY
 
 def encode_auth_token(user_id):
     payload = {
@@ -22,7 +22,7 @@ def encode_auth_token(user_id):
     }
     return jwt.encode(
         payload,
-        app.config.get('SECRET_KEY'),
+        SECRET_KEY,
         algorithm='HS256'
     )
 

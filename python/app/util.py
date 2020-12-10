@@ -35,6 +35,8 @@ import jwt
 import pprint
 import hashlib
 from flask import Request
+from app.config import SECRET_KEY
+
 def decode_auth_token(auth_token,key):
     payload = jwt.decode(auth_token, key,algorithms=['HS256'])
     return payload['sub']
@@ -70,7 +72,7 @@ def getJwt(request: Request):
     pprint.pprint(auth_token)
     if auth_token:
         try:
-            resp = decode_auth_token(auth_token,app.config.get('SECRET_KEY'))
+            resp = decode_auth_token(auth_token,SECRET_KEY)
             pprint.pprint(resp)
             print("Cookies")
             pprint.pprint(request.cookies)

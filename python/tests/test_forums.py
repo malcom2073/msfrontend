@@ -100,7 +100,7 @@ def test_forums_addForum(client):
     assert 'name' in jsonresponse['data'] and jsonresponse['data']['name'] == USER
     # We're good now to request to add forums!
     for obj in forumindex:
-        rv = client.post('/addForum',
+        rv = client.post('/forum/addForum',
             headers={'Set-Cookie':cookie,'Authorization':'Bearer ' + accesstoken},
             json={'index':obj['id'],'title':obj['title'],'desc':obj['desc']})
         jsonresponse = json.loads(rv.data)
@@ -110,7 +110,7 @@ def test_forums_addForum(client):
 
 
 def util_forums_getForums(client):
-    rv = client.get('/getForums')
+    rv = client.get('/forum/getForums')
     pprint.pprint(rv.data)
     jsonresponse = json.loads(rv.data)
     assert 'status' in jsonresponse and jsonresponse['status'] == 'success' and  'data' in jsonresponse
@@ -152,7 +152,7 @@ def test_forums_addThread(client):
     assert 'name' in jsonresponse['data'] and jsonresponse['data']['name'] == USER
     # We're good now to request to add forums!
     for obj in topicindex:
-        rv = client.post('/addThread',
+        rv = client.post('/forum/addThread',
             headers={'Set-Cookie':cookie,'Authorization':'Bearer ' + accesstoken},
             json={'index':obj['id'],'parent':obj['parent'],'subject':obj['subject'],'content':obj['content']})
         jsonresponse = json.loads(rv.data)
@@ -169,7 +169,7 @@ def test_forum_threads(client):
     foundcount = 0
     for obj in forumList:
         print("Forum" + str(obj))
-        rv = client.get('/getThreads?forumid=' + str(obj['id']))
+        rv = client.get('/forum/getThreads?forumid=' + str(obj['id']))
         jsonresponse = json.loads(rv.data)
         print("/getThreads response")
         pprint.pprint(rv.data)
