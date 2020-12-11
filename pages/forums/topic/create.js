@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import pageLayout from '../../../components/pagelayout'
 import Forum_Index from '../../../components/forums'
 import CreateTopic from '../../../modules/forum/components/createtopic'
-
+import { privateRoute } from "../../../components/privateroute";
 class TopicCreate extends React.Component {
 		constructor(props)
 		{
@@ -25,4 +25,4 @@ class TopicCreate extends React.Component {
 	}
 
 }
-export default pageLayout(TopicCreate);
+export default privateRoute(pageLayout(TopicCreate));
