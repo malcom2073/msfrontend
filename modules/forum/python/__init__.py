@@ -86,11 +86,6 @@ def getForumTopics():
         print("No users")
         return jsonify({'status':'error','error':'No User'})
     return jsonresponse
-    #elif forumid == 2:
-    #    return jsonify([
-    #    {
-    #        return ["Tut - Topic 1","Tut - Topic 2", "Tut - Topic 3"];
-    #    }
 
 @module_bp.route('/addForum',methods=['POST'])
 @jwt_private
@@ -115,7 +110,6 @@ def addForum():
 def getForumList():
     jwt = getJwt(request)
     dbsession = db.Session()
-    #user = dbsession.query(User).filter(User.name == jwt['user']).first()
     forums = dbsession.query(MSForumsForum).filter(MSForumsForum.parent == 0).all()
     if forums is None or len(forums) == 0:
         dbsession.close()
@@ -129,7 +123,6 @@ def getForumList():
 def delForum():
     jwt = getJwt(request)
     dbsession = db.Session()
-    #user = dbsession.query(User).filter(User.name == jwt['user']).first()
     forums = dbsession.query(MSForumsForum).filter(MSForumsForum.parent == 0).all()
     if forums is None or len(forums) == 0:
         dbsession.close()

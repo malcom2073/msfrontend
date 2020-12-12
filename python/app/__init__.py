@@ -80,8 +80,6 @@ def userlist():
 @app.route('/private')
 @jwt_private
 def private():
-    #post_data = request.get_json()
-    #pprint.pprint(resp)
     return 'Private data!\n'
 
 @app.route('/')
@@ -98,11 +96,6 @@ def getAllPostIds():
                 'ids': 'ssg-ssr'
             }
         },
-#        {
-#            'params' : {
-#                'ids': 'pre-rendering'
-#            }
-#        }
     ])
 
     
