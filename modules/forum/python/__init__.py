@@ -72,6 +72,22 @@ def delThread():
         return jsonify({'status':'error','error':str(e)})
     return jsonify({'status':'success'})
 
+
+@module_bp.route('/getThread',methods=['GET'])
+def getForumTopic():
+    threadid = int(request.args.get('threadid'))
+    print('Thread ID Requested: ' + str(threadid))
+    jwt = getJwt(request)
+    dbsession = db.Session()
+    thread = dbsession.query(MSForumsThread).filter(MSForumsThread.id == threadid).all()
+    jsonresponse = jsonify({'status':'success','data': thread})
+    dbsession.close()
+    if thread is None:
+        print("No users")
+        return jsonify({'status':'error','error':'No User'})
+    return jsonresponse
+
+
 @module_bp.route('/getThreads',methods=['GET'])
 def getForumTopics():
     forumid = int(request.args.get('forumid'))
@@ -143,6 +159,37 @@ def getPostList():
         dbsession.close()
         return jsonify({'status':'error','error':'Invalid topic'})
     posts = dbsession.query(MSForumsComment).filter(MSForumsComment.thread_id == topicid).all()
-    jsonresponse = jsonify({'status':'success','data':topic + posts}) # Grab response before closing database, this fixes lazy-loading errors.
+    jsonresponse = jsonify({'status':'success','data':posts}) # Grab response before closing database, this fixes lazy-loading errors.
     dbsession.close()
     return jsonresponse
+
+@module_bp.route('/getComment',methods=['GET'])
+def getComment():
+    commentid = int(request.args.get('commentid'))
+    print('commentid ID Requested: ' + str(commentid))
+    dbsession = db.Session()
+    posts = dbsession.query(MSForumsComment).filter(MSForumsComment.id == commentid).all()
+    jsonresponse = jsonify({'status':'success','data':posts}) # Grab response before closing database, this fixes lazy-loading errors.
+    dbsession.close()
+    return jsonresponse
+
+@module_bp.route('/addComment',methods=['POST'])
+@jwt_private
+def addComment():
+    #json={'index':obj['id'],'thread':obj['thread'],'user':obj['user'],'timestmap':obj['timestamp'],'text':obj['text']})
+    jwt = getJwt(request)
+    post_data = request.get_json()
+    print('Index: ' + str(post_data.get('index')))
+    print('Thread: ' + str(post_data.get('thread')))
+    print('User: ' + str(post_data.get('user')))
+    print('Timestamp: ' + str(post_data.get('timestamp')))
+    print('Text: ' + post_data.get('text'))
+    try:
+        dbsession = db.Session()
+        dbsession.add(MSForumsComment(id=post_data.get('index'),thread_id=post_data.get('thread'),user_id=post_data.get('user'),timestamp=post_data.get('timestamp'),text=post_data.get('text')))
+        dbsession.commit()
+        dbsession.close()
+    except:
+        return jsonify({'status':'error','error':'Unknown error'})
+    return jsonify({'status':'success'})
+    

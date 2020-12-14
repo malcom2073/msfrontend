@@ -10,6 +10,8 @@ from app import main_table_list
 from app.models.user import User
 from datetime import datetime
 from dataclasses import dataclass
+from typing import Type
+
 
 @dataclass
 class MSForumsComment(db.Model):
@@ -19,6 +21,7 @@ class MSForumsComment(db.Model):
     text: str
     user: User
     timestamp: int
+    thread: Type['MSForumsThread'] # Parent forum, only top level should be null
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
