@@ -129,6 +129,7 @@ commentindex = [
 
 # Test inserting forums based on the forumindex variable above!
 def test_forums_addForum(client):
+    print("*******************RUNNING TEST_FORUMS_ADDFORUM********************")
     # Grab a token and cookie
     rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     jsonresponse = json.loads(rv.data)
@@ -162,6 +163,7 @@ def util_forums_getForums(client):
 
 # Test to make sure the index in the database matches the test forumindex
 def test_forum_index(client):
+    print("*******************RUNNING TEST_FORUM_INDEX********************")
     #assert jsonresponse['data'] == forumindex
     test_forums_addForum(client)
     forumList = util_forums_getForums(client)
@@ -181,6 +183,7 @@ def test_forum_index(client):
 
 # Test inserting posts based on the threadindex variable above!
 def test_forums_addThread(client):
+    print("*******************RUNNING TEST_FORUMS_ADDTHREAD********************")
     # Grab a token and cookie
     rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     jsonresponse = json.loads(rv.data)
@@ -207,6 +210,7 @@ def test_forums_addThread(client):
 
 # Test to make sure the index in the database matches the test threadindex
 def test_forum_threads(client):
+    print("*******************RUNNING TEST_FORUM_THREADS********************")
     test_forums_addForum(client)
     test_forums_addThread(client)
     forumList = util_forums_getForums(client)
@@ -235,6 +239,7 @@ def test_forum_threads(client):
 
 # Test inserting posts based on the threadindex variable above!
 def test_forums_addComment(client):
+    print("*******************RUNNING TEST_FORUM_ADDCOMMENTS********************")
     # Grab a token and cookie
     rv = client.post('/auth/auth',json={ 'username': USER, 'password': PASSWORD })
     jsonresponse = json.loads(rv.data)
