@@ -18,7 +18,7 @@ class Topic extends React.Component {
             </div>
 			<div id="posttopic">
                     Post new topic here	
-					<Link href={"/forums/topic/create?forum="+ this.props.query.slug}>Create Topic</Link>
+					<Link href={"/forums/forum/" + this.props.query.slug + "/create"}>Create Topic</Link>
             </div>
 		</>
 	)
