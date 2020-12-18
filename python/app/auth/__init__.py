@@ -150,6 +150,7 @@ def auth():
     # TODO: These are hardcoded at the moment.
     roleobj = {
         'user': post_data.get('username'),
+        'user_id': user.id,
         'roles': [
             'admin',
             'member-i',

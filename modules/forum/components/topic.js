@@ -44,7 +44,7 @@ class TopicList extends React.Component {
                         <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
                             <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
                                 <Row>
-                                    <Col span={4}>User: {value.user.name}</Col>
+                                    <Col span={4}>User: {value.user ? value.user.name : 'NoUser'}</Col>
                                     <Col span={8}>
                                         <Row>
                                             <Col>{value.text}</Col>

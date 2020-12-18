@@ -3,6 +3,7 @@ import ForumApi from '../../../modules/forum/lib/api'
 import TopicList from '../../../modules/forum/components/topic'
 import { withRouter } from 'next/router'
 import pageLayout from '../../../components/pagelayout'
+import Link from 'next/link'
 class Topic extends React.Component {
 		constructor({query})
 		{
@@ -14,6 +15,10 @@ class Topic extends React.Component {
 			Topic List!s
             <div id="uniq">
                 <TopicList query={this.props.query}/>
+            </div>
+			<div id="posttopic">
+                    Post new topic here	
+					<Link href={"/forums/topic/" + this.props.query.slug + "/create"}>Create post</Link>
             </div>
 		</>
 	)

@@ -183,14 +183,19 @@ def addComment():
     #json={'index':obj['id'],'thread':obj['thread'],'user':obj['user'],'timestmap':obj['timestamp'],'text':obj['text']})
     jwt = getJwt(request)
     post_data = request.get_json()
-    print('Index: ' + str(post_data.get('index')))
-    print('Thread: ' + str(post_data.get('thread')))
+    if 'index' in post_data:
+        print('Index: ' + str(post_data.get('index')))
+    print('Thread: ' + str(post_data.get('thread_id')))
     print('User: ' + str(post_data.get('user')))
     print('Timestamp: ' + str(post_data.get('timestamp')))
     print('Text: ' + post_data.get('text'))
+    sys.stdout.flush()
     try:
         dbsession = db.Session()
-        dbsession.add(MSForumsComment(id=post_data.get('index'),thread_id=post_data.get('thread'),user_id=post_data.get('user'),timestamp=post_data.get('timestamp'),text=post_data.get('text')))
+        if 'index' in post_data:
+            dbsession.add(MSForumsComment(id=post_data.get('index'),thread_id=post_data.get('thread_id'),user_id=post_data.get('user'),timestamp=post_data.get('timestamp'),text=post_data.get('text')))
+        else:
+            dbsession.add(MSForumsComment(id=post_data.get('index'),thread_id=post_data.get('thread_id'),user_id=post_data.get('user'),timestamp=post_data.get('timestamp'),text=post_data.get('text')))
         dbsession.commit()
         dbsession.close()
     except:

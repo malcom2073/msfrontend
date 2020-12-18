@@ -1,10 +1,10 @@
 import {Container, Row, Col, Table} from 'react-bootstrap';
 import nextCookie from 'next-cookies'
 import { render } from 'react-dom';
-import pageLayout from '../../../components/pagelayout'
-import Forum_Index from '../../../components/forums'
-import CreateTopic from '../../../modules/forum/components/createtopic'
-import { privateRoute } from "../../../components/privateroute";
+import pageLayout from '../../../../components/pagelayout'
+import Forum_Index from '../../../../components/forums'
+import CreateComment from '../../../../modules/forum/components/createcomment'
+import { privateRoute } from "../../../../components/privateroute";
 class CommentCreate extends React.Component {
 		constructor(props)
 		{
@@ -14,10 +14,10 @@ class CommentCreate extends React.Component {
 	render() {
 	return (
 		<>
-			Main Forum Index
-			Create Topic Here! ID: {this.props.query.forum}
+			Main Thread Index
+			Create Comment Here! ID: {this.props.query.forum}
 		<Container fluid>
-			<CreateTopic query={this.props.query}/>
+			<CreateComment query={this.props.query}/>
 
 		</Container>
 		</>
