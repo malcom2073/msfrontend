@@ -28,7 +28,8 @@ export default class CreateTopic extends React.Component {
             baseURL: 'http://localhost:3000',
             headers: headers,
           });
-          const response = await api.post('/api/addThread',{ parent: this.props.query.forum, title: e.subject,text: e.posttext});
+          const response = await api.post('/api/forum/addThread',{ 'parent': this.props.query.slug, 'subject': e.subject,'content': e.posttext});
+          console.log("addThread Response");
           console.log(response);
           // TODO: Handle more of these errors.
           if (response.problem) {
@@ -46,7 +47,7 @@ export default class CreateTopic extends React.Component {
             }
             alert('Unknown error');
         }
-        Router.push('/forums/forum/' + this.props.query.forum);
+        Router.push('/forums/forum/' + this.props.query.slug);
         return;
     
     }

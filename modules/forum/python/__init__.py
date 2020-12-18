@@ -5,6 +5,7 @@ import random
 import string
 import datetime
 import jwt
+import sys # For sys.stdout.flush()
 
 from util import getJwt, getAuthToken
 from auth import jwt_private
@@ -39,10 +40,12 @@ import app
 def addThread():
     jwt = getJwt(request)
     post_data = request.get_json()
+    pprint.pprint(post_data)
     print('Index: ' + str(post_data.get('index')))
     print('Parent: ' + str(post_data.get('parent')))
     print('Title: ' + post_data.get('subject'))
     print('text: ' + post_data.get('content'))
+    sys.stdout.flush()
     try:
         dbsession = db.Session()
         dbsession.add(MSForumsThread(id=post_data.get('index'),forum_id=post_data.get('parent'),subject=post_data.get('subject'),content=post_data.get('content')))
@@ -112,6 +115,7 @@ def addForum():
     print('Parent: ' + str(post_data.get('parent')))
     print('Title: ' + post_data.get('title'))
     print('Desc: ' + post_data.get('desc'))
+    sys.stdout.flush()
     try:
         dbsession = db.Session()
         dbsession.add(MSForumsForum(id=post_data.get('index'),parent=0,title=post_data.get('title'),desc=post_data.get('desc')))
