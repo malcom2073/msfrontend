@@ -18,7 +18,6 @@ export default class CreateComment extends React.Component {
         this.setState({[e.target.name]: e.target.value});
       }
     onSubmit = async e => {
-        console.log(e);
         var token = AuthToken.fromNext()
         var headers = { Accept: 'application/vnd.github.v3+json'}
         if (token) {
@@ -30,12 +29,7 @@ export default class CreateComment extends React.Component {
           });
           var timestamp = Date.now() / 1000 | 0;
           var user_id = token.decodedToken.sub.user_id;
-          console.log("***TOKEN***");
-          console.log(token);
-          console.log(token.decodedToken);
           const response = await api.post('/api/forum/addComment',{ 'thread_id': this.props.query.slug, 'timestamp':timestamp,'user': user_id,'text': e.posttext});
-          console.log("addThread Response");
-          console.log(response);
           // TODO: Handle more of these errors.
           if (response.problem) {
             switch (response.problem) {

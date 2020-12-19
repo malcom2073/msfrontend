@@ -18,7 +18,6 @@ export default class CreateTopic extends React.Component {
         this.setState({[e.target.name]: e.target.value});
       }
     onSubmit = async e => {
-        console.log(e);
         var token = AuthToken.fromNext()
         var headers = { Accept: 'application/vnd.github.v3+json'}
         if (token) {
@@ -29,8 +28,6 @@ export default class CreateTopic extends React.Component {
             headers: headers,
           });
           const response = await api.post('/api/forum/addThread',{ 'parent': this.props.query.slug, 'subject': e.subject,'content': e.posttext});
-          console.log("addThread Response");
-          console.log(response);
           // TODO: Handle more of these errors.
           if (response.problem) {
             switch (response.problem) {
