@@ -43,10 +43,6 @@ export default function pageLayout(WrappedComponent) {
                     {
                         var pathname = this.props.pathname;
                         var path = pathname.split("/").slice(1,index).join("/") + "/" + value;
-                        console.log("*****");
-                        console.log(pathname);
-                        console.log(path);
-                        console.log(value);
                 return (
 
                         <Breadcrumb.Item href={path}>
@@ -73,9 +69,6 @@ export default function pageLayout(WrappedComponent) {
 
           
         static async getInitialProps({query,pathname}) {
-            console.log("PageLayoutProps");
-            console.log(query);
-            console.log(pathname);
             return {query:query,pathname:pathname}
         }
         async componentDidMount() {
