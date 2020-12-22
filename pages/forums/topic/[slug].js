@@ -1,5 +1,7 @@
 import { Row, Col } from 'antd';
 import ForumApi from '../../../modules/forum/lib/api'
+import dynamic from 'next/dynamic'
+//const TopicList = dynamic(import('../../../modules/forum/components/topic'), {ssr: false})
 import TopicList from '../../../modules/forum/components/topic'
 import { withRouter } from 'next/router'
 import pageLayout from '../../../components/pagelayout'

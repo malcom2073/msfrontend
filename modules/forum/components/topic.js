@@ -4,6 +4,9 @@ import { withRouter } from 'next/router'
 import pageLayout from '../../../components/pagelayout'
 import { Comment, Avatar, Form, Button, List, Input } from 'antd';
 import { Typography, Space } from 'antd';
+import remark from 'remark'
+import html from 'remark-html'
+
 
 const { Text, Link } = Typography;
 class TopicList extends React.Component {
@@ -18,7 +21,18 @@ class TopicList extends React.Component {
         var topicdata = await this.api.getPostList(this.props.query.slug);
         if (topicdata)
         {
-            this.setState({topicdata: topicdata,loaded:true});
+            var retval = []
+            var arrayLength = topicdata.length;
+            for (var i = 0; i < arrayLength; i++) {
+                //Do something
+                var processedContent = await remark().use(html).process(topicdata[i].text);
+                var contentHtml = processedContent.toString();
+                retval.push({'user':topicdata[i].user,'text':contentHtml,'timestamp':topicdata[i].timestamp});
+            }
+            console.log("TOPICDATA");
+            console.log(retval);
+            this.setState({topicdata: retval,loaded:true});
+            
         }
     }
     timeConverter(UNIX_timestamp){
@@ -34,6 +48,29 @@ class TopicList extends React.Component {
         return time;
       }
 	render() {
+        const options = {
+            lineWrapping: true,
+            // TODO: show vim key buffer and current mode (always visible at bottom)
+            //   https://codemirror.net/demo/vim.html
+            // TODO: allow vim mode to be toggled on/off through UI
+            //keyMap: "vim", // https://codemirror.net/doc/manual.html#vimapi
+
+            //mode: 'hypermd',
+            // mode: 'gfm',
+            //theme: 'hypermd-light',
+
+            hmdFold: {
+              image: true,
+              link: true,
+              math: true,
+            },
+            hmdHideToken: true,
+            hmdCursorDebounce: true,
+            hmdPaste: true,
+            hmdClick: true,
+            hmdHover: true,
+            hmdTableAlign: true,
+        };
         return (
             <>
                 Forum Topic
@@ -47,7 +84,9 @@ class TopicList extends React.Component {
                                     <Col span={4}>User: {value.user ? value.user.name : 'NoUser'}</Col>
                                     <Col span={8}>
                                         <Row>
-                                            <Col>{value.text}</Col>
+                                            <Col>
+                                            <div dangerouslySetInnerHTML={{__html: value.text}}></div>
+                                            </Col>
                                         </Row>
                                         <Row>
                                             <Col><Text type="secondary">Posted {this.timeConverter(value.timestamp)}</Text></Col>
