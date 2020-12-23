@@ -2,7 +2,14 @@ import { create } from 'apisauce'
 import { AuthToken } from '../../../services/auth_token'
 import { useRouter } from 'next/router'
 import Router from 'next/router'
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Row,Form, Input, Button, Checkbox } from 'antd';
+
+
+import {UnControlled as CodeMirror} from 'react-codemirror2'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/material.css'
+
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -52,8 +59,33 @@ export default class CreateComment extends React.Component {
     }
     
     render() {
+        const options = {
+            lineWrapping: true,
+            // TODO: show vim key buffer and current mode (always visible at bottom)
+            //   https://codemirror.net/demo/vim.html
+            // TODO: allow vim mode to be toggled on/off through UI
+            //keyMap: "vim", // https://codemirror.net/doc/manual.html#vimapi
+
+            //mode: 'hypermd',
+            mode: 'gfm',
+            //theme: 'hypermd-light',
+
+            hmdFold: {
+              image: true,
+              link: true,
+              math: true,
+            },
+            hmdHideToken: true,
+            hmdCursorDebounce: true,
+            hmdPaste: true,
+            hmdClick: true,
+            hmdHover: true,
+            hmdTableAlign: true,
+        };
       this.nextUrl = this.props.next;
         return (
+            <>
+            <Row>
             <Form name="basic" onFinish={this.onSubmit}>
       <Form.Item
         label="Post Text"
@@ -68,7 +100,16 @@ export default class CreateComment extends React.Component {
           Submit
         </Button>
       </Form.Item>
-          </Form>          
+          </Form>
+          </Row>
+          <Row> 
+          <CodeMirror
+      value={"Testing **values** in codemirror"}
+      options={{theme: 'material', mode: 'javascript'}}
+      onChange={() => null}
+    />
+</Row>
+</>
         );
       }
 }
