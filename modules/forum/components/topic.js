@@ -48,29 +48,7 @@ class TopicList extends React.Component {
         return time;
       }
 	render() {
-        const options = {
-            lineWrapping: true,
-            // TODO: show vim key buffer and current mode (always visible at bottom)
-            //   https://codemirror.net/demo/vim.html
-            // TODO: allow vim mode to be toggled on/off through UI
-            //keyMap: "vim", // https://codemirror.net/doc/manual.html#vimapi
 
-            //mode: 'hypermd',
-            // mode: 'gfm',
-            //theme: 'hypermd-light',
-
-            hmdFold: {
-              image: true,
-              link: true,
-              math: true,
-            },
-            hmdHideToken: true,
-            hmdCursorDebounce: true,
-            hmdPaste: true,
-            hmdClick: true,
-            hmdHover: true,
-            hmdTableAlign: true,
-        };
         return (
             <>
                 Forum Topic
