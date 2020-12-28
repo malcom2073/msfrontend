@@ -66,9 +66,9 @@ export default class CreateComment extends React.Component {
             // TODO: allow vim mode to be toggled on/off through UI
             //keyMap: "vim", // https://codemirror.net/doc/manual.html#vimapi
 
-            //mode: 'hypermd',
-            mode: 'gfm',
-            //theme: 'hypermd-light',
+            mode: 'hypermd',
+            //mode: 'gfm',
+            theme: 'hypermd-light',
 
             hmdFold: {
               image: true,
@@ -105,7 +105,7 @@ export default class CreateComment extends React.Component {
           <Row> 
           <CodeMirror
       value={"Testing **values** in codemirror"}
-      options={{theme: 'material', mode: 'javascript'}}
+      options={options}
       onChange={() => null}
     />
 </Row>

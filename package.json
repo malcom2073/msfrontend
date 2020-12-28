@@ -28,6 +28,7 @@
     "fs": "0.0.1-security",
     "gray-matter": "^4.0.2",
     "http-proxy-middleware": "^1.0.6",
+    "hypermd": "^0.3.11",
     "js-cookie": "^2.2.1",
     "jwt-decode": "^3.0.0",
     "less": "^3.12.2",
