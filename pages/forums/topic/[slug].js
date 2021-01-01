@@ -14,13 +14,12 @@ class Topic extends React.Component {
 	render() {
 	return (
 		<>
-			Topic List!s
             <div id="uniq">
                 <TopicList query={this.props.query}/>
             </div>
 			<div id="posttopic">
-                    Post new topic here	
-					<Link href={"/forums/topic/" + this.props.query.slug + "/create"}>Create post</Link>
+                    Post new Comment here	
+					<Link href={"/forums/topic/" + this.props.query.slug + "/create"}> Create post</Link>
             </div>
 		</>
 	)

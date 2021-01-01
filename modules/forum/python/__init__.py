@@ -83,9 +83,9 @@ def getForumTopic():
     jwt = getJwt(request)
     dbsession = db.Session()
     thread = dbsession.query(MSForumsThread).filter(MSForumsThread.id == threadid).all()
-    jsonresponse = jsonify({'status':'success','data': thread})
+    jsonresponse = jsonify({'status':'success','data': thread[0]})
     dbsession.close()
-    if thread is None:
+    if thread is None or len(thread) == 0:
         print("No users")
         return jsonify({'status':'error','error':'No User'})
     return jsonresponse

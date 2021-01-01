@@ -21,13 +21,12 @@ class ForumList extends React.Component {
 	render() {
         return (
             <>
-                Topic List!s
                 <div id="uniq">
                 {(this.state && this.state.loaded) ? (this.state.topicdata.map((value,index) => {
                     console.log("Newval: " + value);
                     return (
                         <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
-                            <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
+                            <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={24}>
                                 <Row>
                                     <Col span={4}>
                                     <Link key={"/forums/topic/" + value.id} href={"/forums/topic/" + value.id}>

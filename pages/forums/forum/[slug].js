@@ -12,7 +12,6 @@ class Topic extends React.Component {
 	render() {
 	return (
 		<>
-			Forum Slug Page
             <div id="uniq">
                 <ForumList query={this.props.query}/>
             </div>

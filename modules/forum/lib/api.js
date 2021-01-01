@@ -34,6 +34,27 @@ export default class ForumApi extends Object {
         return response.data.data
 
     }
+    async getThreadInfo(topicid)
+    {
+      const response = await this.api.get('/api/forum/getThread', {'threadid' : topicid});
+      console.log(response);
+      if (response.problem) {
+          switch (response.problem) {
+            case 'CLIENT_ERROR':
+              if (response.status == 401)
+              {
+                alert('Invalid credentials');
+                return 
+                //Bad authentication!
+              }
+              break;
+            default:
+                break;
+          }
+          alert('Unknown error');
+      }
+      return response.data.data
+    }
     async getPostList(topicid)
     {
         const response = await this.api.get('/api/forum/getComments', {'topicid' : topicid});

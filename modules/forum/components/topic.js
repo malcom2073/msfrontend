@@ -17,21 +17,33 @@ class TopicList extends React.Component {
         this.state = {loaded:false};
     }
     async componentDidMount() {
-        
-        var topicdata = await this.api.getPostList(this.props.query.slug);
-        if (topicdata)
+        var threaddata = await this.api.getThreadInfo(this.props.query.slug);
+        console.log(threaddata);
+        var commentdata = await this.api.getPostList(this.props.query.slug);
+        if (commentdata)
         {
             var retval = []
-            var arrayLength = topicdata.length;
+            var arrayLength = commentdata.length;
             for (var i = 0; i < arrayLength; i++) {
                 //Do something
-                var processedContent = await remark().use(html).process(topicdata[i].text);
+                var processedContent = await remark().use(html).process(commentdata[i].text);
                 var contentHtml = processedContent.toString();
-                retval.push({'user':topicdata[i].user,'text':contentHtml,'timestamp':topicdata[i].timestamp});
+                retval.push({'user':commentdata[i].user,'text':contentHtml,'timestamp':commentdata[i].timestamp});
             }
-            console.log("TOPICDATA");
+            var threadretval = {}
+            var processedContent = await remark().use(html).process(threaddata.content);
+            var contentHtml = processedContent.toString();
+            threadretval['content'] = contentHtml
+            threadretval['timestamp'] = threaddata.timestamp
+            threadretval['subject'] = threaddata.subject
+            threadretval['user'] = threaddata.user
+            //retval.push({'user':commentdata[i].user,'text':contentHtml,'timestamp':commentdata[i].timestamp});
+
+            
+            console.log("commentdata");
+            console.log(threaddata);
             console.log(retval);
-            this.setState({topicdata: retval,loaded:true});
+            this.setState({commentdata: retval,threaddata: threadretval,loaded:true});
             
         }
     }
@@ -51,16 +63,36 @@ class TopicList extends React.Component {
 
         return (
             <>
-                Forum Topic
                 <div id="uniq">
-                {(this.state && this.state.loaded) ? (this.state.topicdata.map((value,index) => {
+                    {(this.state && this.state.loaded && this.state.threaddata) ? (
+                        <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
+                            <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={18}>
+                                <Row>
+                                    <Col span={4}>User: {this.state.threaddata.user ? this.state.threaddata.user.name : 'NoUser'}</Col>
+                                    <Col span={12}>
+                                        <Row>
+                                            <Col>
+                                            <div dangerouslySetInnerHTML={{__html: this.state.threaddata.content}}></div>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col><Text type="secondary">Posted {this.timeConverter(this.state.threaddata.timestamp)}</Text></Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    ) : ( 
+                       <></> 
+                     )}
+                {(this.state && this.state.loaded) ? (this.state.commentdata.map((value,index) => {
                     console.log("Newval: " + value);
                     return (
                         <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
-                            <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
+                            <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={18}>
                                 <Row>
                                     <Col span={4}>User: {value.user ? value.user.name : 'NoUser'}</Col>
-                                    <Col span={8}>
+                                    <Col span={12}>
                                         <Row>
                                             <Col>
                                             <div dangerouslySetInnerHTML={{__html: value.text}}></div>

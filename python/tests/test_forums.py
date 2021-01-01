@@ -257,7 +257,7 @@ def test_forums_addComment(client):
     for obj in commentindex:
         rv = client.post('/forum/addComment',
             headers={'Set-Cookie':cookie,'Authorization':'Bearer ' + accesstoken},
-            json={'index':obj['id'],'thread':obj['thread'],'user':obj['user'],'timestmap':obj['timestamp'],'text':obj['text']})
+            json={'index':obj['id'],'thread_id':obj['thread'],'user':obj['user'],'timestmap':obj['timestamp'],'text':obj['text']})
         jsonresponse = json.loads(rv.data)
         assert 'status' in jsonresponse and jsonresponse['status'] == 'success'
         pprint.pprint(rv.data)
@@ -266,10 +266,11 @@ def test_forums_addComment(client):
 
 # Test to make sure the index in the database matches the test threadindex
 def test_forum_comments(client):
-    print("*******************RUNNING TEST_FORUM_COMMENTS********************")
+    print("*******************RUNNING TEST_FORUM_COMMENTS PRE********************")
     test_forums_addForum(client)
     test_forums_addThread(client)
     test_forums_addComment(client)
+    print("*******************RUNNING TEST_FORUM_COMMENTS********************")
     forumList = util_forums_getForums(client)
     foundcount = 0
     for obj in forumList:
