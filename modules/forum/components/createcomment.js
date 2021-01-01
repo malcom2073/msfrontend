@@ -4,11 +4,7 @@ import { useRouter } from 'next/router'
 import Router from 'next/router'
 import { Row,Form, Input, Button, Checkbox } from 'antd';
 
-
-import {UnControlled as CodeMirror} from 'react-codemirror2'
-import 'codemirror/mode/javascript/javascript'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/material.css'
+import Editor from './editor.js'
 
 const layout = {
   labelCol: { span: 8 },
@@ -24,6 +20,12 @@ export default class CreateComment extends React.Component {
         // super easy to update the state
         this.setState({[e.target.name]: e.target.value});
       }
+      onEditorChange = (value) => {
+        const text = value();
+        console.log("CreateComment SubClass:");
+        console.log(text);
+        this.setState({'posttext': text});
+      }
     onSubmit = async e => {
         var token = AuthToken.fromNext()
         var headers = { Accept: 'application/vnd.github.v3+json'}
@@ -36,7 +38,7 @@ export default class CreateComment extends React.Component {
           });
           var timestamp = Date.now() / 1000 | 0;
           var user_id = token.decodedToken.sub.user_id;
-          const response = await api.post('/api/forum/addComment',{ 'thread_id': this.props.query.slug, 'timestamp':timestamp,'user': user_id,'text': e.posttext});
+          const response = await api.post('/api/forum/addComment',{ 'thread_id': this.props.query.slug, 'timestamp':timestamp,'user': user_id,'text': this.state['posttext']});
           // TODO: Handle more of these errors.
           if (response.problem) {
             switch (response.problem) {
@@ -59,31 +61,8 @@ export default class CreateComment extends React.Component {
     }
     
     render() {
-        const options = {
-            lineWrapping: true,
-            // TODO: show vim key buffer and current mode (always visible at bottom)
-            //   https://codemirror.net/demo/vim.html
-            // TODO: allow vim mode to be toggled on/off through UI
-            //keyMap: "vim", // https://codemirror.net/doc/manual.html#vimapi
-
-            mode: 'hypermd',
-            //mode: 'gfm',
-            theme: 'hypermd-light',
-
-            hmdFold: {
-              image: true,
-              link: true,
-              math: true,
-            },
-            hmdHideToken: true,
-            hmdCursorDebounce: true,
-            hmdPaste: true,
-            hmdClick: true,
-            hmdHover: true,
-            hmdTableAlign: true,
-        };
       this.nextUrl = this.props.next;
-        return (
+/*        return (
             <>
             <Row>
             <Form name="basic" onFinish={this.onSubmit}>
@@ -103,13 +82,19 @@ export default class CreateComment extends React.Component {
           </Form>
           </Row>
           <Row> 
-          <CodeMirror
-      value={"Testing **values** in codemirror"}
-      options={options}
-      onChange={() => null}
-    />
+          <Editor/>
 </Row>
 </>
+        );*/
+        return (
+          <Form name="basic" onFinish={this.onSubmit}>
+          <Editor onEditorChange={this.onEditorChange}/>
+          <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+          </Form>
         );
       }
 }

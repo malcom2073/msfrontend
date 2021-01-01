@@ -20,7 +20,21 @@ module.exports = withCSS({
     config.node = {
       fs: 'empty'
     }
-
+    config.module.rules.push(
+      {
+        test: /\.css$/,
+        use: [
+          { loader: "css-loader" }
+        ]
+      },
+      {
+        test: /\.s[a|c]ss$/,
+        loader: 'sass-loader!style-loader!css-loader'
+      },
+      {
+        test: /\.(jpe?g|png|ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+        use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
+      })
     return config
   },
   ...withLess(
