@@ -77,6 +77,7 @@ def upload():
     print("/upload called")
     sys.stdout.flush()
     pprint.pprint(request.files)
+    pprint.pprint(request)
     for f in request.files:
         print("File: " + f)
         pprint.pprint(request.files.get(f))
@@ -129,7 +130,7 @@ def getPosts():
 #    sys.stdout.flush()
     try:
         dbsession = db.Session()
-        postlist = dbsession.query(MSBlogPost).order_by(MSBlogPost.timestamp.desc()).all()
+        postlist = dbsession.query(MSBlogPost).filter(MSBlogPost.published == True).order_by(MSBlogPost.timestamp.desc()).all()
         jsonresponse = jsonify({'status':'success','data': postlist})
         dbsession.close()
         if postlist is None or len(postlist) == 0:

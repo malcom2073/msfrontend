@@ -6,7 +6,7 @@ sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app\\models")
 
 
 from app import app
-app.loadModules()
+#app.loadModules()
 from app import db
 
 from app.models.user import User
