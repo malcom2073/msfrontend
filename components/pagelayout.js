@@ -34,7 +34,7 @@ export default function pageLayout(WrappedComponent) {
             </Header>
             
             <Layout style={{ padding: '0 0', marginTop: 64 }}>
-            <MSAdminSideBar/>
+            {/*<MSAdminSideBar/>*/}
             <Layout style={{ padding: '0 24px 24px' }}>
                 <Breadcrumb style={{ margin: '16px 0' }}>
                 <Breadcrumb.Item>Home</Breadcrumb.Item>

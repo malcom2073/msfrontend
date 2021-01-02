@@ -33,7 +33,7 @@ export default class CreateComment extends React.Component {
             headers.Authorization = token.authorizationString();
         }
         const api = create({
-            baseURL: 'http://localhost:3000',
+            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
             headers: headers,
           });
           var timestamp = Date.now() / 1000 | 0;

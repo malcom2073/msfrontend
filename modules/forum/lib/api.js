@@ -8,7 +8,7 @@ export default class ForumApi extends Object {
         super();
         var headers = { Accept: 'application/vnd.github.v3+json'}
         this.api = create({
-            baseURL: 'http://localhost:3000',
+            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
             headers: headers
         });
     }

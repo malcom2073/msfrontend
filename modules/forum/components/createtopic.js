@@ -24,7 +24,7 @@ export default class CreateTopic extends React.Component {
             headers.Authorization = token.authorizationString();
         }
         const api = create({
-            baseURL: 'http://localhost:3000',
+            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
             headers: headers,
           });
           const response = await api.post('/api/forum/addThread',{ 'parent': this.props.query.slug, 'subject': e.subject,'content': e.posttext});

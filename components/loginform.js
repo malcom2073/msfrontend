@@ -20,7 +20,7 @@ export default class LoginForm extends React.Component {
     onSubmit = async e => {
       console.log(e);
         const api = create({
-          baseURL: 'http://localhost:3000',
+          baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
           headers: { Accept: 'application/json' },
         })
         const response = await api.post('/api/auth/auth',{ username: e.username, password: e.password});
