@@ -20,11 +20,16 @@ def encode_auth_token(user_id):
         'iat': datetime.datetime.utcnow(),
         'sub': user_id
     }
-    return jwt.encode(
+    jwtretval = jwt.encode(
         payload,
         SECRET_KEY,
         algorithm='HS256'
     )
+    try:
+        jwtretval = jwtretval.decode('utf-8')
+    except (UnicodeDecodeError, AttributeError):
+        pass
+    return jwtretval
 
 
 
