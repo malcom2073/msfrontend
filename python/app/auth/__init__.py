@@ -122,7 +122,7 @@ def refresh():
 
     # TODO: These are hardcoded at the moment.
     jwt_token['session'] = m.hexdigest()
-    resp = jsonify({'status':'success','access_token':encode_auth_token(jwt_token).decode('utf-8')})
+    resp = jsonify({'status':'success','access_token':encode_auth_token(jwt_token)})
     resp.set_cookie("mspysid", value = session, httponly = True)
     return resp
 
@@ -163,7 +163,7 @@ def auth():
         ],
         'session': m.hexdigest()
     }
-    resp = jsonify({'status':'success','access_token':encode_auth_token(roleobj).decode('utf-8')})
+    resp = jsonify({'status':'success','access_token':encode_auth_token(roleobj)})
     resp.set_cookie("mspysid", value = session, httponly = True)
     return resp
 
