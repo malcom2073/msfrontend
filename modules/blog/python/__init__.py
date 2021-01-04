@@ -29,14 +29,14 @@ def addPost():
     jwt = getJwt(request)
     post_data = request.get_json()
     pprint.pprint(post_data)
-    print('Index: ' + str(post_data.get('id')))
+    #print('Index: ' + str(post_data.get('id')))
     print('Title: ' + post_data.get('title'))
-    print('Date: ' + post_data.get('date'))
+    print('Date: ' + str(post_data.get('date')))
     print('Content: ' + post_data.get('content'))
     sys.stdout.flush()
     try:
         dbsession = db.Session()
-        dbsession.add(MSBlogPost(id=post_data.get('id'),title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content')))
+        dbsession.add(MSBlogPost(title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content')))
         dbsession.commit()
         dbsession.close()
     except Exception as e:
