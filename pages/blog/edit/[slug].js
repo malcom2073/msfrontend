@@ -1,11 +1,11 @@
 import { create } from 'apisauce'
 import nextCookie from 'next-cookies'
 import { render } from 'react-dom';
-import pageLayout from '../../components/pagelayout'
-import { AuthToken } from '../../services/auth_token'
+import pageLayout from '../../../components/pagelayout'
+import { AuthToken } from '../../../services/auth_token'
 import Router from 'next/router'
-import Forum_Index from '../../components/forums'
-import Editor from '../../components/markdowneditor'
+import Forum_Index from '../../../components/forums'
+import Editor from '../../../components/markdowneditor'
 import { Row,Form, Input, Button, Checkbox } from 'antd';
 
 const tailLayout = {
@@ -13,12 +13,42 @@ const tailLayout = {
   };
 
   
-class BlogCreate extends React.Component {
-		constructor(props)
+class BlogEdit extends React.Component {
+		constructor({query})
 		{
-				super(props);
+            super();
+            this.myRef = React.createRef();
         }
-        
+        async componentDidMount() {
+
+			var token = AuthToken.fromNext()
+            var headers = { Accept: 'application/vnd.github.v3+json'}
+            if (token) {
+                headers.Authorization = token.authorizationString();
+            }
+            const api = create({
+                baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
+                headers: headers,
+              });
+			const response = await api.get('/api/blog/getPost',{'postid' : this.props.query.slug});
+        console.log(response);
+        if (response.problem) {
+            switch (response.problem) {
+              case 'CLIENT_ERROR':
+                if (response.status == 401)
+                {
+                  alert('Invalid credentials');
+                  return 
+                  //Bad authentication!
+                }
+                break;
+              default:
+                  break;
+            }
+            alert('Unknown error');
+		}
+        this.myRef.current.setValue(response.data.data.content)
+        }
         onEditorChange = (value) => {
             const text = value();
             console.log("Create Blog SubClass:");
@@ -41,7 +71,7 @@ class BlogCreate extends React.Component {
               {
                   user_id = token.decodedToken.sub.user_id;
               }
-              const response = await api.post('/api/blog/addPost',{ 'title': '', 'date':timestamp,'user': user_id,'content': this.state['posttext']});
+              const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': '','content': this.state['posttext']});
               // TODO: Handle more of these errors.
               if (response.problem) {
                 switch (response.problem) {
@@ -66,10 +96,10 @@ class BlogCreate extends React.Component {
 	return (
 		<>
         <Form name="basic" onFinish={this.onSubmit}>
-        <Editor onEditorChange={this.onEditorChange}/>
+        <Editor ref={this.myRef} onEditorChange={this.onEditorChange}/>
           <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
-          Create
+          Save
         </Button>
       </Form.Item>
           </Form>
@@ -78,4 +108,4 @@ class BlogCreate extends React.Component {
 	}
 
 }
-export default pageLayout(BlogCreate);
+export default pageLayout(BlogEdit);

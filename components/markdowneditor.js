@@ -1,17 +1,23 @@
 import React, {Component} from 'react';
 import MDEditor from "rich-markdown-editor";
+import { useState } from 'react'
 
 export default class Editor extends Component {
   constructor(...args) {
     super(...args);
     this.codeMirrorRef = React.createRef();
+    this.state = {value:""}
   }
   onEditorChange = (value) => {
     const text = value();
     console.log("MDEditor default")
     console.log(text);
   }
+  setValue = (value) => {
+      this.setState({value:value});
+  }
   render() {
+
     const options = {
       mode: 'hypermd',
       // mode: 'gfm',
@@ -36,6 +42,7 @@ export default class Editor extends Component {
 
 return (
 <MDEditor
+    value={this.state.value}
  onChange={this.props.onEditorChange}
  defaultValue="Hello world!"
  />

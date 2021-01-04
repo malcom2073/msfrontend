@@ -44,3 +44,76 @@ def addPost():
     return jsonify({'status':'success'})
 
 
+@module_bp.route('/editPost',methods=['POST'])
+@jwt_private
+def editPost():
+    jwt = getJwt(request)
+    post_data = request.get_json()
+    pprint.pprint(post_data)
+    #print('Index: ' + str(post_data.get('id')))
+    print('Title: ' + post_data.get('title'))
+    print('ID: ' + str(post_data.get('id')))
+    postid = post_data.get('id')
+    print('Content: ' + post_data.get('content'))
+    sys.stdout.flush()
+    dbsession = db.Session()
+    try:
+        postlist = dbsession.query(MSBlogPost).filter(MSBlogPost.id == postid).all()
+        singlepost = postlist[0]
+        singlepost.title = post_data.get('title')
+        singlepost.content = post_data.get('content')
+        dbsession.commit()
+        dbsession.close()
+    except Exception as e:
+        dbsession.rollback()
+        dbsession.close()
+        return jsonify({'status':'error','error':str(e)})
+    return jsonify({'status':'success'})
+
+
+@module_bp.route('/getPosts',methods=['GET'])
+def getPosts():
+#    jwt = getJwt(request)
+#    post_data = request.get_json()
+#    pprint.pprint(post_data)
+    #print('Index: ' + str(post_data.get('id')))
+#    print('Last: ' + str(post_data.get('last')))
+#    sys.stdout.flush()
+    try:
+        dbsession = db.Session()
+        postlist = dbsession.query(MSBlogPost).all()
+        jsonresponse = jsonify({'status':'success','data': postlist})
+        dbsession.close()
+        if postlist is None or len(postlist) == 0:
+            print("No posts")
+            return jsonify({'status':'error','error':'No Posts'})
+        return jsonresponse
+    except Exception as e:
+        return jsonify({'status':'error','error':str(e)})
+    return jsonify({'status':'success'})
+
+
+
+@module_bp.route('/getPost',methods=['GET'])
+@jwt_private
+def getPost():
+#    jwt = getJwt(request)
+    postid = int(request.args.get('postid'))
+#    pprint.pprint(post_data)
+    #print('Index: ' + str(post_data.get('id')))
+#    sys.stdout.flush()
+    try:
+        dbsession = db.Session()
+        postlist = dbsession.query(MSBlogPost).filter(MSBlogPost.id == postid).all()
+        jsonresponse = jsonify({'status':'success','data': postlist[0]})
+        dbsession.close()
+        if postlist is None or len(postlist) == 0:
+            print("No posts")
+            return jsonify({'status':'error','error':'No Posts'})
+        return jsonresponse
+    except Exception as e:
+        return jsonify({'status':'error','error':str(e)})
+    return jsonify({'status':'success'})
+
+
+
