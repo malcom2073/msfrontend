@@ -152,6 +152,12 @@ def test_blog_addPost(client):
     jsonresponse = json.loads(rv.data)
     assert 'data' in jsonresponse
     assert 'name' in jsonresponse['data'] and jsonresponse['data']['name'] == USER
+    rv = client.post('/blog/addPost',
+        headers={'Set-Cookie':cookie,'Authorization':'Bearer ' + accesstoken},
+        json={'id':0,'title':'','date':'','content':''})
+    jsonresponse = json.loads(rv.data)
+    pprint.pprint(jsonresponse)
+    assert 'status' in jsonresponse and jsonresponse['status'] == 'success'
     # We're good now to request to add forums!
     #for obj in forumindex:
     #    rv = client.post('/forum/addForum',
