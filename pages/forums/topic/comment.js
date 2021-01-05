@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import pageLayout from '../../../components/pagelayout'
 import Forum_Index from '../../../components/forums'
 import CreateTopic from '../../../modules/forum/components/createtopic'
-import { privateRoute } from "../../../components/privateroute";
+import privateRoute from "../../../components/privateroute";
 class CommentCreate2 extends React.Component {
 		constructor(props)
 		{

@@ -5,7 +5,7 @@ import LoginForm from '../../../components/loginform'
 import Link from 'next/link'
 import { Form, Input, Checkbox } from 'antd';
 import nextCookie from 'next-cookies'
-import { privateRoute } from "../../../components/privateroute";
+import privateRoute from "../../../components/privateroute";
 import { render } from 'react-dom';
 import { AuthToken } from "../../../services/auth_token";
 import MsApi from '../../../lib/msapi';

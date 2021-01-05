@@ -4,7 +4,7 @@ import MSNavbar from '../components/navbar'
 //import MSNavBar from '../components/navbar'
 import LoginForm from '../components/loginform'
 import nextCookie from 'next-cookies'
-import { privateRoute } from "../components/privateroute";
+import privateRoute from "../components/privateroute";
 import { render } from 'react-dom';
 import pageLayout from '../components/pagelayout'
 

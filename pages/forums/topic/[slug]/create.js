@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 //import CreateComment from '../../../../modules/forum/components/createcomment'
 const CreateComment = dynamic(import('../../../../modules/forum/components/createcomment'), {ssr: false})
 
-import { privateRoute } from "../../../../components/privateroute";
+import privateRoute from "../../../../components/privateroute";
 class CommentCreate extends React.Component {
 		constructor(props)
 		{
