@@ -2,6 +2,7 @@ import { create } from 'apisauce'
 import nextCookie from 'next-cookies'
 import { render } from 'react-dom';
 import pageLayout from '../../../components/pagelayout'
+import privateRoute from '../../../components/privateroute'
 import { AuthToken } from '../../../services/auth_token'
 import Router from 'next/router'
 import Forum_Index from '../../../components/forums'
@@ -108,4 +109,4 @@ class BlogEdit extends React.Component {
 	}
 
 }
-export default pageLayout(BlogEdit);
+export default privateRoute(pageLayout(BlogEdit));

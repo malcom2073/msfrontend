@@ -3,7 +3,7 @@ import { AuthToken } from "../services/auth_token";
 import Router from 'next/router'
 import MsApi from '../lib/msapi'
 
-export function privateRoute(WrappedComponent) {
+export default function privateRoute(WrappedComponent) {
   return class extends Component{
     state = {
       auth: new AuthToken(this.props.token)

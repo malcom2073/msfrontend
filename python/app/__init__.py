@@ -114,8 +114,8 @@ def getNavbar():
             'type':'link'
         },
         {
-            'title':  'Status',
-            'link': '/status',
+            'title':  'Blog',
+            'link': '/blog',
             'type':'link'
         },
         {
