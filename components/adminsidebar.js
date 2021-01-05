@@ -12,15 +12,15 @@ class MSAdminSideBar extends React.Component {
     constructor(props) {
         super(props);
     }
-    render() {
+    render = () => {
         return (
         <>
-            <Sider width={200} className="site-layout-background">
-                <Menu
-                mode="inline"
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
-                style={{ height: '100%', borderRight: 0 }}
+        <Sider width={200} className="site-layout-background">
+            <Menu
+            mode="inline"
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            style={{ height: '100%', borderRight: 0 }}
                 >
                 <Menu.Item key="13" icon={<DashboardOutlined/>}>Dashboard</Menu.Item>
                 <SubMenu key="sub1" icon={<DatabaseOutlined />} title="Configuration">
@@ -41,8 +41,8 @@ class MSAdminSideBar extends React.Component {
                     <Menu.Item key="11">option11</Menu.Item>
                     <Menu.Item key="12">option12</Menu.Item>
                 </SubMenu>
-                </Menu>
-            </Sider>
+            </Menu>
+        </Sider>
         </>
         )
     }

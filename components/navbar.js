@@ -26,7 +26,7 @@ class MSNavBar extends React.Component {
         this.setState({navBar:navBar,isLoading: false,auth: AuthToken.fromNext(null)});
     }
 
-    render() {
+    render = () => {
         // Navbar has two link groups, left and right.
         // Left is usually used for common links: Home, Status, Forums, etc
         // Right would be used for a user dropdown, or settings menu

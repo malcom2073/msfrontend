@@ -3,28 +3,25 @@ import ForumApi from '../modules/forum/lib/api'
 import Link from 'next/link'
 
 class Forum_Index extends React.Component {
-		constructor(props)
-		{
-				super(props);
-                this.api = new ForumApi();
-                this.state = {loaded:false};
+    constructor(props) {
+            super(props);
+            this.api = new ForumApi();
+            this.state = {loaded:false};
+    }
+    componentDidMount = async () => {    
+        var forumdata = await this.api.getForumList();
+        if (forumdata) {
+            console.log("ForumData!");
+            console.log(forumdata);
+            this.setState({forumdata: forumdata,loaded:true});
         }
-        async componentDidMount() {
-        
-            var forumdata = await this.api.getForumList();
-            if (forumdata)
-            {
-                console.log("ForumData!");
-                console.log(forumdata);
-                this.setState({forumdata: forumdata,loaded:true});
-            }
-        }
-	render() {
+    }
+    render = () => {
         console.log("State");
         console.log(this.state);
-	return (
-		<>
-			FORUM INDEX!s
+        return (
+            <>
+            FORUM INDEX!s
             <div id="uniq">
             {this.state && this.state.loaded && (this.state.forumdata.map((value,index) => {
                 console.log("Newval: " + value);
@@ -53,8 +50,8 @@ class Forum_Index extends React.Component {
                 );
             }))}
             </div>
-		</>
-	)
-	}
+            </>
+        )
+    }
 }
 export default Forum_Index;
