@@ -11,18 +11,15 @@ import MsApi from '../../lib/msapi';
 import pageLayout from '../../components/pagelayout'
 
 class Users extends React.Component {
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         //this.state = props;
         this.state = {...props,isLoading: true};
-
     }
-    render() {
+    render = () => {
         console.log(this.props);
         return (
             <>
-
             <Table striped bordered hover>
             <tbody>
             {(this.state && !this.state.isLoading) ? (this.state.profile.map((value, index) => {
@@ -46,13 +43,13 @@ class Users extends React.Component {
         </>
         )
     }
-    async componentDidMount() {
+    componentDidMount = async () => {
         var msapi = new MsApi();
         var profileobj = await msapi.getUserList();
         //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
         this.setState({ isLoading: false,auth: new AuthToken(this.props.auth.token) ,profile:profileobj })
     }
-    static async getInitialProps(ctx) {
+    static getInitialProps = async (ctx) => {
         //return ctx;
         //const navBar = await getUserNavbar(ctx)
         //this.setState({navBar:navBar});

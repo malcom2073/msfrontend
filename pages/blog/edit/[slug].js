@@ -15,98 +15,95 @@ const tailLayout = {
 
   
 class BlogEdit extends React.Component {
-		constructor({query})
-		{
-            super();
-            this.myRef = React.createRef();
+    constructor({query}) {
+        super();
+        this.myRef = React.createRef();
+    }
+    componentDidMount = async () => {
+        var token = AuthToken.fromNext();
+        var headers = { Accept: 'application/vnd.github.v3+json'};
+        if (token) {
+            headers.Authorization = token.authorizationString();
         }
-        async componentDidMount() {
-
-			var token = AuthToken.fromNext()
-            var headers = { Accept: 'application/vnd.github.v3+json'}
-            if (token) {
-                headers.Authorization = token.authorizationString();
-            }
-            const api = create({
-                baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
-                headers: headers,
-              });
-			const response = await api.get('/api/blog/getPost',{'postid' : this.props.query.slug});
+        const api = create({
+            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
+            headers: headers,
+            });
+        const response = await api.get('/api/blog/getPost',{'postid' : this.props.query.slug});
         console.log(response);
         if (response.problem) {
             switch (response.problem) {
-              case 'CLIENT_ERROR':
+                case 'CLIENT_ERROR':
                 if (response.status == 401)
                 {
-                  alert('Invalid credentials');
-                  return 
-                  //Bad authentication!
+                    alert('Invalid credentials');
+                    return 
+                    //Bad authentication!
                 }
                 break;
-              default:
-                  break;
+                default:
+                    break;
             }
             alert('Unknown error');
-		}
+        }
         this.myRef.current.setValue(response.data.data.content)
+    }
+    onEditorChange = (value) => {
+        const text = value();
+        console.log("Create Blog SubClass:");
+        console.log(text);
+        this.setState({'posttext': text});
         }
-        onEditorChange = (value) => {
-            const text = value();
-            console.log("Create Blog SubClass:");
-            console.log(text);
-            this.setState({'posttext': text});
-          }
-          onSubmit = async e => {
-            var token = AuthToken.fromNext()
-            var headers = { Accept: 'application/vnd.github.v3+json'}
-            if (token) {
-                headers.Authorization = token.authorizationString();
+        onSubmit = async e => {
+        var token = AuthToken.fromNext()
+        var headers = { Accept: 'application/vnd.github.v3+json'}
+        if (token) {
+            headers.Authorization = token.authorizationString();
+        }
+        const api = create({
+            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
+            headers: headers,
+            });
+            var timestamp = Date.now() / 1000 | 0;
+            var user_id = -1;
+            if (token && token.decodedToken && token.decodedToken.sub)
+            {
+                user_id = token.decodedToken.sub.user_id;
             }
-            const api = create({
-                baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
-                headers: headers,
-              });
-              var timestamp = Date.now() / 1000 | 0;
-              var user_id = -1;
-              if (token && token.decodedToken && token.decodedToken.sub)
-              {
-                  user_id = token.decodedToken.sub.user_id;
-              }
-              const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': '','content': this.state['posttext']});
-              // TODO: Handle more of these errors.
-              if (response.problem) {
-                switch (response.problem) {
-                  case 'CLIENT_ERROR':
-                    if (response.status == 401)
-                    {
-                      alert('Invalid credentials');
-                      return {}
-                      //Bad authentication!
-                    }
-                    break;
-                  default:
-                      break;
+            const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': '','content': this.state['posttext']});
+            // TODO: Handle more of these errors.
+            if (response.problem) {
+            switch (response.problem) {
+                case 'CLIENT_ERROR':
+                if (response.status == 401)
+                {
+                    alert('Invalid credentials');
+                    return {}
+                    //Bad authentication!
                 }
-                alert('Unknown error');
+                break;
+                default:
+                    break;
             }
-            Router.push('/blog');
-            return;
-        
+            alert('Unknown error');
         }
-	render() {
-	return (
-		<>
-        <Form name="basic" onFinish={this.onSubmit}>
-        <Editor ref={this.myRef} onEditorChange={this.onEditorChange}/>
-          <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Save
-        </Button>
-      </Form.Item>
-          </Form>
-		</>
-	)
+        Router.push('/blog');
+        return;
+    
+    }
+	render = () => {
+        return (
+            <>
+            <Form name="basic" onFinish={this.onSubmit}>
+                <Editor ref={this.myRef} onEditorChange={this.onEditorChange}/>
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">
+                        Save
+                    </Button>
+                </Form.Item>
+            </Form>
+            </>
+        )
 	}
-
 }
 export default privateRoute(pageLayout(BlogEdit));

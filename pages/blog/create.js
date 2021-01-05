@@ -15,68 +15,64 @@ const tailLayout = {
 
   
 class BlogCreate extends React.Component {
-		constructor(props)
-		{
-				super(props);
+    constructor(props) {
+            super(props);
+    }
+    
+    onEditorChange = (value) => {
+        const text = value();
+        console.log("Create Blog SubClass:");
+        console.log(text);
+        this.setState({'posttext': text});
+    }
+    onSubmit = async (e) => {
+        var token = AuthToken.fromNext()
+        var headers = { Accept: 'application/vnd.github.v3+json'}
+        if (token) {
+            headers.Authorization = token.authorizationString();
         }
-        
-        onEditorChange = (value) => {
-            const text = value();
-            console.log("Create Blog SubClass:");
-            console.log(text);
-            this.setState({'posttext': text});
-          }
-          onSubmit = async e => {
-            var token = AuthToken.fromNext()
-            var headers = { Accept: 'application/vnd.github.v3+json'}
-            if (token) {
-                headers.Authorization = token.authorizationString();
-            }
-            const api = create({
-                baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
-                headers: headers,
-              });
-              var timestamp = Date.now() / 1000 | 0;
-              var user_id = -1;
-              if (token && token.decodedToken && token.decodedToken.sub)
-              {
-                  user_id = token.decodedToken.sub.user_id;
-              }
-              const response = await api.post('/api/blog/addPost',{ 'title': '', 'date':timestamp,'user': user_id,'content': this.state['posttext']});
-              // TODO: Handle more of these errors.
-              if (response.problem) {
-                switch (response.problem) {
-                  case 'CLIENT_ERROR':
-                    if (response.status == 401)
-                    {
-                      alert('Invalid credentials');
-                      return {}
-                      //Bad authentication!
+        const api = create({
+            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
+            headers: headers,
+            });
+        var timestamp = Date.now() / 1000 | 0;
+        var user_id = -1;
+        if (token && token.decodedToken && token.decodedToken.sub) {
+            user_id = token.decodedToken.sub.user_id;
+        }
+        const response = await api.post('/api/blog/addPost',{ 'title': '', 'date':timestamp,'user': user_id,'content': this.state['posttext']});
+        // TODO: Handle more of these errors.
+        if (response.problem) {
+            switch (response.problem) {
+                case 'CLIENT_ERROR':
+                    if (response.status == 401) {
+                        alert('Invalid credentials');
+                        return {}
+                        //Bad authentication!
                     }
                     break;
-                  default:
-                      break;
-                }
-                alert('Unknown error');
+                default:
+                    break;
             }
-            Router.push('/blog');
-            return;
-        
+            alert('Unknown error');
         }
-	render() {
-	return (
-		<>
-        <Form name="basic" onFinish={this.onSubmit}>
-        <Editor onEditorChange={this.onEditorChange}/>
-          <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Create
-        </Button>
-      </Form.Item>
-          </Form>
-		</>
-	)
-	}
+        Router.push('/blog');
+        return;    
+    }
 
+    render() {
+        return (
+            <>
+            <Form name="basic" onFinish={this.onSubmit}>
+                <Editor onEditorChange={this.onEditorChange}/>
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">
+                        Create
+                    </Button>
+                </Form.Item>
+            </Form>
+            </>
+        )
+    }
 }
 export default privateRoute(pageLayout(BlogCreate));
