@@ -6,9 +6,17 @@ import privateRoute from '../../../components/privateroute'
 import { AuthToken } from '../../../services/auth_token'
 import Router from 'next/router'
 import Forum_Index from '../../../components/forums'
-import Editor from '../../../components/markdowneditor'
+//import Editor from '../../../components/markdowneditor'
 import { Row,Form, Input, Button, Checkbox } from 'antd';
 
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+
+//import { Editor } from '@toast-ui/react-editor';
+import dynamic from 'next/dynamic';
+//import EditorV2 from '../../../components/markdowneditorv2';
+
+import EditorV2 from '../../../components/markdowneditorv2'
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
@@ -46,10 +54,14 @@ class BlogEdit extends React.Component {
             }
             alert('Unknown error');
         }
+        //if (this.myref && this.myref.current)
+        //{
+        //this.myRef.current.getInstance().setMarkdown(response.data.data.content);
+        //}
         this.myRef.current.setValue(response.data.data.content)
     }
     onEditorChange = (value) => {
-        const text = value();
+        const text = value;
         console.log("Create Blog SubClass:");
         console.log(text);
         this.setState({'posttext': text});
@@ -95,7 +107,7 @@ class BlogEdit extends React.Component {
         return (
             <>
             <Form name="basic" onFinish={this.onSubmit}>
-                <Editor ref={this.myRef} onEditorChange={this.onEditorChange}/>
+                <EditorV2 ref={this.myRef} onChange={this.onEditorChange}/>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">
                         Save

@@ -1,22 +1,38 @@
 import React, {Component} from 'react';
-import MDEditor from "rich-markdown-editor";
+//import MDEditor from "rich-markdown-editor";
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 
-export default class Editor extends Component {
+const Editor = dynamic(() => import("./editorwrapper"), { ssr: false });
+const EditorWithForwardedRef = React.forwardRef((props, ref) => (
+  <Editor {...props} forwardedRef={ref} />
+));
+
+
+export default class EditorV2 extends Component {
     constructor(...args) {
         super(...args);
-        this.codeMirrorRef = React.createRef();
+        this.editorRef = React.createRef();
         this.state = {value:""}
     }
     
-    onEditorChange = (value) => {
-        const text = value;
+    onEditorChange = () => {
+        if (!this.editorRef.current)
+        {
+            return;
+        }
+        const text = this.editorRef.current.editorInst.getMarkdown();
         console.log("MDEditor default")
         console.log(text);
+        this.props.onChange(text);
     }
 
     setValue = (value) => {
         this.setState({value:value});
+        console.log("SETVALUE***********************");
+        console.log(this.editorRef);
+        console.log(this.editorRef.current);
+        this.editorRef.current.editorInst.setMarkdown(value);
     }
     render = () => {
         const options = {
@@ -42,11 +58,7 @@ export default class Editor extends Component {
         //return <ReactCodeMirror value={defaultText} ref={this.codeMirrorRef} className="code-mirror_editor" options={options} />;
 
         return (
-            <MDEditor
-                value={this.state.value}
-                onChange={this.props.onEditorChange}
-                defaultValue="Hello world!"
-                />
+            <EditorWithForwardedRef usageStatistics={false} ref={this.editorRef} onChange={this.onEditorChange} />
         );
     }
 }
