@@ -9,54 +9,46 @@ const EditorWithForwardedRef = React.forwardRef((props, ref) => (
 ));
 
 
+/**
+ * EditorV2, a toast-ui based Markdown WYSIWYG Editor 
+ * 
+ * This classhas an onChange callback passed in as a property, that is 
+ * called every time the text is changed. This editor does zero debounce,
+ * so that should be done in the parent container.
+ * 
+ * Usage:
+ * import EditorV2 from './markdowneditorv2'
+ * 
+ * constructor = () => {
+ *   this.myRef = React.createRef();
+ * }
+ * 
+ * onEditorChange = (text) => {
+ *   //We handle text changes here
+ * }
+ * render = () => {
+ *   <EditorV2 ref={this.myRef} onChange={this.onEditorChange}/>
+ * }
+ */
+
 export default class EditorV2 extends Component {
     constructor(...args) {
         super(...args);
         this.editorRef = React.createRef();
-        this.state = {value:""}
     }
     
     onEditorChange = () => {
-        if (!this.editorRef.current)
-        {
+        if (!this.editorRef.current) {
             return;
         }
-        const text = this.editorRef.current.editorInst.getMarkdown();
-        console.log("MDEditor default")
-        console.log(text);
-        this.props.onChange(text);
+        this.props.onChange(this.editorRef.current.editorInst.getMarkdown());
     }
 
     setValue = (value) => {
-        this.setState({value:value});
-        console.log("SETVALUE***********************");
-        console.log(this.editorRef);
-        console.log(this.editorRef.current);
         this.editorRef.current.editorInst.setMarkdown(value);
     }
+
     render = () => {
-        const options = {
-            mode: 'hypermd',
-            // mode: 'gfm',
-            theme: 'hypermd-light',
-
-            hmdFold: {
-            image: true,
-            link: true,
-            math: true,
-            },
-            hmdHideToken: true,
-            hmdCursorDebounce: true,
-            hmdPaste: true,
-            hmdClick: true,
-            hmdHover: true,
-            hmdTableAlign: true,
-        };
-
-        const defaultText = "# Heading\n\nSome **bold** and _italic_ text\nBy [Jed Watson](https://github.com/JedWatson)\n";
-
-        //return <ReactCodeMirror value={defaultText} ref={this.codeMirrorRef} className="code-mirror_editor" options={options} />;
-
         return (
             <EditorWithForwardedRef usageStatistics={false} ref={this.editorRef} onChange={this.onEditorChange} />
         );
