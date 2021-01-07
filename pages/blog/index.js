@@ -6,6 +6,7 @@ import { AuthToken } from '../../services/auth_token'
 import Forum_Index from '../../components/forums'
 import { Row, Col } from 'antd';
 import remark from 'remark'
+import gfm from 'remark-gfm'
 import html from 'remark-html'
 import Link from 'next/link'
 
@@ -47,7 +48,7 @@ class BlogList extends React.Component {
 		var arrayLength = response.data.data.length;
 		for (var i = 0; i < arrayLength; i++) {
 			//Do something
-			var processedContent = await remark().use(html).process(response.data.data[i].content);
+			var processedContent = await remark().use(html).use(gfm).process(response.data.data[i].content);
 			var contentHtml = processedContent.toString();
 			retval.push({'id':response.data.data[i].id,'user':response.data.data[i].user,'title':response.data.data[i].title,'content':contentHtml,'timestamp':response.data.data[i].timestamp});
 		}

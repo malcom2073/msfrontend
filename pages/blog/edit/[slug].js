@@ -58,6 +58,7 @@ class BlogEdit extends React.Component {
         //{
         //this.myRef.current.getInstance().setMarkdown(response.data.data.content);
         //}
+        this.setState({'posttext': response.data.data.content});
         this.myRef.current.setValue(response.data.data.content)
     }
     onEditorChange = (value) => {
