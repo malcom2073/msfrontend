@@ -47,35 +47,8 @@ export default function privateRoute(WrappedComponent) {
         componentDidMount = () => {
             //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
             this.setState({ auth: new AuthToken(this.props.auth.token) })
-            this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),5000); //Check every 5 seconds
         }
-
-        componentWillUnmount = () => {
-            clearInterval(this.apichecktimer);
-        }
-
-        checkAuth = () => {
-            const token = AuthToken.fromNext();
-            var currdate = new Date();
-            var tokendate = new Date(token.decodedToken.exp * 1000)
-            if (token &&  currdate > tokendate) {
-                Router.push('/login?next=' + this.state.pathname);
-            }
-            else {
-                if (token) {
-                    tokendate.setSeconds(tokendate.getSeconds() - 60);
-                    if (currdate > tokendate) {
-                        // Token is not yet expired, but is within 1 minute of expiring. Refresh it.
-                        var api = new MsApi();
-                        api.refreshToken();
-                    }
-                }
-                else {
-                    Router.push('/login?next=' + this.state.pathname);
-                }
-            }
-        }
-
+        
         render = () => {
             //Grab auth from this.state instead of from props, this ensures we get an actual instance of AuthToken instead of a JSON representation of it
             //We may not need to do this...

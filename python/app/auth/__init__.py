@@ -16,7 +16,7 @@ from app.config import SECRET_KEY
 
 def encode_auth_token(user_id):
     payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=600),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=120),
         'iat': datetime.datetime.utcnow(),
         'sub': user_id
     }

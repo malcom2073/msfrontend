@@ -2,7 +2,7 @@ import Head from 'next/head'
 //import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import Component from 'react'
-import Date from '../components/date'
+//import Date from '../components/date'
 import { create } from 'apisauce'
 import MSNavBar from '../components/navbar'
 import {Container, Row, Col} from 'react-bootstrap';
@@ -67,14 +67,41 @@ export default function pageLayout(WrappedComponent) {
                 </>
             )
         }
+        checkAuth = () => {
+            const token = AuthToken.fromNext();
+            console.log("Token check");
+            console.log(token);
 
+            var currdate = new Date();
+            var tokendate = new Date(token.decodedToken.exp * 1000)
+            if (token &&  currdate > tokendate) {
+                //Router.push('/login?next=' + this.state.pathname);
+            }
+            else {
+                if (token) {
+                    tokendate.setSeconds(tokendate.getSeconds() - 60);
+                    if (currdate > tokendate) {
+                        // Token is not yet expired, but is within 1 minute of expiring. Refresh it.
+                        var api = new MsApi();
+                        api.refreshToken();
+                    }
+                }
+                else {
+                    Router.push('/login?next=' + this.state.pathname);
+                }
+            }
+        }
         static getInitialProps = async({query,pathname}) => {
             return {query:query,pathname:pathname};
+        }
+        componentWillUnmount = () => {
+            clearInterval(this.apichecktimer);
         }
         componentDidMount = async () => {
             var msapi = new MsApi();
             const navBar = await msapi.getUserNavbar(null);
             this.setState({navBar:navBar,isLoading: false,auth: AuthToken.fromNext(null)});
+            this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),5000); //Check every 5 seconds
             //var profileobj = await msapi.getUserList();
             //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
             //this.setState({ isLoading: false,auth: new AuthToken(this.props.auth.token) ,profile:profileobj })
