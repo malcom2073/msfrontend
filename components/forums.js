@@ -26,10 +26,10 @@ class Forum_Index extends React.Component {
             {this.state && this.state.loaded && (this.state.forumdata.map((value,index) => {
                 console.log("Newval: " + value);
                 return (
-                    <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
-                        <Col style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
-                            <Row>
-                                <Col span={4}>
+                    <Row key={"r-" + index} style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
+                        <Col key={"c-"+index} style={{"borderRadius":"1px","border":"1px solid black"}} span={12}>
+                            <Row key={"r2-" + index}>
+                                <Col key={"c2-" + index} span={4}>
                                     
                                     <Link key={"/forums/forum/" + value.id} href={"/forums/forum/" + value.id}>
                                         {value.title}

@@ -45,7 +45,7 @@ export default function pageLayout(WrappedComponent) {
                                 var path = pathname.split("/").slice(1,index).join("/") + "/" + value;
                         return (
 
-                                <Breadcrumb.Item href={path}>
+                                <Breadcrumb.Item key={"bc-" + index}>
                                     <Link key={path} href={path}>{value}</Link>
                                 </Breadcrumb.Item>)
                             }

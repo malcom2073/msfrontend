@@ -13,7 +13,6 @@ import pageLayout from '../../components/pagelayout'
 class Users extends React.Component {
     constructor(props) {
         super(props);
-        //this.state = props;
         this.state = {...props,isLoading: true};
     }
     render = () => {
@@ -24,7 +23,7 @@ class Users extends React.Component {
             <tbody>
             {(this.state && !this.state.isLoading) ? (this.state.profile.map((value, index) => {
                 return (
-                    <tr>
+                    <tr key={"tr-" + index}>
                         <td>{value.name}</td>
                         <td>{value.email}</td>
                         <td>{value.timezone}</td>

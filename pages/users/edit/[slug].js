@@ -13,9 +13,8 @@ import pageLayout from '../../../components/pagelayout'
 import { Button, DatePicker, version } from "antd";
 
 class EditUser extends React.Component {
-    constructor() {
-        super();
-        //this.state = props;
+    constructor(props) {
+        super(props);
         this.state = {isLoading: true};
     }
     onFinish = (values) => {

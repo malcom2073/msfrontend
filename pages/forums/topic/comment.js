@@ -9,7 +9,6 @@ class CommentCreate2 extends React.Component {
 		constructor(props)
 		{
 				super(props);
-				this.state = props;
 		}
 	render() {
 	return (

@@ -60,7 +60,7 @@ class BlogList extends React.Component {
 		 {this.state && this.state.loaded && (this.state.bloglist.map((value,index) => {
                 console.log("Blog Index List: " + value);
                 return (
-                    <Row style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
+                    <Row key={"r-" + index} style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
 						<Col span={3}>
 							<Link href={"/blog/edit/" + value.id}> Edit</Link>
 						</Col>
