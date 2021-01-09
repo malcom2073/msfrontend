@@ -95,7 +95,6 @@ def getPosts():
 
 
 @module_bp.route('/getPost',methods=['GET'])
-@jwt_private
 def getPost():
 #    jwt = getJwt(request)
     postid = int(request.args.get('postid'))
