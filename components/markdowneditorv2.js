@@ -35,8 +35,19 @@ export default class EditorV2 extends Component {
     constructor(...args) {
         super(...args);
         this.editorRef = React.createRef();
+        this.editorText = null;
     }
     
+    onEditorLoaded = () => {
+        console.log("Editor loaded");
+        console.log(this.editorRef);
+        console.log(tihs.editorRef.current);
+        if (this.editorRef.current && this.editorText){
+            this.editorRef.current.editorInst.setMarkdown(this.editorText);
+            this.editorText = null;
+            }
+
+    }
     onEditorChange = () => {
         if (!this.editorRef.current) {
             return;
@@ -45,12 +56,25 @@ export default class EditorV2 extends Component {
     }
 
     setValue = (value) => {
+        if (this.editorRef.current){
         this.editorRef.current.editorInst.setMarkdown(value);
+        }
+        else {
+            this.editorText = value
+        }
     }
+    componentDidMount = async () => {
+        console.log("EditorV2 componentDidMount");
+        console.log(this.editorRef.current);
+        if (this.editorRef.current && this.editorText){
+            this.editorRef.current.editorInst.setMarkdown(this.editorText);
+            this.editorText = null;
+            }
+        }
 
     render = () => {
         return (
-            <EditorWithForwardedRef usageStatistics={false} ref={this.editorRef} onChange={this.onEditorChange} />
+            <EditorWithForwardedRef usageStatistics={false} ref={this.editorRef} onLoad={this.onEditorLoaded} onChange={this.onEditorChange} />
         );
     }
 }
