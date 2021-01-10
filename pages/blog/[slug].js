@@ -11,7 +11,7 @@ import remark from 'remark'
 import gfm from 'remark-gfm'
 import html from 'remark-html'
 import Link from 'next/link'
-
+import ReactMarkdown from 'react-markdown'
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
@@ -55,9 +55,10 @@ class BlogView extends React.Component {
         //this.setState({'posttext': response.data.data.content});
         //this.myRef.current.setValue(response.data.data.content)
 
-        var processedContent = await remark().use(html).use(gfm).process(response.data.data.content);
-        var contentHtml = processedContent.toString();
-        this.setState({blogdata: contentHtml,loaded:true})
+        //var processedContent = await remark().use(html).use(gfm).process(response.data.data.content);
+        //var contentHtml = processedContent.toString();
+        //this.setState({blogdata: contentHtml,loaded:true})
+        this.setState({blogdata: response.data.data.content,loaded:true})
     }
     
 	render = () => {
@@ -66,7 +67,7 @@ class BlogView extends React.Component {
                 <Row justify="center">
       <Col span={12} offset={6}>
             {(this.state && this.state.loaded ? (
-                <div dangerouslySetInnerHTML={{__html: this.state.blogdata}}></div>
+                <ReactMarkdown plugins={[gfm]} children={this.state.blogdata} />
             ) : (
                 <></>
             ))}

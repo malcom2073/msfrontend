@@ -14,6 +14,7 @@ from modules.forum.python.models.msforumsforum import MSForumsForum
 from modules.forum.python.models.msforumsthread import MSForumsThread
 from modules.forum.python.models.msforumscomment import MSForumsComment
 from modules.forum.python.models.msforumsforum import MSForumsForum
+from modules.blog.python.models.msblogpost import MSBlogPost
 from app.models.userprofilefield import UserProfileField
 import csv
 import pprint
@@ -103,6 +104,35 @@ def loadDatabase(usercsv, fakedata=False):
             print(str(e))
             db.session.rollback()
             pass
+
+        try:
+            db.session.add(MSBlogPost(id=0,user_id=0,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="First Blog Post",content="""
+Hello world! This is a world
+
+**test**
+
+
+"""))
+
+            db.session.add(MSBlogPost(id=1,user_id=0,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="First Blog Post",content="""
+It's very easy to make some words **bold** and other 
+words *italic* with Markdown. You can even [link to Google!](http://google.com)
+"""))
+
+
+            db.session.add(MSBlogPost(id=2,user_id=0,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="First Blog Post",content="""
+#Table Example
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+"""))
+            db.session.commit()
+
+        except Exception as e:
+            print(str(e))
+            db.session.rollback()
+
 
 
         print("Done loading")

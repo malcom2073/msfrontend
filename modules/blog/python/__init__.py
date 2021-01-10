@@ -49,12 +49,12 @@ def addPost():
 def editPost():
     jwt = getJwt(request)
     post_data = request.get_json()
-    pprint.pprint(post_data)
+    #pprint.pprint(post_data)
     #print('Index: ' + str(post_data.get('id')))
     print('Title: ' + post_data.get('title'))
     print('ID: ' + str(post_data.get('id')))
     postid = post_data.get('id')
-    print('Content: ' + post_data.get('content'))
+    print('Content: '.encode('utf-8') + post_data.get('content').encode('utf-8'))
     sys.stdout.flush()
     dbsession = db.Session()
     try:

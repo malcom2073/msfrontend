@@ -26,6 +26,7 @@ class BlogEdit extends React.Component {
     constructor({query}) {
         super();
         this.myRef = React.createRef();
+        this.titleRef = React.createRef();
     }
     componentDidMount = async () => {
         var token = AuthToken.fromNext();
@@ -60,14 +61,18 @@ class BlogEdit extends React.Component {
         //}
         this.setState({'posttext': response.data.data.content});
         this.myRef.current.setValue(response.data.data.content)
+        this.titleRef.value = response.data.data.title;
     }
+    onTitleChange (e) {
+        console.log('handle change called')
+      }
     onEditorChange = (value) => {
         const text = value;
         console.log("Create Blog SubClass:");
         console.log(text);
         this.setState({'posttext': text});
         }
-        onSubmit = async e => {
+    onSubmit = async e => {
         var token = AuthToken.fromNext()
         var headers = { Accept: 'application/vnd.github.v3+json'}
         if (token) {
@@ -83,7 +88,7 @@ class BlogEdit extends React.Component {
             {
                 user_id = token.decodedToken.sub.user_id;
             }
-            const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': '','content': this.state['posttext']});
+            const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': this.titleRef.value,'content': this.state['posttext']});
             // TODO: Handle more of these errors.
             if (response.problem) {
             switch (response.problem) {
@@ -108,6 +113,7 @@ class BlogEdit extends React.Component {
         return (
             <>
             <Form name="basic" onFinish={this.onSubmit}>
+                Title: <input onChange={(e) => {this.onTitleChange(e)}} ref={(myref) => {this.titleRef = myref}}/>
                 <EditorV2 ref={this.myRef} onChange={this.onEditorChange}/>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">
