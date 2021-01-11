@@ -63,7 +63,7 @@ class BlogEdit extends React.Component {
         this.myRef.current.setValue(response.data.data.content)
         this.titleRef.value = response.data.data.title;
     }
-    onTitleChange (e) {
+    onTitleChange = (e) => {
         console.log('handle change called')
       }
     onEditorChange = (value) => {
