@@ -14,9 +14,11 @@ from app.models.group import Group
 from app.models.userprofilefield import UserProfileField
 from app.config import SECRET_KEY
 
+# 5 Minute Token timeout
+# TODO: Make thie configurable, so "remember me" will make a much MUCH longer token
 def encode_auth_token(user_id):
     payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=120),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=300),
         'iat': datetime.datetime.utcnow(),
         'sub': user_id
     }

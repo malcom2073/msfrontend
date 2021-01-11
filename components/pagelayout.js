@@ -69,9 +69,6 @@ export default function pageLayout(WrappedComponent) {
         }
         checkAuth = () => {
             const token = AuthToken.fromNext();
-            console.log("Token check");
-            console.log(token);
-
             var currdate = new Date();
             var tokendate = new Date(token.decodedToken.exp * 1000)
             if (token &&  currdate > tokendate) {
@@ -79,6 +76,7 @@ export default function pageLayout(WrappedComponent) {
             }
             else {
                 if (token) {
+                    // if it's within 60 seconds of expiring, request a new one 
                     tokendate.setSeconds(tokendate.getSeconds() - 60);
                     if (currdate > tokendate) {
                         // Token is not yet expired, but is within 1 minute of expiring. Refresh it.
@@ -87,7 +85,9 @@ export default function pageLayout(WrappedComponent) {
                     }
                 }
                 else {
-                    Router.push('/login?next=' + this.state.pathname);
+                    // TODO: Refresh the page since we're logged out?
+                    //Router.push('/login?next=' + this.state.pathname);
+                    Router.push(this.state.pathname);
                 }
             }
         }
@@ -101,7 +101,7 @@ export default function pageLayout(WrappedComponent) {
             var msapi = new MsApi();
             const navBar = await msapi.getUserNavbar(null);
             this.setState({navBar:navBar,isLoading: false,auth: AuthToken.fromNext(null)});
-            this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),5000); //Check every 5 seconds
+            this.apichecktimer = setInterval(function() { this.checkAuth(); }.bind(this),30000); //Check every 30 seconds
             //var profileobj = await msapi.getUserList();
             //This is required to turn auth into an actual AuthToken instance, for passing into the component below.
             //this.setState({ isLoading: false,auth: new AuthToken(this.props.auth.token) ,profile:profileobj })
