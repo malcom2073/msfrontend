@@ -19,9 +19,9 @@ class Private extends React.Component {
   <Container fluid>
     <Row>
     Private stuff here!
-    {this.props.auth.isValid() ?  'This is valid!' : 'Invalid'}
+    {this.props.auth && this.props.auth.isValid() ?  'This is valid!' : 'Invalid'}
     More text
-    {this.props.auth.token}
+    {this.props.auth && this.props.auth.token}
     Last Text
     </Row>
   </Container>
