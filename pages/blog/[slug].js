@@ -73,32 +73,37 @@ class BlogView extends React.Component {
             }
             alert('Unknown error');
         }
-        //if (this.myref && this.myref.current)
-        //{
-        //this.myRef.current.getInstance().setMarkdown(response.data.data.content);
-        //}
-        //this.setState({'posttext': response.data.data.content});
-        //this.myRef.current.setValue(response.data.data.content)
-
-        //var processedContent = await remark().use(html).use(gfm).process(response.data.data.content);
-        //var contentHtml = processedContent.toString();
-        //this.setState({blogdata: contentHtml,loaded:true})
-        this.setState({blogdata: response.data.data.content,loaded:true})
+        
+        this.setState({title: response.data.data.title, blogdata: response.data.data.content,loaded:true})
     }
     
 	render = () => {
         return (
-            <>
-                <Row justify="center">
-      <Col span={10} >
+        <>
+            <Row justify="center">
             {(this.state && this.state.loaded ? (
-                <ReactMarkdown renderers={renderers} plugins={[gfm]} children={this.state.blogdata} />
+                <Title>{this.state.title}</Title>
             ) : (
                 <></>
-            ))}
-      </Col>
-    </Row>
-            </>
+            ))}    
+            </Row>
+            <Row justify="center">
+                <Col span={10} >
+                {(this.state && this.state.loaded ? (
+                    <ReactMarkdown renderers={renderers} plugins={[gfm]} children={this.state.blogdata} />
+                ) : (
+                    <></>
+                ))}
+                </Col>
+                {(this.props.auth && this.props.auth.isValid() ? (
+                <Col span={1}>
+                    <Link href={"/blog/edit/" + this.props.query.slug}>Edit Post</Link>
+                </Col>
+                ) : (
+                    <></>
+                ))}
+            </Row>
+        </>
         )
 	}
 }

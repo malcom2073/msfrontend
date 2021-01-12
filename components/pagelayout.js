@@ -59,7 +59,7 @@ export default function pageLayout(WrappedComponent) {
                             minHeight: 280,
                         }}
                         >
-                        <WrappedComponent {...this.props} />
+                        <WrappedComponent {...this.props} auth={(this.state ? this.state.auth : null)} />
                         </Content>
                     </Layout>
                     </Layout>
