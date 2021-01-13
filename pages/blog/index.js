@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import pageLayout from '../../components/pagelayout'
 import { AuthToken } from '../../services/auth_token'
 import Forum_Index from '../../components/forums'
-import { Row, Col } from 'antd';
+import { Row, Col} from 'antd';
 import remark from 'remark'
 import gfm from 'remark-gfm'
 import html from 'remark-html'
@@ -57,18 +57,28 @@ class BlogList extends React.Component {
 	render() {
 	return (
 		<>
+        {(this.props.auth && this.props.auth.isValid() ? (
+            <Row>
+                <Link href={"/blog/edit/" + this.props.query.slug}>Edit Post</Link>
+            </Row>
+            ) : (
+                <></>
+        ))}   
 		 {this.state && this.state.loaded && (this.state.bloglist.map((value,index) => {
                 console.log("Blog Index List: " + value);
                 return (
+                    <>
                     <Row key={"r-" + index} style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
                         <Col span={12}>
                             <Link href={"/blog/" + value.id}>{value.title}</Link>
                         </Col>
                     </Row>
+                    </>
                 );
             }))}
+             
 		</>
-	)
+	);
 	}
 
 }
