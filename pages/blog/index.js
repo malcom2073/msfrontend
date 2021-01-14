@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import pageLayout from '../../components/pagelayout'
 import { AuthToken } from '../../services/auth_token'
 import Forum_Index from '../../components/forums'
-import { Row, Col} from 'antd';
+import { Row, Col, Button } from 'antd';
 import remark from 'remark'
 import gfm from 'remark-gfm'
 import html from 'remark-html'
@@ -58,8 +58,10 @@ class BlogList extends React.Component {
 	return (
 		<>
         {(this.props.auth && this.props.auth.isValid() ? (
-            <Row>
-                <Link href={"/blog/edit/" + this.props.query.slug}>Edit Post</Link>
+            <Row justify="center">
+                <Col span={12}>
+                <Link href={"/blog/create"}><Button>New Post</Button></Link>
+                </Col>
             </Row>
             ) : (
                 <></>
