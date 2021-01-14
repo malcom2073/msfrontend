@@ -10,6 +10,10 @@ import gfm from 'remark-gfm'
 import html from 'remark-html'
 import Link from 'next/link'
 
+import { Typography, Space } from 'antd';
+const { Text } = Typography;
+
+
 class BlogList extends React.Component {
 		constructor(props)
 		{
@@ -54,6 +58,18 @@ class BlogList extends React.Component {
 		}
         this.setState({bloglist: retval,loaded:true})
         }
+        timeConverter(UNIX_timestamp){
+            var a = new Date(UNIX_timestamp * 1000);
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            var year = a.getFullYear();
+            var month = months[a.getMonth()];
+            var date = a.getDate();
+            var hour = a.getHours();
+            var min = a.getMinutes();
+            var sec = a.getSeconds();
+            var time = date + ' ' + month + ' ' + year + ' ' + (hour < 10 ? "0" + hour : hour) + ':' + (min < 10 ? "0" + min : min) + ':' + (sec < 10 ? "0" + sec : sec) ;
+            return time;
+          }
 	render() {
 	return (
 		<>
@@ -71,6 +87,9 @@ class BlogList extends React.Component {
                 return (
                     <>
                     <Row key={"r-" + index} style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
+                        <Col span={3}>
+                        <Text type="secondary">Posted {this.timeConverter(value.timestamp)}</Text>
+                        </Col>
                         <Col span={12}>
                             <Link href={"/blog/" + value.id}>{value.title}</Link>
                         </Col>

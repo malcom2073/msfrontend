@@ -81,7 +81,7 @@ def getPosts():
 #    sys.stdout.flush()
     try:
         dbsession = db.Session()
-        postlist = dbsession.query(MSBlogPost).all()
+        postlist = dbsession.query(MSBlogPost).order_by(MSBlogPost.timestamp.desc()).all()
         jsonresponse = jsonify({'status':'success','data': postlist})
         dbsession.close()
         if postlist is None or len(postlist) == 0:
