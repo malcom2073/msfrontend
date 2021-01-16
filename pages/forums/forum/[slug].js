@@ -5,22 +5,22 @@ import { withRouter } from 'next/router'
 import pageLayout from '../../../components/pagelayout'
 import Link from 'next/link'
 class Topic extends React.Component {
-		constructor({query})
-		{
+        constructor({query})
+        {
                 super();
         }
-	render() {
-	return (
-		<>
-            <div id="uniq">
-                <ForumList query={this.props.query}/>
-            </div>
-			<div id="posttopic">
-                    Post new topic here	
-					<Link href={"/forums/forum/" + this.props.query.slug + "/create"}>Create Topic</Link>
-            </div>
-		</>
-	)
-	}
+    render() {
+        return (
+            <>
+                <div id="uniq">
+                    <ForumList query={this.props.query}/>
+                </div>
+                <div id="posttopic">
+                        Post new topic here	
+                        <Link href={"/forums/forum/" + this.props.query.slug + "/create"}>Create Topic</Link>
+                </div>
+            </>
+        )
+    }
 }
 export default pageLayout(Topic);

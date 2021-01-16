@@ -4,9 +4,9 @@ import Link from 'next/link'
 
 class Forum_Index extends React.Component {
     constructor(props) {
-            super(props);
-            this.api = new ForumApi();
-            this.state = {loaded:false};
+        super(props);
+        this.api = new ForumApi();
+        this.state = {loaded:false};
     }
     componentDidMount = async () => {    
         var forumdata = await this.api.getForumList();

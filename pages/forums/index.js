@@ -5,20 +5,20 @@ import pageLayout from '../../components/pagelayout'
 import Forum_Index from '../../components/forums'
 
 class Forum extends React.Component {
-		constructor(props)
-		{
-				super(props);
-		}
-	render() {
-	return (
-		<>
-			Main Forum Index
-		<Container fluid>
-			<Forum_Index></Forum_Index>
-		</Container>
-		</>
-	)
-	}
+    constructor(props)
+    {
+        super(props);
+    }
+    render() {
+        return (
+            <>
+                Main Forum Index
+            <Container fluid>
+                <Forum_Index></Forum_Index>
+            </Container>
+            </>
+        )
+    }
 
 }
 export default pageLayout(Forum);

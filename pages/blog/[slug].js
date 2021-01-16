@@ -77,7 +77,7 @@ class BlogView extends React.Component {
         this.setState({title: response.data.data.title, blogdata: response.data.data.content,loaded:true})
     }
     
-	render = () => {
+    render = () => {
         return (
         <>
             <Row justify="center">
@@ -105,6 +105,6 @@ class BlogView extends React.Component {
             </Row>
         </>
         )
-	}
+    }
 }
 export default pageLayout(BlogView);

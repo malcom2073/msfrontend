@@ -33,13 +33,13 @@ class BlogCreate extends React.Component {
     }
     onTitleChange = (e) => {
         console.log('handle change called')
-      }
+    }
     onEditorChange = (value) => {
         const text = value;
         console.log("Create Blog SubClass:");
         console.log(text);
         this.setState({'posttext': text});
-        }
+    }
     onSubmit = async e => {
         var token = AuthToken.fromNext()
         var headers = { Accept: 'application/vnd.github.v3+json'}
@@ -76,12 +76,8 @@ class BlogCreate extends React.Component {
         }
         Router.push('/blog');
         return;
-
-
-
-    
     }
-	render = () => {
+    render = () => {
         return (
             <>
             <Form name="basic" onFinish={this.onSubmit}>
@@ -95,6 +91,6 @@ class BlogCreate extends React.Component {
             </Form>
             </>
         )
-	}
+    }
 }
 export default privateRoute(pageLayout(BlogCreate));
