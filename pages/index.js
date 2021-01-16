@@ -15,24 +15,24 @@ import MSAdminSideBar from '../components/adminsidebar'
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import pageLayout from '../components/pagelayout'
-function Home({allPostsData}) {
-//    <MSAdminSideBar/>
+import Router from 'next/router'
 
-    return (
-        <>
-          This is some content
-      </>
-  )
+class IndexPage extends React.Component {
+    constructor(props)
+    {
+        super(props);
+    }
+    componentDidMount = () => {
+    Router.push('/blog');
+    }
+    
+    render() {
+        return (
+            <>
+                This is some content
+            </>
+        )
+    }
+
 }
-
-export default pageLayout(Home);
-
-
-//export async function getStaticProps() {
-//  const allPostsData = getSortedPostsData()
-//  return {
-//    props: {
-//      allPostsData
-//    }
-//  }
-//}
+export default pageLayout(IndexPage);

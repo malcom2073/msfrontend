@@ -4,11 +4,13 @@ import { render } from 'react-dom';
 import pageLayout from '../../components/pagelayout'
 import Forum_Index from '../../components/forums'
 
+
 class Forum extends React.Component {
     constructor(props)
     {
         super(props);
     }
+
     render() {
         return (
             <>
