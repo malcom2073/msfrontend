@@ -4,14 +4,14 @@ import { render } from 'react-dom';
 import pageLayout from '../../components/pagelayout'
 import { AuthToken } from '../../services/auth_token'
 import Forum_Index from '../../components/forums'
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Divider  } from 'antd';
 import remark from 'remark'
 import gfm from 'remark-gfm'
 import html from 'remark-html'
 import Link from 'next/link'
 
 import { Typography, Space } from 'antd';
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 
 class BlogList extends React.Component {
@@ -86,12 +86,18 @@ class BlogList extends React.Component {
                 console.log("Blog Index List: " + value);
                 return (
                     <>
-                    <Row key={"r-" + index} style={{padding: "5px"}} gutter={[16, 24]}  justify="center">
-                        <Col span={3}>
-                        <Text type="secondary">Posted {this.timeConverter(value.timestamp)}</Text>
-                        </Col>
-                        <Col span={12}>
-                            <Link href={"/blog/" + value.id}>{value.title}</Link>
+                    <Row key={"r-" + index} style={{padding: "20px"}} gutter={[16, 24]}  justify="center">
+                        <Col span={16}>
+                            <Row justify="center">
+                                <Col span={16}>
+                                    <Title><Link href={"/blog/" + value.id}>{value.title}</Link></Title>
+                                </Col>
+                            </Row>
+                            <Row justify="center">
+                                <Col span={8} offset={8}>
+                                    <Text type="secondary">Posted {this.timeConverter(value.timestamp)}</Text>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                     </>
