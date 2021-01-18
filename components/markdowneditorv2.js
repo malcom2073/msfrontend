@@ -32,22 +32,21 @@ const EditorWithForwardedRef = React.forwardRef((props, ref) => (
  */
 
 export default class EditorV2 extends Component {
-    constructor(...args) {
-        super(...args);
+    constructor(props) {
+        super(props);
         this.editorRef = React.createRef();
         this.editorText = null;
+        this.componentLoadCheckTimer = null;
+        this.componentLoadCheckTimerCount = 0;
     }
     
     onEditorLoaded = () => {
-        console.log("Editor loaded");
-        console.log(this.editorRef);
-        console.log(tihs.editorRef.current);
         if (this.editorRef.current && this.editorText){
             this.editorRef.current.editorInst.setMarkdown(this.editorText);
             this.editorText = null;
-            }
-
+        }
     }
+
     onEditorChange = () => {
         if (!this.editorRef.current) {
             return;
@@ -57,20 +56,41 @@ export default class EditorV2 extends Component {
 
     setValue = (value) => {
         if (this.editorRef.current){
-        this.editorRef.current.editorInst.setMarkdown(value);
+            this.editorRef.current.editorInst.setMarkdown(value);
         }
         else {
             this.editorText = value
         }
     }
-    componentDidMount = async () => {
-        console.log("EditorV2 componentDidMount");
-        console.log(this.editorRef.current);
+
+    checkForComponentLoad = () => {
+        this.componentLoadCheckTimerCount++;
+        if (this.componentLoadCheckTimerCount > 5) {
+            //It's been more than 2.5 seconds, don't keep trying.
+            clearInterval(this.componentLoadCheckTimer);
+        }
         if (this.editorRef.current && this.editorText){
             this.editorRef.current.editorInst.setMarkdown(this.editorText);
             this.editorText = null;
-            }
+            clearInterval(this.componentLoadCheckTimer);
         }
+    }
+
+    componentDidMount = async () => {
+        if (this.editorRef.current && this.editorText){
+            this.editorRef.current.editorInst.setMarkdown(this.editorText);
+            this.editorText = null;
+        }
+        else{
+            this.componentLoadCheckTimer = setInterval(function() { this.checkForComponentLoad(); }.bind(this),500); //Check every 30 seconds
+        }
+    }
+    
+    componentWillUnmount = () => {
+        if (this.componentLoadCheckTimer) {
+            clearInterval(this.componentLoadCheckTimer);
+        }
+    }
 
     render = () => {
         return (

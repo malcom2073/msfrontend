@@ -23,12 +23,13 @@ const tailLayout = {
 
   
 class BlogEdit extends React.Component {
-    constructor({query}) {
-        super();
+    constructor(props) {
+        super(props);
         this.myRef = React.createRef();
         this.titleRef = React.createRef();
     }
     componentDidMount = async () => {
+        console.log("BlogEdit ComponentDidMount");
         var token = AuthToken.fromNext();
         var headers = { Accept: 'application/vnd.github.v3+json'};
         if (token) {
@@ -62,6 +63,7 @@ class BlogEdit extends React.Component {
         this.setState({'posttext': response.data.data.content});
         this.myRef.current.setValue(response.data.data.content)
         this.titleRef.value = response.data.data.title;
+        console.log("BlogEdit ComponentDidMount DONE");
     }
     onTitleChange = (e) => {
         console.log('handle change called')
