@@ -77,7 +77,7 @@ class BlogView extends React.Component {
             headers: headers,
             });
         const response = await api.get('/api/blog/getPost',{'postid' : this.props.query.slug});
-        console.log(response);
+        //console.log(response);
         if (response.problem) {
             switch (response.problem) {
                 case 'CLIENT_ERROR':
@@ -95,7 +95,7 @@ class BlogView extends React.Component {
         }
         
         var toccontent = toc(response.data.data.content);
-        console.log(toccontent);
+        //console.log(toccontent);
         var i;
         var currlevel = 0;
         var textoutput = "\n";
@@ -105,11 +105,11 @@ class BlogView extends React.Component {
         //textoutput = `\`\`\`\n`;
         for (i = 0; i < toccontent.json.length; i++) {
             var newlvl = (toccontent.json[i].lvl - toccontent.highest)
-            console.log("NewLvl: " + newlvl);
-            console.log("Currlvl: " + currlevelindex);
+            //console.log("NewLvl: " + newlvl);
+            //console.log("Currlvl: " + currlevelindex);
             if (newlvl > currlevel) {
                 prefixlist.push(currlevelindex)
-                console.log("PrefixList Push");
+                //console.log("PrefixList Push");
                 currlevel = newlvl;
                 currlevelindex = 0;
             }
@@ -133,14 +133,14 @@ class BlogView extends React.Component {
                 }
             }
             textoutput += spacing + "* " + numbers
-            console.log("PLength: " + prefixlist.length);
+            //console.log("PLength: " + prefixlist.length);
             textoutput += "" + currlevelindex;
             textoutput += " [" + toccontent.json[i].content +"](http://localhost:3000/blog/6#" + toccontent.json[i].slug + ")";
             textoutput += "\n"
             //text += cars[i] + "<br>";
         }
         //textoutput += `\n\`\`\``;
-        console.log(textoutput);
+        //console.log(textoutput);
         //this.setState({title: response.data.data.title, blogdata: response.data.data.content.replace("__TOC__",textoutput),loaded:true})
         this.setState({title: response.data.data.title, blogdata: response.data.data.content.replace("__TOC__",toccontent.content),loaded:true})
     }
