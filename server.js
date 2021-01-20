@@ -24,6 +24,7 @@ app.prepare().then(() => {
  
   //if (isDevelopment) {
     server.use('/api', createProxyMiddleware(apiPaths['/api']));
+    server.use(express.static('uploads'));
   //}
 
   server.all('*', (req, res) => {

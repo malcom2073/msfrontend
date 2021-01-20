@@ -81,7 +81,7 @@ def upload():
         print("File: " + f)
         pprint.pprint(request.files.get(f))
         filestor = request.files.get(f)
-        filestor.save(os.path.join('..','public','upload',f))
+        filestor.save(os.path.join('..','uploads','upload',f))
     formdict = request.form.to_dict()
     pprint.pprint(formdict)
     #pprint.pprint(formdict['file'])
