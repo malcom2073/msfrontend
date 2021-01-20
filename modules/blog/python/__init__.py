@@ -18,7 +18,7 @@ from app.models.group import Group
 from app.models import userprofilefield as UserProfileField
 from modules.blog.python.models.msblogpost import MSBlogPost
 import app
-
+import os
 
 # Should there be a standard set of module endpoints?
 # Something like: /getVersion, /getInfo, /getAuthor?
@@ -49,6 +49,48 @@ def addPost():
 def editPost():
     jwt = getJwt(request)
     post_data = request.get_json()
+    #pprint.pprint(post_data)
+    #print('Index: ' + str(post_data.get('id')))
+    print('Title: ' + post_data.get('title'))
+    print('ID: ' + str(post_data.get('id')))
+    postid = post_data.get('id')
+    print('Content: '.encode('utf-8') + post_data.get('content').encode('utf-8'))
+    sys.stdout.flush()
+    dbsession = db.Session()
+    try:
+        postlist = dbsession.query(MSBlogPost).filter(MSBlogPost.id == postid).all()
+        singlepost = postlist[0]
+        singlepost.title = post_data.get('title')
+        singlepost.content = post_data.get('content')
+        dbsession.commit()
+        dbsession.close()
+    except Exception as e:
+        dbsession.rollback()
+        dbsession.close()
+        return jsonify({'status':'error','error':str(e)})
+    return jsonify({'status':'success'})
+
+
+@module_bp.route('/upload',methods=['PUT'])
+@jwt_private
+def upload():
+    print("/upload called")
+    sys.stdout.flush()
+    pprint.pprint(request.files)
+    for f in request.files:
+        print("File: " + f)
+        pprint.pprint(request.files.get(f))
+        filestor = request.files.get(f)
+        filestor.save(os.path.join('..','public','upload',f))
+    formdict = request.form.to_dict()
+    pprint.pprint(formdict)
+    #pprint.pprint(formdict['file'])
+    #pprint.pprint(formdict['image[image]'])
+    sys.stdout.flush()
+    jwt = getJwt(request)
+    post_data = request.get_json()
+    pprint.pprint(post_data)
+    return jsonify({'status':'success','path':'/upload/' + f})
     #pprint.pprint(post_data)
     #print('Index: ' + str(post_data.get('id')))
     print('Title: ' + post_data.get('title'))
