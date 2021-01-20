@@ -1,5 +1,6 @@
 const express = require('express')
 const next = require('next')
+const path = require('path');
 const { createProxyMiddleware } = require("http-proxy-middleware")
 
 const port = process.env.PORT || 3000
@@ -24,7 +25,8 @@ app.prepare().then(() => {
  
   //if (isDevelopment) {
     server.use('/api', createProxyMiddleware(apiPaths['/api']));
-    server.use(express.static('uploads'));
+    server.use('/uploads',express.static(path.join(__dirname, 'uploads')));
+    //server.use('/', express.static('uploads'));
   //}
 
   server.all('*', (req, res) => {
