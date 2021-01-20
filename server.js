@@ -23,11 +23,8 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 app.prepare().then(() => {
   const server = express()
  
-  //if (isDevelopment) {
-    server.use('/api', createProxyMiddleware(apiPaths['/api']));
-    server.use('/uploads',express.static(path.join(__dirname, 'uploads')));
-    //server.use('/', express.static('uploads'));
-  //}
+  server.use('/api', createProxyMiddleware(apiPaths['/api']));
+  server.use('/upload',express.static(path.join(__dirname, 'uploads/upload')));
 
   server.all('*', (req, res) => {
     return handle(req, res)
