@@ -6,7 +6,7 @@ import string
 import datetime
 import jwt
 import sys # For sys.stdout.flush()
-
+from PIL import Image
 from util import getJwt, getAuthToken
 from auth import jwt_private
 module_bp = Blueprint('blog_bp', __name__)
@@ -82,6 +82,10 @@ def upload():
         pprint.pprint(request.files.get(f))
         filestor = request.files.get(f)
         filestor.save(os.path.join('..','uploads','upload',f))
+        size = 128, 128
+        im = Image.open(os.path.join('..','uploads','upload',f))
+        im.thumbnail(size)
+        im.save(os.path.join('..','uploads','upload',"thumbnail." + f), "JPEG")
     formdict = request.form.to_dict()
     pprint.pprint(formdict)
     #pprint.pprint(formdict['file'])
@@ -90,7 +94,7 @@ def upload():
     jwt = getJwt(request)
     post_data = request.get_json()
     pprint.pprint(post_data)
-    return jsonify({'status':'success','path':'/upload/' + f})
+    return jsonify({'status':'success','path':'/upload/' + "thumbnail." + f})
     #pprint.pprint(post_data)
     #print('Index: ' + str(post_data.get('id')))
     print('Title: ' + post_data.get('title'))

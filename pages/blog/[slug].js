@@ -5,6 +5,7 @@ import pageLayout from '../../components/pagelayout'
 import privateRoute from '../../components/privateroute'
 import { AuthToken } from '../../services/auth_token'
 import Router from 'next/router'
+import ModalImage from "react-modal-image";
 import Forum_Index from '../../components/forums'
 import { Row,Col, Form, Input, Button, Checkbox,List } from 'antd';
 import remark from 'remark'
@@ -13,6 +14,7 @@ import html from 'remark-html'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'  
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { Modal } from 'antd';
 //import { coy } from "react-syntax-highlighter/dist/styles/prism";
 import {coy} from "react-syntax-highlighter/dist/cjs/styles/prism/prism"
 var toc = require('markdown-toc-unlazy');
@@ -60,7 +62,18 @@ const renderers = {
     },
     blockquote: function makeBlockQuote(props) {
         return <Text type="secondary">{props.children}</Text>
-    }
+    },
+    image:({
+        alt,
+        src,
+        title,
+    }) => (
+        <ModalImage
+  small={src}
+  large={src.replace("thumbnail.","")}
+  alt="Hello World!"
+/>
+    ),
 };
 class BlogView extends React.Component {
     constructor({query}) {
