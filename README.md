@@ -1,6 +1,6 @@
 About
 ===============
-This is a playground for me to learn ReactJS, NextJS, and various frontend and backend services required for developing a CMS web framework from scratch. I intend to eventually use it for my personal site, but it likely won't be a product in any way.
+This is a playground to learn ReactJS, NextJS, and various frontend and backend services required for developing a CMS web framework from scratch.
 
 Technologies
 ==============
