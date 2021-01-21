@@ -2,6 +2,30 @@ About
 ===============
 This is a playground for me to learn ReactJS, NextJS, and various frontend and backend services required for developing a CMS web framework from scratch. I intend to eventually use it for my personal site, but it likely won't be a product in any way.
 
+Technologies
+==============
+* ReactJS/NextJS/Espresso
+  * Frontend and static content
+* Python Flask/SqlAlchemy
+  * Backend
+* Modular architecture, providing:
+  * Grouping of ReactJS components and Javascript API alongside Python backend endpoints
+  * Automatic loading of detected modules with Flask Blueprints
+
+Architecture
+===============
+
+* Core NextJS Webapp
+  * Runs Espresso server providing NextJS static and dynamic content
+* Authentication
+  * Flask API backed user authenticatoin
+  * JWT with cookie integration providing both XSS and CSRF protection
+* Forums
+  * Generic Forums module, allowing markdown based post formatting
+* Blog
+  * Markdown based blogging module
+  * Image Upload, with automatic thumbnail eneration and Lightbox for user presentation
+  
 How to run
 ===============
 Clone the repository
