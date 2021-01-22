@@ -97,7 +97,13 @@ export default class EditorV2 extends Component {
 
     render = () => {
         return (
-            <EditorWithForwardedRef usageStatistics={false} ref={this.editorRef} onLoad={this.onEditorLoaded} onChange={this.onEditorChange} hooks={{    
+            <EditorWithForwardedRef usageStatistics={false} ref={this.editorRef} onLoad={this.onEditorLoaded} onChange={this.onEditorChange}
+            events={{
+                load: async (prop) => {
+                    prop.setMarkdown(this.props.content);
+                }
+            }}
+            hooks={{    
                 addImageBlobHook: async (blob, callback) => {
                     console.log("addImageBlobHook");
                     console.log(blob);

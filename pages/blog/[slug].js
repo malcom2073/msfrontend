@@ -69,10 +69,10 @@ const renderers = {
         title,
     }) => (
         <ModalImage
-  small={src}
-  large={src.replace("thumbnail.","")}
-  alt="Hello World!"
-/>
+            small={src}
+            large={src.replace("thumbnail.","")}
+            alt={title}
+        />
     ),
 };
 class BlogView extends React.Component {
