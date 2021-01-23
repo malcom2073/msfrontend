@@ -1,6 +1,6 @@
 About
 ===============
-This is a playground to learn ReactJS, NextJS, and various frontend and backend services required for developing a CMS web framework from scratch.
+This is a playground to learn ReactJS, NextJS, and various frontend and backend services required for developing a CMS web framework from scratch. This site is viewable live at https://dev.mikesshop.net
 
 Technologies
 ==============
