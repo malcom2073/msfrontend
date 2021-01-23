@@ -18,7 +18,6 @@ import { UserOutlined, LaptopOutlined, NotificationOutlined,SettingOutlined } fr
 import Link from 'next/link'
 import MsApi from '../lib/msapi'
 import { AuthToken } from "../services/auth_token";
-import Head from "next/head"
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
