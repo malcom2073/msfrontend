@@ -18,6 +18,7 @@ import { UserOutlined, LaptopOutlined, NotificationOutlined,SettingOutlined } fr
 import Link from 'next/link'
 import MsApi from '../lib/msapi'
 import { AuthToken } from "../services/auth_token";
+import Head from "next/head"
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
@@ -28,6 +29,9 @@ export default function pageLayout(WrappedComponent) {
             console.log(this.props);
             return (
                 <>
+                <Head>
+                    <title>MikesShop.net</title>
+                </Head>
                 <Layout>
                     <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
                         <MSNavBar/>
