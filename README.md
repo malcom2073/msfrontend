@@ -28,7 +28,7 @@ Architecture
     * Forums
       * Generic Forums module, allowing markdown based post formatting
       * Posts require authentication and are tied to a user
-   * Blog
+    * Blog
       * Markdown based blogging module
       * Image Upload, with automatic thumbnail eneration and Lightbox for user presentation
       * Links to authentication module
