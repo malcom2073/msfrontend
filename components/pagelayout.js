@@ -30,7 +30,11 @@ export default function pageLayout(WrappedComponent) {
                 <>
                 <Head>
                     <title>MikesShop.net</title>
+                    {(process.env.NODE_ENV == 'production') ? (
                     <script async defer data-website-id="1916a093-a671-4adc-bbe8-5fbb63b691aa" src="https://tr.mikesshop.net/umami.js" />
+                    ) : (
+                        <></>
+                    )}
                 </Head>
                 <Layout>
                     <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
