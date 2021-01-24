@@ -22,6 +22,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 app.prepare().then(() => {
   const server = express()
+  server.set('trust proxy', true)
  
   server.use('/api', createProxyMiddleware(apiPaths['/api']));
   server.use('/upload',express.static(path.join(__dirname, 'uploads/upload')));
