@@ -31,7 +31,7 @@ export default function pageLayout(WrappedComponent) {
                 <Head>
                     <title>MikesShop.net</title>
                     {(process.env.NODE_ENV == 'production') ? (
-                    <script async defer data-website-id="1916a093-a671-4adc-bbe8-5fbb63b691aa" src="https://tr.mikesshop.net/umami.js" />
+                        <script async defer data-website-id={process.env.TR_WEBSITE_ID} src={process.env.TR_WEBSITE_SCRIPT} />
                     ) : (
                         <></>
                     )}
