@@ -29,9 +29,23 @@ export default function pageLayout(WrappedComponent) {
             return (
                 <>
                 <Head>
-                    <title>MikesShop.net</title>
+                    {(this.props && this.props.meta && this.props.meta.title) ? (
+                        <title>{this.props?.meta?.title}</title>
+                    ) : (
+                        <title>Mikesshop.net</title>
+                    )}
                     {(process.env.NODE_ENV == 'production') ? (
                         <script async defer data-website-id={process.env.TR_WEBSITE_ID} src={process.env.TR_WEBSITE_SCRIPT} />
+                    ) : (
+                        <></>
+                    )}
+                    {(this.props && this.props.meta && this.props.meta.description) ? (
+                        <meta name="description" content={this.props?.meta?.description} />
+                    ) : (
+                        <></>
+                    )}
+                    {(this.props && this.props.meta && this.props.meta.keywords) ? (
+                        <meta name="keywords" content={this.props?.meta?.keywords} />
                     ) : (
                         <></>
                     )}
@@ -99,8 +113,12 @@ export default function pageLayout(WrappedComponent) {
                 }
             }
         }
-        static getInitialProps = async({query,pathname}) => {
-            return {query:query,pathname:pathname};
+        static getInitialProps = async(ctx) => {
+            if (WrappedComponent.getInitialProps) {
+              const wrappedProps = await WrappedComponent.getInitialProps(ctx);
+              return { ...wrappedProps, query:ctx.query,pathname:ctx.pathname };
+            }
+            return {query:ctx.query,pathname:ctx.pathname};
         }
         componentWillUnmount = () => {
             clearInterval(this.apichecktimer);

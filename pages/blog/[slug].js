@@ -37,7 +37,7 @@ const renderers = {
         // This only works for raw text headers
         // TODO: Make it work for dynamic text headers?
         var slug = "";
-        console.log(props);
+        //console.log(props);
         if (props.children.length > 0) {
             var childtext = props.children[0].props.children
             if (typeof(childtext) == "string") {
@@ -79,7 +79,9 @@ class BlogView extends React.Component {
     constructor({query}) {
         super({query});
     }
-    componentDidMount = async () => {
+
+    static async getInitialProps(ctx) {
+        //MetaData Set here
         var token = AuthToken.fromNext();
         var headers = { Accept: 'application/vnd.github.v3+json'};
         if (token) {
@@ -89,7 +91,7 @@ class BlogView extends React.Component {
             baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
             headers: headers,
             });
-        const response = await api.get('/api/blog/getPost',{'postid' : this.props.query.slug});
+        const response = await api.get('/api/blog/getPost',{'postid' : ctx.query.slug});
         //console.log(response);
         if (response.problem) {
             switch (response.problem) {
@@ -155,26 +157,42 @@ class BlogView extends React.Component {
         //textoutput += `\n\`\`\``;
         //console.log(textoutput);
         //this.setState({title: response.data.data.title, blogdata: response.data.data.content.replace("__TOC__",textoutput),loaded:true})
-        this.setState({title: response.data.data.title, blogdata: response.data.data.content.replace("__TOC__",toccontent.content),loaded:true})
+        //this.setState({title: response.data.data.title, blogdata: response.data.data.content.replace("__TOC__",toccontent.content),loaded:true})
+
+        return { meta: {
+            title: "MSNET " + response.data.data.title,
+            description: "MikesShop.net " + response.data.data.title,
+            keywords: "blog mikesshop malcom2073 cars computers technology"
+        },
+        title:response.data.data.title,
+        blogdata: response.data.data.content.replace("__TOC__",toccontent.content)
+    }
+      }
+
+    componentDidMount = async () => {
     }
     
     render = () => {
         return (
         <>
             <Row justify="center">
-            {(this.state && this.state.loaded ? (
-                <Title>{this.state.title}</Title>
-            ) : (
-                <></>
-            ))}    
+            {//(this.state && this.state.loaded ? (
+             //   <Title>{this.state.title}</Title>
+            //) : (
+             //   <></>
+            //))
+        }    
+        <Title>{this.props.title}</Title>
             </Row>
             <Row justify="center">
                 <Col span={10} >
-                {(this.state && this.state.loaded ? (
-                    <ReactMarkdown renderers={renderers} plugins={[gfm]} children={this.state.blogdata} />
-                ) : (
-                    <></>
-                ))}
+                {//(this.state && this.state.loaded ? (
+                 //   <ReactMarkdown renderers={renderers} plugins={[gfm]} children={this.state.blogdata} />
+                //) : (
+                //    <></>
+                //))
+                }
+                <ReactMarkdown renderers={renderers} plugins={[gfm]} children={this.props.blogdata} />
                 </Col>
                 {(this.props.auth && this.props.auth.isValid() ? (
                 <Col span={1}>

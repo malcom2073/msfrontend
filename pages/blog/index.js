@@ -20,6 +20,15 @@ class BlogList extends React.Component {
         super(props);
         this.state = { loaded:false}
     }
+    static async getInitialProps(ctx) {
+        //MetaData Set here
+        return { meta: {
+            title: "MikesShop.net - Blog Index",
+            description: "MikesShop.net blog list",
+            keywords: "blog mikesshop malcom2073 cars computers technology"
+        }}
+      }
+
     async componentDidMount() {
         var token = AuthToken.fromNext()
         var headers = { Accept: 'application/vnd.github.v3+json'}
