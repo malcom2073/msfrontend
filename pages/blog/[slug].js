@@ -98,7 +98,7 @@ class BlogView extends React.Component {
                 case 'CLIENT_ERROR':
                 if (response.status == 401)
                 {
-                    alert('Invalid credentials');
+                    //alert('Invalid credentials');
                     return 
                     //Bad authentication!
                 }
@@ -106,7 +106,8 @@ class BlogView extends React.Component {
                 default:
                     break;
             }
-            alert('Unknown error');
+            //alert('Unknown error');
+            return;
         }
         
         var toccontent = toc(response.data.data.content);
