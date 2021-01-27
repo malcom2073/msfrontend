@@ -76,8 +76,8 @@ const renderers = {
     ),
 };
 class BlogView extends React.Component {
-    constructor({query}) {
-        super({query});
+    constructor(props) {
+        super(props);
     }
 
     static async getInitialProps(ctx) {
@@ -161,7 +161,7 @@ class BlogView extends React.Component {
         //this.setState({title: response.data.data.title, blogdata: response.data.data.content.replace("__TOC__",toccontent.content),loaded:true})
 
         return { meta: {
-            title: "MSNET " + response.data.data.title,
+            title: "" + response.data.data.title,
             description: "MikesShop.net " + response.data.data.title,
             keywords: "blog mikesshop malcom2073 cars computers technology"
         },

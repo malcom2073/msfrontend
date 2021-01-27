@@ -16,6 +16,9 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import dynamic from 'next/dynamic';
 //import EditorV2 from '../../../components/markdowneditorv2';
 
+import { Alert } from 'antd';
+
+
 import EditorV2 from '../../../components/markdowneditorv2'
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
@@ -28,6 +31,7 @@ class BlogEdit extends React.Component {
         this.myRef = React.createRef();
         this.titleRef = React.createRef();
         this.state = {loaded:false}
+        this.saveNotificaitonTimer = null;
     }
     componentDidMount = async () => {
         //console.log("BlogEdit ComponentDidMount");
@@ -61,20 +65,34 @@ class BlogEdit extends React.Component {
         //{
         //this.myRef.current.getInstance().setMarkdown(response.data.data.content);
         //}
-        this.setState({loaded:true,posttext: response.data.data.content});
+        this.setState({savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
         //this.myRef.current.setValue(response.data.data.content)
-        this.titleRef.value = response.data.data.title;
+        this.titleRef.current.input.value = response.data.data.title;
         //console.log("BlogEdit ComponentDidMount DONE");
     }
-    onTitleChange = (e) => {
-        console.log('handle change called')
-      }
     onEditorChange = (value) => {
         const text = value;
         //console.log("Create Blog SubClass:");
         //console.log(text);
-        this.setState({posttext: text});
+        if (text != this.state.savedcontent) {
+            this.setState({savedcontent: text,changed:true});
         }
+        else {
+            this.setState({savedcontent: text,changed:false});
+        }
+    }
+    onTitleChange = (value) => {
+        var text = value.target.value
+        if (text != this.state.savedtitle) {
+            this.setState({savedtitle: text,changed:true});
+        }
+        else {
+            this.setState({savedtitle: text,changed:false});
+        }
+    }
+    onCancel = async e => {
+        Router.push('/blog/' + this.props.query.slug);
+    }
     onSubmit = async e => {
         var token = AuthToken.fromNext()
         var headers = { Accept: 'application/vnd.github.v3+json'}
@@ -91,7 +109,7 @@ class BlogEdit extends React.Component {
             {
                 user_id = token.decodedToken.sub.user_id;
             }
-            const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': this.titleRef.value,'content': this.state.posttext});
+            const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': this.state.savedtitle,'content': this.state.savedcontent});
             // TODO: Handle more of these errors.
             if (response.problem) {
             switch (response.problem) {
@@ -108,25 +126,43 @@ class BlogEdit extends React.Component {
             }
             alert('Unknown error');
         }
-        Router.push('/blog/' + this.props.query.slug);
-        return;    
+        this.setState({savedalert: true,changed: false,savedtext: this.state.posttext});
+        this.saveNotificaitonTimer = setTimeout(()=>this.setState({savedalert:false}),3000);
+        //Router.push('/blog/' + this.props.query.slug);
+        return;
     }
+    componentWillUnmount = () => {
+        if (this.saveNotificaitonTimer) {
+            clearInterval(this.saveNotificaitonTimer);
+        }
+    }
+
 	render = () => {
         return (
             <>
-            <Form name="basic" onFinish={this.onSubmit}>
-                Title: <input onChange={(e) => {this.onTitleChange(e)}} ref={(myref) => {this.titleRef = myref}}/>
-                {(this.state && this.state.loaded) ? ( 
-                    <EditorV2 content={this.state.posttext} ref={this.myRef} onChange={this.onEditorChange}/>
-                ) : (
-                    <></>
-                )}
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Save
-                    </Button>
-                </Form.Item>
-            </Form>
+            {(this.state && this.state.savedalert) ? (
+                <Alert message="Success Text" type="success" />
+            ) : (
+                <></>
+            )}
+            {(this.state && this.state.loaded) ? (
+                <>
+                Title:
+                <Input value={this.state.savedtitle} onChange={this.onTitleChange.bind(this)} ref={this.titleRef}/>
+                <EditorV2 content={this.state.posttext} ref={this.myRef} onChange={this.onEditorChange.bind(this)}/>
+                </>
+            ) : (
+                <></>
+            )}
+            {(this.state && this.state.changed) ? (
+                <Button type="primary" onClick={this.onSubmit}>
+                    Save
+                </Button>
+            ) : (
+                <Button type="primary" onClick={this.onCancel}>
+                    Close
+                </Button>
+            )}
             </>
         )
 	}
