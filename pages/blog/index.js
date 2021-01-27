@@ -9,7 +9,7 @@ import remark from 'remark'
 import gfm from 'remark-gfm'
 import html from 'remark-html'
 import Link from 'next/link'
-
+import BlogApi from '../../modules/blog/lib/api'
 import { Typography, Space } from 'antd';
 const { Text, Title } = Typography;
 
@@ -19,6 +19,8 @@ class BlogList extends React.Component {
     {
         super(props);
         this.state = { loaded:false}
+        this.api = new BlogApi();
+
     }
     static async getInitialProps(ctx) {
         //MetaData Set here
@@ -30,40 +32,14 @@ class BlogList extends React.Component {
       }
 
     async componentDidMount() {
-        var token = AuthToken.fromNext()
-        var headers = { Accept: 'application/vnd.github.v3+json'}
-        if (token) {
-            headers.Authorization = token.authorizationString();
-        }
-        const api = create({
-            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
-            headers: headers,
-            });
-        const response = await api.get('/api/blog/getPosts');
-        console.log(response);
-        if (response.problem) {
-            switch (response.problem) {
-            case 'CLIENT_ERROR':
-                if (response.status == 401)
-                {
-                alert('Invalid credentials');
-                return 
-                //Bad authentication!
-                }
-                break;
-            default:
-                break;
-            }
-            alert('Unknown error');
-        }
-
+        response = await this.api.getPosts();
         var retval = []
-        var arrayLength = response.data.data.length;
+        var arrayLength = response.length;
         for (var i = 0; i < arrayLength; i++) {
             //Do something
-            var processedContent = await remark().use(html).use(gfm).process(response.data.data[i].content);
+            var processedContent = await remark().use(html).use(gfm).process(response[i].content);
             var contentHtml = processedContent.toString();
-            retval.push({'id':response.data.data[i].id,'user':response.data.data[i].user,'title':response.data.data[i].title,'content':contentHtml,'timestamp':response.data.data[i].timestamp});
+            retval.push({'id':response[i].id,'user':response[i].user,'title':response[i].title,'content':contentHtml,'timestamp':response[i].timestamp});
         }
         this.setState({bloglist: retval,loaded:true})
     }
