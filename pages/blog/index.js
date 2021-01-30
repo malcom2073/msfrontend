@@ -32,7 +32,8 @@ class BlogList extends React.Component {
       }
 
     async componentDidMount() {
-        response = await this.api.getPosts();
+        var response = await this.api.getPosts();
+        console.log(response);
         var retval = []
         var arrayLength = response.length;
         for (var i = 0; i < arrayLength; i++) {

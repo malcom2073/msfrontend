@@ -15,6 +15,7 @@ import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'  
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { Modal } from 'antd';
+import BlogApi from '../../modules/blog/lib/api'
 //import { coy } from "react-syntax-highlighter/dist/styles/prism";
 import {coy} from "react-syntax-highlighter/dist/cjs/styles/prism/prism"
 var toc = require('markdown-toc-unlazy');
@@ -78,39 +79,14 @@ const renderers = {
 class BlogView extends React.Component {
     constructor(props) {
         super(props);
+        this.api = new BlogApi();
     }
 
     static async getInitialProps(ctx) {
         //MetaData Set here
-        var token = AuthToken.fromNext();
-        var headers = { Accept: 'application/vnd.github.v3+json'};
-        if (token) {
-            headers.Authorization = token.authorizationString();
-        }
-        const api = create({
-            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
-            headers: headers,
-            });
-        const response = await api.get('/api/blog/getPost',{'postid' : ctx.query.slug});
-        //console.log(response);
-        if (response.problem) {
-            switch (response.problem) {
-                case 'CLIENT_ERROR':
-                if (response.status == 401)
-                {
-                    //alert('Invalid credentials');
-                    return 
-                    //Bad authentication!
-                }
-                break;
-                default:
-                    break;
-            }
-            //alert('Unknown error');
-            return;
-        }
-        
-        var toccontent = toc(response.data.data.content);
+        var api = new BlogApi();
+        var response = await api.getPost(ctx.query.slug);
+        var toccontent = toc(response.content);
         //console.log(toccontent);
         var i;
         var currlevel = 0;
@@ -161,12 +137,12 @@ class BlogView extends React.Component {
         //this.setState({title: response.data.data.title, blogdata: response.data.data.content.replace("__TOC__",toccontent.content),loaded:true})
 
         return { meta: {
-            title: "" + response.data.data.title,
-            description: "MikesShop.net " + response.data.data.title,
+            title: "" + response.title,
+            description: "MikesShop.net " + response.title,
             keywords: "blog mikesshop malcom2073 cars computers technology"
         },
-        title:response.data.data.title,
-        blogdata: response.data.data.content.replace("__TOC__",toccontent.content)
+        title:response.title,
+        blogdata: response.content.replace("__TOC__",toccontent.content)
     }
       }
 

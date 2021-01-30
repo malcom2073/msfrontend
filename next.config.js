@@ -15,6 +15,9 @@ module.exports = withCSS({
   //  importLoaders: 1,
   //  localIdentName: "[local]___[hash:base64:5]",
   //},
+  env: {
+    MSAPI_ENDPOINT: process.env.REACT_APP_MSAPI_ENDPOINT
+  },
   webpack: (config) => {
     // Fixes npm packages that depend on `fs` module
     config.node = {
