@@ -85,6 +85,8 @@ def upload():
         size = 128, 128
         im = Image.open(os.path.join('..','uploads','upload',f))
         im.thumbnail(size)
+        if im.mode in ("RGBA", "P"):
+            im = im.convert("RGB") 
         im.save(os.path.join('..','uploads','upload',"thumbnail." + f), "JPEG")
     formdict = request.form.to_dict()
     pprint.pprint(formdict)
