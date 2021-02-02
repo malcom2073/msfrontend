@@ -18,21 +18,23 @@ from .auth import auth_bp
 app.register_blueprint(auth_bp, url_prefix='/auth')
 from .auth import jwt_private
 
-print("loading")
-import os
-import importlib
-d = '../modules/'
-for o in os.listdir(d):
-    if os.path.isdir(os.path.join(d,o)):
-        if os.path.isdir(os.path.join(d,o,'python')):
-            #Module has a python folder! Import it!
-            i = importlib.import_module(".",'modules.' + o + '.python')
-            app.register_blueprint(i.module_bp,url_prefix=i.module_prefix)
-            print("Imported module")
-            print(i)
-        print("Dir: " + os.path.join(d,o))
 
+def loadModules():
+    print("loading")
+    import os
+    import importlib
+    d = '../modules/'
+    for o in os.listdir(d):
+        if os.path.isdir(os.path.join(d,o)):
+            if os.path.isdir(os.path.join(d,o,'python')):
+                #Module has a python folder! Import it!
+                i = importlib.import_module(".",'modules.' + o + '.python')
+                app.register_blueprint(i.module_bp,url_prefix=i.module_prefix)
+                print("Imported module")
+                print(i)
+            print("Dir: " + os.path.join(d,o))
 
+loadModules()
 
 @app.route('/getUser',methods=['GET'])
 def getUser():

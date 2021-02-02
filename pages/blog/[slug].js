@@ -86,6 +86,7 @@ class BlogView extends React.Component {
         //MetaData Set here
         var api = new BlogApi();
         var response = await api.getPost(ctx.query.slug);
+        console.log(response);
         var toccontent = toc(response.content);
         //console.log(toccontent);
         var i;

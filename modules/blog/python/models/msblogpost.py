@@ -3,7 +3,7 @@
 
 #from sqlalchemy.ext.declarative import declarative_base
 #from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey, Column, Integer, String, DateTime
+from sqlalchemy import ForeignKey, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from app import db
 from app import main_table_list
@@ -22,6 +22,7 @@ class MSBlogPost(db.Model):
     user: User
     timestamp: int
     content: str
+    published: bool
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
@@ -29,6 +30,7 @@ class MSBlogPost(db.Model):
     title = Column(String)
     content = Column(String)
     timestamp = Column(Integer)
+    published = Column(Boolean)
 
     def __repr__(self):
         return "<User(id={}, name={}>".format(self.id, self.name)
