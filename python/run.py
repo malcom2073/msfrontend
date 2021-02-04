@@ -4,6 +4,8 @@ sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net")
 sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app")
 sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app\\models")
 
+import os
+os.system('alembic upgrade head')
 
 from app import app
 #app.loadModules()
@@ -107,7 +109,7 @@ def loadDatabase(usercsv, fakedata=False):
             pass
 
         try:
-            db.session.add(MSBlogPost(id=0,user_id=0,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="First Blog Post",content="""
+            db.session.add(MSBlogPost(id=0,user_id=0,published=True,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="First Blog Post",content="""
 Hello world! This is a world
 
 **test**
@@ -115,7 +117,7 @@ Hello world! This is a world
 
 """))
 
-            db.session.add(MSBlogPost(id=1,user_id=0,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="First Blog Post",content="""
+            db.session.add(MSBlogPost(id=1,user_id=0,published=True,timestamp=(datetime.datetime.now()-datetime.timedelta(days=3)).timestamp(),title="First Blog Post",content="""
 It's very easy to make some words **bold** and other 
 words *italic* with Markdown. You can even [link to Google!](http://google.com)
 """))
@@ -139,5 +141,5 @@ words *italic* with Markdown. You can even [link to Google!](http://google.com)
         print("Done loading")
 
 if __name__ == '__main__':
-    loadDatabase('output.csv',True)
+    loadDatabase('output.csv')
     app.run(host='0.0.0.0', port=5000, debug=True)
