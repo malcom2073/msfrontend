@@ -84,9 +84,29 @@ class BlogView extends React.Component {
 
     static async getInitialProps(ctx) {
         //MetaData Set here
-        var api = new BlogApi();
+        var api = null;
+        if (ctx.req)
+        {
+            api = new BlogApi(true);
+        }
+        else {
+            api = new BlogApi(false);
+        }
         var response = await api.getPost(ctx.query.slug);
+        console.log("blog getinitialprops");
+        console.log(ctx.query);
         console.log(response);
+        if (!response)
+        {
+            return { meta: {
+                title: "",
+                description: "MikesShop.net ",
+                keywords: "blog mikesshop malcom2073 cars computers technology"
+            },
+            title:'',
+            blogdata: ''
+        }
+        }
         var toccontent = toc(response.content);
         //console.log(toccontent);
         var i;

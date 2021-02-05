@@ -35,13 +35,15 @@ class BlogList extends React.Component {
         var response = await this.api.getPosts();
         console.log(response);
         var retval = []
-        var arrayLength = response.length;
-        for (var i = 0; i < arrayLength; i++) {
-            //Do something
-            var processedContent = await remark().use(html).use(gfm).process(response[i].content);
-            var contentHtml = processedContent.toString();
-            retval.push({'id':response[i].id,'user':response[i].user,'title':response[i].title,'content':contentHtml,'timestamp':response[i].timestamp});
-        }
+        if (response) {
+            var arrayLength = response.length;
+            for (var i = 0; i < arrayLength; i++) {
+                //Do something
+                var processedContent = await remark().use(html).use(gfm).process(response[i].content);
+                var contentHtml = processedContent.toString();
+                retval.push({'id':response[i].id,'user':response[i].user,'title':response[i].title,'content':contentHtml,'timestamp':response[i].timestamp});
+            }
+            }
         this.setState({bloglist: retval,loaded:true})
     }
     timeConverter(UNIX_timestamp){

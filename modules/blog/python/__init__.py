@@ -44,6 +44,35 @@ def addPost():
     return jsonify({'status':'success'})
 
 
+@module_bp.route('/publishPost',methods=['POST'])
+@jwt_private
+def publishPost():
+    jwt = getJwt(request)
+    post_data = request.get_json()
+    #pprint.pprint(post_data)
+    #print('Index: ' + str(post_data.get('id')))
+    print('ID: ' + str(post_data.get('postid')))
+    postid = post_data.get('postid')
+    published = post_data.get('published')
+    #print('Content: '.encode('utf-8') + post_data.get('content').encode('utf-8'))
+    #sys.stdout.flush()
+    dbsession = db.Session()
+    try:
+        postlist = dbsession.query(MSBlogPost).filter(MSBlogPost.id == postid).all()
+        singlepost = postlist[0]
+        singlepost.published = published
+        #singlepost.title = post_data.get('title')
+        #singlepost.content = post_data.get('content')
+        dbsession.commit()
+        dbsession.close()
+    except Exception as e:
+        dbsession.rollback()
+        dbsession.close()
+        return jsonify({'status':'error','error':str(e)})
+    return jsonify({'status':'success'})
+
+
+
 @module_bp.route('/editPost',methods=['POST'])
 @jwt_private
 def editPost():

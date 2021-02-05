@@ -24,6 +24,7 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
 
+import BlogApi from '../../../modules/blog/lib/api'
   
 class BlogEdit extends React.Component {
     constructor(props) {
@@ -32,6 +33,7 @@ class BlogEdit extends React.Component {
         this.titleRef = React.createRef();
         this.state = {loaded:false}
         this.saveNotificaitonTimer = null;
+        this.api = new BlogApi();
     }
     componentDidMount = async () => {
         //console.log("BlogEdit ComponentDidMount");
@@ -65,7 +67,7 @@ class BlogEdit extends React.Component {
         //{
         //this.myRef.current.getInstance().setMarkdown(response.data.data.content);
         //}
-        this.setState({savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
+        this.setState({published: response.data.data.published, savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
         //this.myRef.current.setValue(response.data.data.content)
         this.titleRef.current.input.value = response.data.data.title;
         //console.log("BlogEdit ComponentDidMount DONE");
@@ -93,39 +95,27 @@ class BlogEdit extends React.Component {
     onCancel = async e => {
         Router.push('/blog/' + this.props.query.slug);
     }
+    onPublish = async e => {
+        if (this.state.changed) {
+            //We need to save prior to setting publish, since state has hcanged
+        }
+        this.api.setPostPublished(this.props.query.slug,true);
+        this.setState({published:true});
+
+    }
+    onSaveAndUnpublish = async e => {
+        this.api.setPostPublished(this.props.query.slug,false);
+        this.setState({published:false});
+
+    }
+    onUnPublish = async e => {
+        //Don't save changes! Just unpublish
+        this.api.setPostPublished(this.props.query.slug,false);
+        this.setState({published:false});
+
+    }
     onSubmit = async e => {
-        var token = AuthToken.fromNext()
-        var headers = { Accept: 'application/vnd.github.v3+json'}
-        if (token) {
-            headers.Authorization = token.authorizationString();
-        }
-        const api = create({
-            baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
-            headers: headers,
-            });
-            var timestamp = Date.now() / 1000 | 0;
-            var user_id = -1;
-            if (token && token.decodedToken && token.decodedToken.sub)
-            {
-                user_id = token.decodedToken.sub.user_id;
-            }
-            const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': this.state.savedtitle,'content': this.state.savedcontent});
-            // TODO: Handle more of these errors.
-            if (response.problem) {
-            switch (response.problem) {
-                case 'CLIENT_ERROR':
-                if (response.status == 401)
-                {
-                    alert('Invalid credentials');
-                    return {}
-                    //Bad authentication!
-                }
-                break;
-                default:
-                    break;
-            }
-            alert('Unknown error');
-        }
+        this.api.editPost(this.props.query.slug,this.state.savedtitle,this.state.savedcontent);
         this.setState({savedalert: true,changed: false,savedtext: this.state.posttext});
         this.saveNotificaitonTimer = setTimeout(()=>this.setState({savedalert:false}),3000);
         //Router.push('/blog/' + this.props.query.slug);
@@ -155,13 +145,46 @@ class BlogEdit extends React.Component {
                 <></>
             )}
             {(this.state && this.state.changed) ? (
-                <Button type="primary" onClick={this.onSubmit}>
+                (this.state.published) ? (
+                    <>
+                    <Button type="primary" onClick={this.onSubmit}>
                     Save
                 </Button>
-            ) : (
-                <Button type="primary" onClick={this.onCancel}>
+                <Button type="primary" onClick={this.onSaveAndUnpublish}>
+                Save and Unpublish
+            </Button>
+            </>
+                ) : (
+                    <>
+                    <Button type="primary" onClick={this.onSubmit}>
+                    Save Draft
+                </Button>
+                <Button type="primary" onClick={this.onPublish}>
+                Save and Publish
+            </Button>
+            </>
+                    )
+    ) : (
+        (this.state.published) ? (
+            <>
+                            <Button type="primary" onClick={this.onCancel}>
                     Close
                 </Button>
+        <Button type="primary" onClick={this.onUnPublish}>
+        Unpublish
+    </Button>
+    </>
+        ) : (
+            <>
+        <Button type="primary" onClick={this.onSubmit}>
+            Close
+        </Button>
+        <Button type="primary" onClick={this.onPublish}>
+            Publish
+        </Button>
+    </>
+            )
+
             )}
             </>
         )

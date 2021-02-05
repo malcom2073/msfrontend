@@ -7,6 +7,12 @@ services:
       dockerfile: docker/backend/Dockerfile
 #    volumes:
 #      - './api:/usr/src/app'
+    volumes:
+      - '../:/usr/src/app'
+    networks:
+      - backend
+      - frontend
+      - db
     ports:
       - 5000:5000
     environment:
@@ -23,6 +29,8 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
+    networks:
+      - db
     ports:
       - 5432:5432
     volumes:
@@ -36,6 +44,9 @@ services:
       context: ./web
       dockerfile: Dockerfile
     restart: unless-stopped
+    networks:
+      - backend
+      - frontend
     ports:
       - 8080:8080
     depends_on:
@@ -49,6 +60,10 @@ services:
 #    volumes:
 #      - './frontend:/usr/src/app'
 #      - '/usr/src/app/node_modules'
+    volumes:
+      - '../:/usr/src/app'
+    networks:
+      - frontend
     ports:
       - 3000:3000
     environment:
@@ -58,3 +73,12 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
     depends_on:
       - backend
+
+
+networks:
+  frontend:
+    name: custom-driver-1
+  backend:
+    name: custom-driver-2
+  db:
+    name: custom-driver-3
