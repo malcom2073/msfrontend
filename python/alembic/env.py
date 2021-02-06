@@ -18,9 +18,18 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 import sys
-sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net")
-sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app")
-sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app\\models")
+import os
+#sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net")
+#sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app")
+#sys.path.append("C:\\Users\\Michael\\code\\mikesshop.net\\python\\app\\models")
+#sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)),'app'))
+#sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)),'app','models'))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..','..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..','app')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..','app','models')))
+import pprint
+pprint.pprint(sys.path)
 
 import app
 
