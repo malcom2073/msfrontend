@@ -2,17 +2,18 @@ version: '3.5'
 
 services:
   backend:
+    image: 10.0.0.252:5000/docker_backend
     build:
       context: ../
       dockerfile: docker/backend/Dockerfile
 #    volumes:
 #      - './api:/usr/src/app'
-    volumes:
-      - '../:/usr/src/app'
+#    volumes:
+#      - '../:/usr/src/app'
     networks:
-      - backend
+#      - backend
       - frontend
-      - db
+#      - db
     ports:
       - 5000:5000
     environment:
@@ -22,15 +23,18 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@tutorial-db:5432/dev_db
       - DATABASE_TEST_URL=postgres://postgres:postgres@tutorial-db:5432/test_db
       - SECRET_KEY=ZQbn05PDeA7v11
+      - NEXT_PUBLIC_MSAPI_ENDPOINT=http://mikesshop.net 
     depends_on:
       - db
 
   db:
+    image: 10.0.0.252:5000/docker_db
     build:
       context: ./db
       dockerfile: Dockerfile
     networks:
-      - db
+      - frontend
+#      - db
     ports:
       - 5433:5432
     volumes:
@@ -40,28 +44,30 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   nginx:
+    image: 10.0.0.252:5000/docker_nginx
     build:
       context: ./web
       dockerfile: Dockerfile
     restart: unless-stopped
     networks:
-      - backend
+#      - backend
       - frontend
     ports:
-      - 8080:8080
+      - 80:80
     depends_on:
       - backend
       - frontend
 
   frontend:
+    image: 10.0.0.252:5000/docker_frontend
     build:
       context: ../
       dockerfile: docker/frontend/Dockerfile
 #    volumes:
 #      - './frontend:/usr/src/app'
 #      - '/usr/src/app/node_modules'
-    volumes:
-      - '../:/usr/src/app'
+#    volumes:
+#      - '../:/usr/src/app'
     networks:
       - frontend
     ports:
@@ -77,8 +83,9 @@ services:
 
 networks:
   frontend:
-    name: custom-driver-1
-  backend:
-    name: custom-driver-2
-  db:
-    name: custom-driver-3
+    driver: bridge
+#    name: custom-driver-1
+#  backend:
+#    name: custom-driver-2
+#  db:
+#    name: custom-driver-3
