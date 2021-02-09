@@ -20,6 +20,9 @@ from modules.blog.python.models.msblogpost import MSBlogPost
 import app
 import os
 
+from sqlalchemy import and_, or_, not_
+
+
 # Should there be a standard set of module endpoints?
 # Something like: /getVersion, /getInfo, /getAuthor?
 
@@ -36,7 +39,7 @@ def addPost():
     sys.stdout.flush()
     try:
         dbsession = db.Session()
-        dbsession.add(MSBlogPost(title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content')))
+        dbsession.add(MSBlogPost(user_id=post_data.get('user_id'),title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content')))
         dbsession.commit()
         dbsession.close()
     except Exception as e:
@@ -151,17 +154,35 @@ def upload():
 
 @module_bp.route('/getPosts',methods=['GET'])
 def getPosts():
+    jwt = getJwt(request)
+    print("JWT!!!")
+    pprint.pprint(jwt)
+    print("JWT!!!")
+    print(jwt)
+    uid = None
+    if jwt:
+        uid = jwt['user_id']
+    print("User ID: " + str(uid))
 #    jwt = getJwt(request)
 #    post_data = request.get_json()
 #    pprint.pprint(post_data)
     #print('Index: ' + str(post_data.get('id')))
 #    print('Last: ' + str(post_data.get('last')))
-#    sys.stdout.flush()
+    sys.stdout.flush()
     try:
         dbsession = db.Session()
-        postlist = dbsession.query(MSBlogPost).filter(MSBlogPost.published == True).order_by(MSBlogPost.timestamp.desc()).all()
+        #filter(or_(User.name == 'ed', User.name == 'wendy'))
+        #postlist = dbsession.query(MSBlogPost).filter((MSBlogPost.published == True) | (MSBlogPost.published == False & MSblogPost.user = )).order_by(MSBlogPost.timestamp.desc()).all()
+        postlist = None
+        if uid is not None:
+            postlist = dbsession.query(MSBlogPost).filter(or_(MSBlogPost.published == True,MSBlogPost.user_id == uid)).order_by(MSBlogPost.timestamp.desc()).all()
+        else:
+            postlist = dbsession.query(MSBlogPost).filter(MSBlogPost.published == True).order_by(MSBlogPost.timestamp.desc()).all()
         jsonresponse = jsonify({'status':'success','data': postlist})
         dbsession.close()
+        print("Postcount: " + str(len(postlist)))
+        sys.stdout.flush()
+
         if postlist is None or len(postlist) == 0:
             print("No posts")
             return jsonify({'status':'error','error':'No Posts'})

@@ -41,7 +41,7 @@ class BlogList extends React.Component {
                 //Do something
                 var processedContent = await remark().use(html).use(gfm).process(response[i].content);
                 var contentHtml = processedContent.toString();
-                retval.push({'id':response[i].id,'user':response[i].user,'title':response[i].title,'content':contentHtml,'timestamp':response[i].timestamp});
+                retval.push({'id':response[i].id,'user':response[i].user,'published':response[i].published,'title':response[i].title,'content':contentHtml,'timestamp':response[i].timestamp});
             }
             }
         this.setState({bloglist: retval,loaded:true})
@@ -79,11 +79,12 @@ class BlogList extends React.Component {
                             <Row justify="center">
                                 <Col span={16}>
                                     <Title><Link href={"/blog/" + value.id}>{value.title}</Link></Title>
+                                    
                                 </Col>
                             </Row>
                             <Row justify="center">
                                 <Col span={8} offset={8}>
-                                    <Text type="secondary">Posted {this.timeConverter(value.timestamp)}</Text>
+                                    <Text type="secondary">{(!value.published) ? (<>(Draft)</>):(<>Posted</>)} {this.timeConverter(value.timestamp)}</Text>
                                 </Col>
                             </Row>
                         </Col>
