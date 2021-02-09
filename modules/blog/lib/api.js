@@ -72,8 +72,8 @@ export default class BlogApi extends MsModuleApi {
     return response.data.data;
 }
 
-  editPost = async (postid,title,content) => {
-    const response = await this.api.post('/editPost',{ 'id':postid,'title': title,'content': content});            
+  editPost = async (postid,timestamp,title,content) => {
+    const response = await this.api.post('/editPost',{ 'id':postid,'timestamp':timestamp,'title': title,'content': content});            
     //console.log(response);
     if (response.problem) {
         switch (response.problem) {

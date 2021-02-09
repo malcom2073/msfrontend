@@ -64,7 +64,7 @@ class BlogList extends React.Component {
         {(this.props.auth && this.props.auth.isValid() ? (
             <Row justify="center">
                 <Col span={12}>
-                <Link href={"/blog/create"}><Button>New Post</Button></Link>
+                <Link href={"/blog/edit/-1"}><Button>New Post</Button></Link>
                 </Col>
             </Row>
             ) : (

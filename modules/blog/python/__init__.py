@@ -37,14 +37,17 @@ def addPost():
     print('Date: ' + str(post_data.get('date')))
     print('Content: ' + post_data.get('content'))
     sys.stdout.flush()
+    blogpostid = 0
     try:
         dbsession = db.Session()
-        dbsession.add(MSBlogPost(user_id=post_data.get('user_id'),title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content')))
+        blogpost = MSBlogPost(user_id=post_data.get('user_id'),title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content'));
+        dbsession.add(blogpost)
         dbsession.commit()
+        blogpostid = blogpost.id
         dbsession.close()
     except Exception as e:
         return jsonify({'status':'error','error':str(e)})
-    return jsonify({'status':'success'})
+    return jsonify({'status':'success','postid':blogpostid})
 
 
 @module_bp.route('/publishPost',methods=['POST'])
@@ -94,6 +97,7 @@ def editPost():
         singlepost = postlist[0]
         singlepost.title = post_data.get('title')
         singlepost.content = post_data.get('content')
+        singlepost.timestamp = post_data.get('timestamp')
         dbsession.commit()
         dbsession.close()
     except Exception as e:

@@ -194,7 +194,7 @@ class BlogView extends React.Component {
                 </Col>
                 {(this.props.auth && this.props.auth.isValid() ? (
                 <Col span={1}>
-                    <Link href={"/blog/edit/" + this.props.query.slug}>Edit Post</Link>
+                    <Link href={"/blog/edit/" + this.props.query.slug + "?test=something"}>Edit Post</Link>
                 </Col>
                 ) : (
                     <></>

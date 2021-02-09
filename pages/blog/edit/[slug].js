@@ -7,7 +7,7 @@ import { AuthToken } from '../../../services/auth_token'
 import Router from 'next/router'
 import Forum_Index from '../../../components/forums'
 //import Editor from '../../../components/markdowneditor'
-import { Row,Form, Input, Button, Checkbox } from 'antd';
+import { Row,Form, Input, Button, Checkbox, DatePicker,TimePicker } from 'antd';
 
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -18,7 +18,7 @@ import dynamic from 'next/dynamic';
 
 import { Alert } from 'antd';
 
-
+const moment = require('moment');
 import EditorV2 from '../../../components/markdowneditorv2'
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
@@ -29,14 +29,18 @@ import BlogApi from '../../../modules/blog/lib/api'
 class BlogEdit extends React.Component {
     constructor(props) {
         super(props);
+        console.log("BlogEditProps");
+        console.log(props);
+        console.log("EndBlogEditProps");
         this.myRef = React.createRef();
         this.titleRef = React.createRef();
+        this.timeRef = React.createRef();
+        this.dateRef = React.createRef();
         this.state = {loaded:false}
         this.saveNotificaitonTimer = null;
         this.api = new BlogApi();
     }
     componentDidMount = async () => {
-        //console.log("BlogEdit ComponentDidMount");
         var token = AuthToken.fromNext();
         var headers = { Accept: 'application/vnd.github.v3+json'};
         if (token) {
@@ -46,6 +50,40 @@ class BlogEdit extends React.Component {
             baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
             headers: headers,
             });
+        if (this.props.query.slug == -1)
+        {
+            var user_id = -1;
+            if (token && token.decodedToken && token.decodedToken.sub)
+            {
+                user_id = token.decodedToken.sub.user_id;
+            }
+            var timestamp = Date.now() / 1000 | 0;
+            const response = await api.post('/api/blog/addPost',{ 'user_id':user_id,'title': 'Title', 'date':timestamp,'content': ''});
+            // TODO: Handle more of these errors.
+            if (response.problem) {
+            switch (response.problem) {
+                case 'CLIENT_ERROR':
+                if (response.status == 401)
+                {
+                    alert('Invalid credentials');
+                    return {}
+                    //Bad authentication!
+                }
+                break;
+                default:
+                    break;
+            }
+        }
+        Router.push('/blog/edit/' + response.data.postid);
+        return;
+            
+            //this.setState({postid:response.data.postid,published: false, savedcontent: '', savedtitle: 'Title',loaded:true,posttext: ''});
+            //this.titleRef.current.input.value = 'Title';
+        }
+        else
+        {
+
+        //console.log("BlogEdit ComponentDidMount");
         const response = await api.get('/api/blog/getPost',{'postid' : this.props.query.slug});
         //console.log(response);
         if (response.problem) {
@@ -67,9 +105,12 @@ class BlogEdit extends React.Component {
         //{
         //this.myRef.current.getInstance().setMarkdown(response.data.data.content);
         //}
-        this.setState({published: response.data.data.published, savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
+        var timestampmoment = moment(response.data.data.timestamp*1000.0);
+
+        this.setState({savedtimestamp:timestampmoment,timestamp:timestampmoment,postid:this.props.query.slug,published: response.data.data.published, savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
         //this.myRef.current.setValue(response.data.data.content)
         this.titleRef.current.input.value = response.data.data.title;
+        }
         //console.log("BlogEdit ComponentDidMount DONE");
     }
     onEditorChange = (value) => {
@@ -93,30 +134,30 @@ class BlogEdit extends React.Component {
         }
     }
     onCancel = async e => {
-        Router.push('/blog/' + this.props.query.slug);
+        Router.push('/blog/' + this.state.postid);
     }
     onPublish = async e => {
         if (this.state.changed) {
             //We need to save prior to setting publish, since state has hcanged
         }
-        this.api.setPostPublished(this.props.query.slug,true);
+        this.api.setPostPublished(this.state.postid,true);
         this.setState({published:true});
 
     }
     onSaveAndUnpublish = async e => {
-        this.api.setPostPublished(this.props.query.slug,false);
+        this.api.setPostPublished(this.state.postid,false);
         this.setState({published:false});
 
     }
     onUnPublish = async e => {
         //Don't save changes! Just unpublish
-        this.api.setPostPublished(this.props.query.slug,false);
+        this.api.setPostPublished(this.state.postid,false);
         this.setState({published:false});
 
     }
     onSubmit = async e => {
-        this.api.editPost(this.props.query.slug,this.state.savedtitle,this.state.savedcontent);
-        this.setState({savedalert: true,changed: false,savedtext: this.state.posttext});
+        this.api.editPost(this.state.postid,this.state.timestamp.unix(),this.state.savedtitle,this.state.savedcontent);
+        this.setState({savedtimestamp:this.state.timestamp,savedalert: true,changed: false,savedtext: this.state.posttext});
         this.saveNotificaitonTimer = setTimeout(()=>this.setState({savedalert:false}),3000);
         //Router.push('/blog/' + this.props.query.slug);
         return;
@@ -126,7 +167,25 @@ class BlogEdit extends React.Component {
             clearInterval(this.saveNotificaitonTimer);
         }
     }
+    onDateChange = (time,timeString) => {
+//        if (time != this.state.timestamp) {
+//            this.setState({changed:true});
+//        }
+//        else {
+//            this.setState({savedtitle: text,changed:false});
+//        }
+        this.setState({timestamp:time,changed:true});
+        //this.timeRef.current.value = time;
+        console.log(time);
+        console.log(timeString);
+    }
+    onTimeChange = (time,timeString)=>{
+        this.setState({timestamp:time,changed:true});
+        //this.dateRef.current.value = time;
+        console.log(time);
+        console.log(timeString);
 
+    }
 	render = () => {
         return (
             <>
@@ -139,6 +198,9 @@ class BlogEdit extends React.Component {
                 <>
                 Title:
                 <Input value={this.state.savedtitle} onChange={this.onTitleChange.bind(this)} ref={this.titleRef}/>
+                Date:
+                <DatePicker value={this.state.timestamp} onChange={this.onDateChange.bind(this)} ref={this.dateRef}/>
+                <TimePicker value={this.state.timestamp} onChange={this.onTimeChange.bind(this)} ref={this.timeRef}/>
                 <EditorV2 content={this.state.posttext} ref={this.myRef} onChange={this.onEditorChange.bind(this)}/>
                 </>
             ) : (
