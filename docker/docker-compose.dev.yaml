@@ -7,8 +7,10 @@ services:
     build:
       context: ../
       dockerfile: docker/backend/Dockerfile
+#    volumes:
+#      - './api:/usr/src/app'
     volumes:
-#      - '../:/usr/src/app'
+      - '../:/usr/src/app'
       - ./upload:/upload
     networks:
 #      - backend
@@ -69,7 +71,7 @@ services:
 #      - './frontend:/usr/src/app'
 #      - '/usr/src/app/node_modules'
     volumes:
-#      - '../:/usr/src/app'
+      - '../:/usr/src/app'
     networks:
       - frontend
     ports:

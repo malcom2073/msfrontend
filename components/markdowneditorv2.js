@@ -126,7 +126,7 @@ export default class EditorV2 extends Component {
                     //    blob: blob,
                     //    type: 'image/jpg'
                     //  })
-                    const response = await api.put('/api/blog/upload',form).then((response) => {
+                    const response = await api.put('/cdn/upload',form).then((response) => {
                     //console.log(response);
                     if (response.problem) {
                         switch (response.problem) {
