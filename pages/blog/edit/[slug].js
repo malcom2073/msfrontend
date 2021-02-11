@@ -156,8 +156,18 @@ class BlogEdit extends React.Component {
 
     }
     onSubmit = async e => {
-        this.api.editPost(this.state.postid,this.state.timestamp.unix(),this.state.savedtitle,this.state.savedcontent);
-        this.setState({savedtimestamp:this.state.timestamp,savedalert: true,changed: false,savedtext: this.state.posttext});
+        var result = await this.api.editPost(this.state.postid,this.state.timestamp.unix(),this.state.savedtitle,this.state.savedcontent);
+        console.log(result);
+        if (result === true)
+        {
+            console.log("onsubmit success");
+        this.setState({savedtimestamp:this.state.timestamp,alertmsg: "Saved...",alerttype:"success",savedalert: true,changed: false,savedtext: this.state.posttext});
+        }
+        else
+        {
+            console.log("onsubmit failure");
+            this.setState({savedtimestamp:this.state.timestamp,alertmsg:"Error Saving: " + result,alerttype:"error",savedalert:true,changed: false,savedtext: this.state.posttext});
+        }
         this.saveNotificaitonTimer = setTimeout(()=>this.setState({savedalert:false}),3000);
         //Router.push('/blog/' + this.props.query.slug);
         return;
@@ -190,7 +200,7 @@ class BlogEdit extends React.Component {
         return (
             <>
             {(this.state && this.state.savedalert) ? (
-                <Alert message="Success Text" type="success" />
+                <Alert message={this.state.alertmsg} type={this.state.alerttype} />
             ) : (
                 <></>
             )}

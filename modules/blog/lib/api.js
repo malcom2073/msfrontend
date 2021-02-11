@@ -51,6 +51,7 @@ export default class BlogApi extends MsModuleApi {
   }
 
   setPostPublished = async (postid,published) => {
+    this.refreshToken();
     const response = await this.api.post('/publishPost',{'postid' : postid,'published':published});
     //console.log(response);
     if (response.problem) {
@@ -73,7 +74,8 @@ export default class BlogApi extends MsModuleApi {
 }
 
   editPost = async (postid,timestamp,title,content) => {
-    const response = await this.api.post('/editPost',{ 'id':postid,'timestamp':timestamp,'title': title,'content': content});            
+    const response = await this.api.post('/editPost',{ 'id':postid,'timestamp':timestamp,'title': title,'content': content},{ headers: this.refreshToken() });
+    //const response = await this.api.post('/editPost',{ 'id':postid,'timestamp':timestamp,'title': title,'content': content});
     //console.log(response);
     if (response.problem) {
         switch (response.problem) {
@@ -81,7 +83,7 @@ export default class BlogApi extends MsModuleApi {
             if (response.status == 401)
             {
                 //alert('Invalid credentials');
-                return 
+                return "Invalid Credentials"
                 //Bad authentication!
             }
             break;
@@ -89,9 +91,9 @@ export default class BlogApi extends MsModuleApi {
                 break;
         }
         //alert('Unknown error');
-        return;
+        return "Unknown Error";
     }
-    return;
+    return true;
 }
 
     async getThreadInfo(topicid)
