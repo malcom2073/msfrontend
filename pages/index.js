@@ -23,7 +23,7 @@ class IndexPage extends React.Component {
         super(props);
     }
     componentDidMount = () => {
-        Router.push('/blog');
+        //Router.push('/blog');
     }
     
     render() {

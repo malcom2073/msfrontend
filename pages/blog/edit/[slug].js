@@ -19,8 +19,8 @@ import dynamic from 'next/dynamic';
 import { Alert } from 'antd';
 
 const moment = require('moment');
-//import EditorV2 from '../../../components/markdowneditorv2'
-import EditorV3 from '../../../components/markdowneditorv3'
+import EditorV2 from '../../../components/markdowneditorv2'
+//import EditorV3 from '../../../components/markdowneditorv3'
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
@@ -109,9 +109,9 @@ class BlogEdit extends React.Component {
         var timestampmoment = moment(response.data.data.timestamp*1000.0);
 
         this.setState({loaded:true});
-        //*****this.setState({savedtimestamp:timestampmoment,timestamp:timestampmoment,postid:this.props.query.slug,published: response.data.data.published, savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
+        this.setState({savedtimestamp:timestampmoment,timestamp:timestampmoment,postid:this.props.query.slug,published: response.data.data.published, savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
         //this.myRef.current.setValue(response.data.data.content)
-        //****this.titleRef.current.input.value = response.data.data.title;
+        this.titleRef.current.input.value = response.data.data.title;
         }
         //console.log("BlogEdit ComponentDidMount DONE");
     }
@@ -199,7 +199,6 @@ class BlogEdit extends React.Component {
 
     }
 	render = () => {
-        //<EditorV2 content={this.state.posttext} ref={this.myRef} onChange={this.onEditorChange.bind(this)}/>
                 
         return (
             <>
@@ -215,7 +214,7 @@ class BlogEdit extends React.Component {
                 Date:
                 <DatePicker value={this.state.timestamp} onChange={this.onDateChange.bind(this)} ref={this.dateRef}/>
                 <TimePicker value={this.state.timestamp} onChange={this.onTimeChange.bind(this)} ref={this.timeRef}/>
-                <EditorV3></EditorV3>
+                <EditorV2 content={this.state.posttext} ref={this.myRef} onChange={this.onEditorChange.bind(this)}/>
                 </>
             ) : (
                 <></>
