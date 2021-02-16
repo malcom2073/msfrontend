@@ -128,6 +128,28 @@ def refresh():
     resp.set_cookie("mspysid", value = session, httponly = True)
     return resp
 
+# Create a new account. This will create a new unvalidated account
+@auth_bp.route('/create', methods=['POST'])
+def create():
+    post_data = request.get_json()
+    print('User: ' + post_data.get('username'))
+    print('Pass: ' + post_data.get('password'))
+    dbsession = db.Session()
+    user =User(
+        name=post_data.get('username'),
+        password='',
+        email='',
+        timezone='edt',
+        lastip='',
+        nickname=post_data.get('username'),
+        primary_group_id=0,
+        registered_date=datetime.datetime.utcnow())
+    user.set_password(post_data.get('password'))
+    dbsession.add(user)
+    dbsession.commit()
+    dbsession.close()
+    return jsonify({'status':'success'})
+
 
 # Post to here to authenticate, get your httponly cookie, and get your jwt matching it.
 # TODO: Add roles to this? We now have database backend.

@@ -9,7 +9,7 @@ from datetime import datetime
 from app.models.group import Group
 from dataclasses import dataclass
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import ForeignKey, Column, Integer, String, DateTime
+from sqlalchemy import ForeignKey, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
 import bcrypt
 
@@ -35,6 +35,7 @@ class User(db.Model):
     timezone = Column(String)
     lastip = Column(String)
     nickname = Column(String)
+    validated = Column(Boolean)
 
     primary_group_id = Column(Integer, ForeignKey(Group.id))
     primary_group = relationship("Group",back_populates="users",lazy="joined")

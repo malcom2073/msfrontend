@@ -156,15 +156,6 @@ def getNavbar():
                         'title': 'Logout',
                         'type':'link',
                         'link' : '/logout'
-                    },
-                    {
-                        'title': '',
-                        'type':'divider'
-                    },
-                    {
-                        'title': 'Sign-Up',
-                        'type':'link',
-                        'link' : '/signup'
                     }
                 ]
             },
@@ -187,7 +178,7 @@ def getNavbar():
                     {
                         'title': 'Sign-Up',
                         'type':'link',
-                        'link' : '/signup'
+                        'link' : '/create'
                     }
                 ]
             },
