@@ -135,7 +135,7 @@ def create():
     print('User: ' + post_data.get('username'))
     print('Pass: ' + post_data.get('password'))
     dbsession = db.Session()
-    user =User(
+    user = User(
         name=post_data.get('username'),
         password='',
         email='',
@@ -143,7 +143,8 @@ def create():
         lastip='',
         nickname=post_data.get('username'),
         primary_group_id=0,
-        registered_date=datetime.datetime.utcnow())
+        registered_date=datetime.datetime.utcnow(),
+        validated=False)
     user.set_password(post_data.get('password'))
     dbsession.add(user)
     dbsession.commit()
@@ -170,6 +171,9 @@ def auth():
     if user is None or not user.check_password(post_data.get('password')):
         print("Invalid user/pass")
         return jsonify({'status':'error','error':'invalid credentials'}),401
+    if not user.validated:
+        print("Un-validated user")
+        return jsonify({'status':'error','error':'Account not yet activated'}),401
     session = request.cookies.get('session')
     m = hashlib.sha256()
     if session is None:

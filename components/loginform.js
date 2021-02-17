@@ -32,7 +32,14 @@ export default class LoginForm extends React.Component {
             case 'CLIENT_ERROR':
                 if (response.status == 401)
                 {
-                alert('Invalid credentials');
+                    if (response.data)
+                    {
+                        alert(response.data.error);
+                    }
+                    else
+                    {
+                    alert('Invalid credentials');
+                    }
                 return {}
                 //Bad authentication!
                 }
