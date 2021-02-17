@@ -1,31 +1,41 @@
-import MSNavbar from '../components/navbar'
+import pageLayout from '../components/pagelayout'
 import LoginForm from '../components/loginform'
 import { Space, Row, Col} from 'antd';
+import { Alert } from 'antd';
 
 
-export default function Login({query}) {
-    console.log('Query');
-    console.log(query);
-    return (
-    <>
-    <Row justify="space-around" align="middle">
-        <Col span={4} align-items="center">
-            {(query && query.next) ? (
-            <LoginForm next={query.next}></LoginForm>
+
+class LoginPage extends React.Component {
+    constructor(props)
+    {
+        super(props);
+    }
+
+    onLoginError = (msg) => {
+        this.setState({alertmsg:msg,alerttype:"error"});
+    }
+    render = () => {
+        console.log('Query');
+        console.log(this.props.query);
+        return (
+        <>
+        <Row justify="space-around" align="middle">
+            <Col span={4} align-items="center">
+            {(this.state && this.state.alertmsg) ? (
+            <Alert message={this.state.alertmsg} type={this.state.alerttype} />
             ) : (
-                <LoginForm></LoginForm>
+                <></>
             )}
-        </Col>
-    </Row>
-    </>
-    )
-}
-export async function getInitialProps({server,pathname,query,req,res}) {
-    return {
-        props: {
-            // props for your component
-            query
-        }
+
+                {(this.props.query && this.props.query.next) ? (
+                <LoginForm next={this.props.query.next} onError={this.onLoginError.bind(this)}></LoginForm>
+                ) : (
+                    <LoginForm onError={this.onLoginError.bind(this)}></LoginForm>
+                )}
+            </Col>
+        </Row>
+        </>
+        )    
     }
 }
-  
+export default pageLayout(LoginPage);

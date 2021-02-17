@@ -12,7 +12,10 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 export default class LoginForm extends React.Component {
-
+    constructor(props)
+    {
+        super(props);
+    }
     onChange = (e) => {
         // Because we named the inputs to match their corresponding values in state, it's
         // super easy to update the state
@@ -34,7 +37,16 @@ export default class LoginForm extends React.Component {
                 {
                     if (response.data)
                     {
+                        console.log("SADFASDFSAFDSAFD");
+                        console.log(this.props);
+                        if (this.props.onError)
+                        {
+                        this.props.onError(response.data.error);
+                        }
+                        else
+                        {
                         alert(response.data.error);
+                        }
                     }
                     else
                     {
@@ -68,7 +80,7 @@ export default class LoginForm extends React.Component {
     render() {
         this.nextUrl = this.props.next;
         return (
-            <Form name="basic" onFinish={this.onSubmit}>
+            <Form name="basic" onFinish={this.onSubmit.bind(this)}>
             <Form.Item
         label="Username"
         name="username"
