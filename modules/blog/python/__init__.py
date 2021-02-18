@@ -40,7 +40,7 @@ def addPost():
     blogpostid = 0
     try:
         dbsession = db.Session()
-        blogpost = MSBlogPost(user_id=post_data.get('user_id'),title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content'));
+        blogpost = MSBlogPost(user_id=post_data.get('user_id'),title=post_data.get('title'),timestamp=post_data.get('date'),content=post_data.get('content'),published=False)
         dbsession.add(blogpost)
         dbsession.commit()
         blogpostid = blogpost.id

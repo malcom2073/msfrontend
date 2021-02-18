@@ -8,6 +8,8 @@ export default class BlogApi extends MsModuleApi {
         super('/blog',serverside); // Pass through the blog endpoint
     }
     getPosts = async () => {
+        this.refreshToken();
+
         const response = await this.api.get('/getPosts');
         console.log(response);
         if (response.problem) {
@@ -28,6 +30,8 @@ export default class BlogApi extends MsModuleApi {
         return response.data.data;
     }
     getPost = async (postid) => {
+        this.refreshToken();
+
       const response = await this.api.get('/getPost',{'postid' : postid});
         console.log(response);
         console.log(process.env.MSAPI_ENDPOINT);
