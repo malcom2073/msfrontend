@@ -8,11 +8,11 @@ import os
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)),'app'))
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)),'app','models'))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')))
-
-print("Running alembic upgrade head!")
-os.system('alembic upgrade head')
-print("Done running alembic upgrade head")
-
+import subprocess
+#print("Running alembic upgrade head!")
+#alembicoutput = subprocess.check_output("alembic upgrade head", shell=True,text=True)
+#print("Done running alembic upgrade head")
+#print("Output: " + str(alembicoutput))
 from app import app
 #app.loadModules()
 from app import db

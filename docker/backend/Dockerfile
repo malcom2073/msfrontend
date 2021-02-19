@@ -28,4 +28,4 @@ WORKDIR /usr/src/app/python
 COPY . /usr/src/app/
 RUN pip install -r /usr/src/app/python/requirements.txt
 ENV PYTHONPATH=/usr/src/app/python:/usr/src/app:/usr/src/app/python/app
-CMD alembic upgrade head && python run.py
+CMD sleep 10 && alembic upgrade head && python run.py
