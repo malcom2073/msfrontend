@@ -35,7 +35,7 @@ class User(db.Model):
     timezone = Column(String)
     lastip = Column(String)
     nickname = Column(String)
-    validated = Column(Boolean)
+    validated = Column(Boolean,nullable=False)
 
     primary_group_id = Column(Integer, ForeignKey(Group.id))
     primary_group = relationship("Group",back_populates="users",lazy="joined")
