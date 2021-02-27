@@ -34,6 +34,9 @@ const generateId = (() => {
     };
   })();
 const renderers = {
+    text: function Text(props) {
+        return <span style={{ fontSize: 20 }}>{props.children}</span>
+    },
     heading: function Heading(props) {
         // This only works for raw text headers
         // TODO: Make it work for dynamic text headers?
