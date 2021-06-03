@@ -115,10 +115,10 @@ class BlogEdit extends React.Component {
         //}
         var timestampmoment = moment(response.data.post.timestamp*1000.0);
 
-        this.setState({loaded:true});
         this.setState({savedtimestamp:timestampmoment,timestamp:timestampmoment,postid:this.props.query.slug,published: response.data.post.published, savedcontent: response.data.post.content, savedtitle: response.data.post.title,loaded:true,posttext: response.data.post.content});
         //this.myRef.current.setValue(response.data.data.content)
         this.titleRef.current.input.value = response.data.post.title;
+        this.setState({loaded:true});
         }
         //console.log("BlogEdit ComponentDidMount DONE");
     }
