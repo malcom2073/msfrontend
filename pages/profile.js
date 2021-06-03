@@ -44,7 +44,7 @@ class Profile extends React.Component {
                             </tr>
                             <tr>
                                 <td>Group</td>
-                                <td>{ (this.state.profile) ? (this.state.profile.primary_group.name) : ("Loading...")}</td>
+                                <td>{ (this.state.profile) ? (this.state.profile.groups[0].name) : ("Loading...")}</td>
                             </tr>
                             <tr>
                                 <td>Registered</td>

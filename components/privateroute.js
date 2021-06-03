@@ -19,14 +19,17 @@ export default function privateRoute(WrappedComponent) {
             //Check for expired auth. This should likely be replaced with valid
             //We can do some logic here for refresh tokens if we want to handle "remember me" boxes.
             if (auth.isExpired()) {
-                if (server)
+                console.log("Auth is expired");
+                if (res)
                 {
+                    console.log("Rewriteing head on server");
                     res.writeHead(302, {location: '/login?next=' + req.url})
                     res.end()
                     return {}; // Return nothing, since we should be redirecting.
                 }
                 else
                 {
+                    console.log("Rewriting head on client");
                     //We're on client
                     if (typeof document !== 'undefined')
                     {
@@ -35,6 +38,7 @@ export default function privateRoute(WrappedComponent) {
                 }
             }
             else {
+                console.log("Auth is NOT expired");
                 initialProps.user = auth.decodedToken.sub;
             }
             //if (WrappedComponent.getInitialProps) {

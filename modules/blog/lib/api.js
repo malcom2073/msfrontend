@@ -10,7 +10,7 @@ export default class BlogApi extends MsModuleApi {
     getPosts = async () => {
         this.refreshToken();
 
-        const response = await this.api.get('/getPosts');
+        const response = await this.api.get('/posts');
         console.log(response);
         if (response.problem) {
             switch (response.problem) {
@@ -27,12 +27,12 @@ export default class BlogApi extends MsModuleApi {
             }
             alert('Unknown error');
         }
-        return response.data.data;
+        return response.data.posts;
     }
     getPost = async (postid) => {
         this.refreshToken();
 
-      const response = await this.api.get('/getPost',{'postid' : postid});
+      const response = await this.api.get('/posts/' + postid);
         console.log(response);
         console.log(process.env.MSAPI_ENDPOINT);
       if (response.problem) {
@@ -51,12 +51,12 @@ export default class BlogApi extends MsModuleApi {
           //alert('Unknown error');
           return;
       }
-      return response.data.data;
+      return response.data.post;
   }
 
   setPostPublished = async (postid,published) => {
     this.refreshToken();
-    const response = await this.api.post('/publishPost',{'postid' : postid,'published':published});
+    const response = await this.api.patch('/posts/' + postid,{'published':published});
     //console.log(response);
     if (response.problem) {
         switch (response.problem) {
@@ -78,7 +78,7 @@ export default class BlogApi extends MsModuleApi {
 }
 
   editPost = async (postid,timestamp,title,content) => {
-    const response = await this.api.post('/editPost',{ 'id':postid,'timestamp':timestamp,'title': title,'content': content},{ headers: this.refreshToken() });
+    const response = await this.api.patch('/posts/' + postid,{ 'id':postid,'timestamp':timestamp,'title': title,'content': content},{ headers: this.refreshToken() });
     //const response = await this.api.post('/editPost',{ 'id':postid,'timestamp':timestamp,'title': title,'content': content});
     //console.log(response);
     if (response.problem) {

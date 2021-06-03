@@ -14,6 +14,10 @@ export class AuthToken {
     this.decodedToken = { email: "", exp: 0 };
     // Save the token, ok to be null
     this.token = token;
+//    if (typeof this.token === 'undefined')
+//    {
+//      this.token = null;
+//    }
     // Decode it using jwt-decode
     try {
       if (token) this.decodedToken = jwtDecode(token);
@@ -33,13 +37,24 @@ export class AuthToken {
 
   // Checks to see if the token is expired yet
   isExpired() {
+//    console.log("Auth::isExpired()");
+//    console.log(this.token);
+//    console.log(this.token && (new Date() > this.expiresAt()));
+//    if (typeof this.token === 'undefined' || this.token == null)
+//    {
+//      return true;
+//    }
     return new Date() > this.expiresAt();
   }
 
   // Returns valid only if the token exists, and also is not expired.
   // TODO: Check validity of server signature here, since this is used on both sides
   isValid() {
-    return !this.isExpired() && this.token;
+ //   if (typeof this.token === 'undefined'  || this.token == null)
+ //   {
+ //     return false;
+ //   }
+    return this.token && (!this.isExpired() && this.token);
   }
 
   // Hackity hack-hack to get the cookies. I'm sure there's a library for this, but I couldn't find

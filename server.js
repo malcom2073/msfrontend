@@ -12,7 +12,7 @@ const apiPaths = {
     '/api': {
         target: 'http://localhost:5000', 
         pathRewrite: {
-            '^/api': '/'
+            '^/api': '/api'
         },
         changeOrigin: true
     }

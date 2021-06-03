@@ -59,7 +59,7 @@ class BlogEdit extends React.Component {
                 user_id = token.decodedToken.sub.user_id;
             }
             var timestamp = Date.now() / 1000 | 0;
-            const response = await api.post('/api/blog/addPost',{ 'user_id':user_id,'title': 'Title', 'date':timestamp,'content': ''});
+            const response = await api.post('/api/blog/posts',{ 'userid':user_id,'title': 'Title', 'timestamp':timestamp,'content': ''});
             // TODO: Handle more of these errors.
             if (response.problem) {
             switch (response.problem) {
@@ -85,7 +85,7 @@ class BlogEdit extends React.Component {
         {
 
         //console.log("BlogEdit ComponentDidMount");
-        const response = await api.get('/api/blog/getPost',{'postid' : this.props.query.slug});
+        const response = await api.get('/api/blog/posts/' + this.props.query.slug);
         //console.log(response);
         if (response.problem) {
             switch (response.problem) {
@@ -102,16 +102,23 @@ class BlogEdit extends React.Component {
             }
             alert('Unknown error');
         }
+        console.log(response);
+
+        if (response.data.status == "failure")
+        {
+            alert('Failure: ' + response.data.error);
+            return;
+        }
         //if (this.myref && this.myref.current)
         //{
         //this.myRef.current.getInstance().setMarkdown(response.data.data.content);
         //}
-        var timestampmoment = moment(response.data.data.timestamp*1000.0);
+        var timestampmoment = moment(response.data.post.timestamp*1000.0);
 
         this.setState({loaded:true});
-        this.setState({savedtimestamp:timestampmoment,timestamp:timestampmoment,postid:this.props.query.slug,published: response.data.data.published, savedcontent: response.data.data.content, savedtitle: response.data.data.title,loaded:true,posttext: response.data.data.content});
+        this.setState({savedtimestamp:timestampmoment,timestamp:timestampmoment,postid:this.props.query.slug,published: response.data.post.published, savedcontent: response.data.post.content, savedtitle: response.data.post.title,loaded:true,posttext: response.data.post.content});
         //this.myRef.current.setValue(response.data.data.content)
-        this.titleRef.current.input.value = response.data.data.title;
+        this.titleRef.current.input.value = response.data.post.title;
         }
         //console.log("BlogEdit ComponentDidMount DONE");
     }

@@ -28,7 +28,7 @@ class Users extends React.Component {
                         <td>{value.email}</td>
                         <td>{value.timezone}</td>
                         <td>{value.lastip}</td>
-                        <td>{value.primary_group.name}</td>
+                        <td>{value.groups[0].name}</td>
                         <td>{value.registered_date}</td>
                         <td><Link href={"/users/edit/" + value.id}>Edit</Link></td>
                     </tr>

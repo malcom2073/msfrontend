@@ -57,7 +57,7 @@ class BlogCreate extends React.Component {
                 user_id = token.decodedToken.sub.user_id;
             }
             //const response = await api.post('/api/blog/editPost',{ 'id':this.props.query.slug,'title': this.titleRef.value,'content': this.state['posttext']});
-            const response = await api.post('/api/blog/addPost',{ 'user_id':user_id,'title': this.titleRef.value, 'date':timestamp,'user': user_id,'content': this.state['posttext']});
+            const response = await api.post('/api/blog/posts',{ 'user_id':user_id,'title': this.titleRef.value, 'date':timestamp,'userid': user_id,'content': this.state['posttext']});
             // TODO: Handle more of these errors.
             if (response.problem) {
             switch (response.problem) {

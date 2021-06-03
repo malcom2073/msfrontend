@@ -27,7 +27,7 @@ export default class LoginForm extends React.Component {
             baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
             headers: { Accept: 'application/json' },
         })
-        const response = await api.post('/api/auth/auth',{ username: e.username, password: e.password});
+        const response = await api.post('/api/auth/authenticate',{ username: e.username, password: e.password});
         console.log(response);
         // TODO: Handle more of these errors.
         if (response.problem) {
