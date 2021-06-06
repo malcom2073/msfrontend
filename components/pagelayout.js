@@ -60,15 +60,33 @@ export default function pageLayout(WrappedComponent) {
                     <Layout style={{ padding: '0 24px 24px' }}>
                         <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
-                        {(this.props && this.props.pathname) ? (this.props.pathname.split("/").map((value,index) => {
+                        {(this.props && this.props.pathname) ? (this.props.pathname.substring(1).split("/").map((value,index) => {
                             if (value != "")
                             {
-                                var pathname = this.props.pathname;
-                                var path = pathname.split("/").slice(1,index).join("/") + "/" + value;
+                                var pathname = this.props.pathname.substring(1);
+                                var textval = value;
+                                var urlval = value;
+                                if (value == "[slug]")
+                                {
+                                    if (this.props.query && this.props.title)
+                                    {
+//                                        textval = this.props.query.slug;
+                                        textval = this.props.title;
+                                        urlval = this.props.query.slug;
+                                    }
+                                }
+                                var path = pathname.split("/").slice(0,index).join("/") + "/" + urlval;
+                                console.log("PATH*****");
+                                console.log(path);
+                                console.log(pathname);
+                                console.log(index);
+                                console.log(value);
+                                console.log("QUERY***");
+                                console.log(this.props);
                         return (
 
                                 <Breadcrumb.Item key={"bc-" + index}>
-                                    <Link key={path} href={path}>{value}</Link>
+                                    <Link key={path} href={path}>{textval}</Link>
                                 </Breadcrumb.Item>)
                             }
                         })) : (<></>)}

@@ -75,7 +75,7 @@ class BlogEdit extends React.Component {
                     break;
             }
         }
-        Router.push('/blog/edit/' + response.data.postid);
+        Router.push('/blog/edit/' + response.data.post.id);
         return;
             
             //this.setState({postid:response.data.postid,published: false, savedcontent: '', savedtitle: 'Title',loaded:true,posttext: ''});
