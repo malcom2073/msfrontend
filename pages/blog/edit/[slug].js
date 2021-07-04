@@ -19,7 +19,8 @@ import dynamic from 'next/dynamic';
 import { Alert } from 'antd';
 
 const moment = require('moment');
-import EditorV2 from '../../../components/markdowneditorv2'
+//import EditorV2 from '../../../components/markdowneditorv2'
+import EditorV4 from '../../../components/markdowneditorv4'
 //import EditorV3 from '../../../components/markdowneditorv3'
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
@@ -124,8 +125,8 @@ class BlogEdit extends React.Component {
     }
     onEditorChange = (value) => {
         const text = value;
-        //console.log("Create Blog SubClass:");
-        //console.log(text);
+        console.log("Create Blog SubClass:");
+        console.log(text);
         if (text != this.state.savedcontent) {
             this.setState({savedcontent: text,changed:true});
         }
@@ -221,7 +222,8 @@ class BlogEdit extends React.Component {
                 Date:
                 <DatePicker value={this.state.timestamp} onChange={this.onDateChange.bind(this)} ref={this.dateRef}/>
                 <TimePicker value={this.state.timestamp} onChange={this.onTimeChange.bind(this)} ref={this.timeRef}/>
-                <EditorV2 content={this.state.posttext} ref={this.myRef} onChange={this.onEditorChange.bind(this)}/>
+                {/*<EditorV2 content={this.state.posttext} ref={this.myRef} onChange={this.onEditorChange.bind(this)}/>*/}
+                <EditorV4 content={this.state.posttext} onChange={this.onEditorChange.bind(this)}/>
                 </>
             ) : (
                 <></>

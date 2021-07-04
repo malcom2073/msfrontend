@@ -16,10 +16,13 @@ import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { Modal } from 'antd';
 import BlogApi from '../../modules/blog/lib/api'
+import ReactDOMServer from 'react-dom/server'
 //import { coy } from "react-syntax-highlighter/dist/styles/prism";
 import {coy} from "react-syntax-highlighter/dist/cjs/styles/prism/prism"
 var toc = require('markdown-toc-unlazy');
 var uslug = require('uslug');
+import EditorV4 from '../../components/markdowneditorv4'
+
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
@@ -83,6 +86,10 @@ class BlogView extends React.Component {
     constructor(props) {
         super(props);
         this.api = new BlogApi();
+        console.log("BlogView::ctor");
+        console.log(props);
+        //this.editorRef = React.createRef();
+        this.state = {blogdata:""}
     }
 
     static async getInitialProps(ctx) {
@@ -171,9 +178,25 @@ class BlogView extends React.Component {
       }
 
     componentDidMount = async () => {
+        var response = await this.api.getPost(this.props.query.slug);
+        console.log("blog componentDidmount");
+        if (response == null)
+        {
+            Router.push("/blog");
+            return;
+        }
+        this.setState({blogdata: response.content});
+        console.log(response);
+        //if (this.editorRef.current)
+        //{
+        //this.editorRef.current.dangerouslySetInnerHtml = response.content;
+        //}
+
     }
     
     render = () => {
+        console.log("blog render");
+        console.log(this.state.blogdata);
         return (
         <>
             <Row justify="center">
@@ -187,13 +210,7 @@ class BlogView extends React.Component {
             </Row>
             <Row justify="center">
                 <Col span={10} >
-                {//(this.state && this.state.loaded ? (
-                 //   <ReactMarkdown renderers={renderers} plugins={[gfm]} children={this.state.blogdata} />
-                //) : (
-                //    <></>
-                //))
-                }
-                <ReactMarkdown renderers={renderers} plugins={[gfm]} children={this.props.blogdata} />
+                <div dangerouslySetInnerHTML={{__html: this.state.blogdata}}/>
                 </Col>
                 {(this.props.auth && this.props.auth.isValid() ? (
                 <Col span={1}>
