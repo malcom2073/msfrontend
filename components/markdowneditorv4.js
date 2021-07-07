@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 //import MDEditor from "rich-markdown-editor";
-import { useState } from 'react'
+import { useState }     from 'react'
 import dynamic from 'next/dynamic'
 import { create } from 'apisauce'
 import { AuthToken } from '../services/auth_token'
+import BlogApi from '../modules/blog/lib/api'
 
 //const Editor = dynamic(() => import("./editorwrapper"), { ssr: false });
 //const EditorWithForwardedRef = React.forwardRef((props, ref) => (
@@ -106,26 +107,88 @@ export default class EditorV4 extends Component {
     UploadToServer = (filename) => {
 
     }
+    imageUploadHandler = (xmlHttpRequest, info,core ) => {
+        console.log("imageUploadHandler");
+        console.log(xmlHttpRequest, info,core )
+    }
     handleImageUploadBefore = (files, info, uploadHandler) => {
            // Upload image to Server
+           var token = AuthToken.fromNext();
+                    //var headers = { Accept: 'application/vnd.github.v3+json'};
+            var headers = {
+                'Content-Type': 'multipart/form-data'
+            }
+            if (token) {
+                headers.Authorization = token.authorizationString();
+            }
+            const api = create({
+                baseURL: process.env.REACT_APP_MSAPI_ENDPOINT,
+                headers: headers,
+                });
 
            //const src = UploadToServer(files[0]);
            console.log("handleImageUploadBefore");
            console.log(files[0]);
-           return false;
+           var form = new FormData();
+            form.append(files[0].name, files[0], files[0].name);
+            //form.append('image[image]', {
+            //    name: 'omgitsme.jpg',
+            //    blob: blob,
+            //    type: 'image/jpg'
+            //  })
+            api.post('/api/cdn/suneditor/upload',form).then((response) => {
+                console.log(response);
+                const response2 = {
+                    // The response must have a "result" array.
+                    "result": [
+                        {
+                            "url": response.data.thumbnail,
+                            "link": response.data.path,
+                            "name": "name",
+                            "size": 0
+                        },
+                ]}
+                var contextAnchor = { 
+                    linkValue: response.data.path, 
+                    urlInput: {
+                        value: response.data.path
+                    },
+                    anchorText: {
+                        value: ""
+                    },
+                    downloadCheck: {
+                        checked: false
+                    },
+                    newWindowCheck: {
+                        checked: true
+                    },
+                    currentRel: [],
+                    preview: {
+                        "textContent":""
+                    }
+                }
+/*                {
+                    modal: forms,
+                    urlInput: null,
+                    linkDefaultRel: this.options.linkRelDefault,
+                    defaultRel: this.options.linkRelDefault.default || '',
+                    currentRel: [],
+                    linkAnchor: null,
+                    linkValue: '',
+                    _change: false,
+                    callerName: pluginName
+                };*/
+                console.log(info);
+                const anchor = this.editorRef.current.core.plugins.anchor.createAnchor.call(this.editorRef.current.core, contextAnchor, true);
+                info.anchor = anchor;
+                this.editorRef.current.core.plugins.image.register.call(this.editorRef.current.core,info,response2);
+                uploadHandler();
+                //uploadHandler(files);
+                //uploadHandler(response2);
+    
+            });
 
-           // result
-           const response = {
-               // The response must have a "result" array.
-               "result": [
-                   {
-                       "url": src,
-                       "name": files[0].name,
-                       "size": files[0].size
-                   },
-           ]}
-           
-           uploadHandler(response);
+            return undefined;
        
     }
     render = () => {
@@ -180,7 +243,7 @@ export default class EditorV4 extends Component {
                     // '/', Line break
                   ]
         }} getSunEditorInstance={this.getSunEditorInstance} onChange={this.props.onChange} setContents={this.props.content}
-        onImageUploadBefore={this.handleImageUploadBefore} />
+        onImageUploadBefore={this.handleImageUploadBefore} imageUploadHandler={this.imageUploadHandler} />
         );
     }
 }
