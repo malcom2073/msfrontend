@@ -10,7 +10,7 @@ const handle = app.getRequestHandler()
 
 const apiPaths = {
     '/api': {
-        target: 'http://localhost:5000', 
+        target: 'http://backend:5000', 
         pathRewrite: {
             '^/api': '/api'
         },
