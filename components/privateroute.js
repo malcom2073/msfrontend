@@ -23,8 +23,12 @@ export default function privateRoute(WrappedComponent) {
                 if (res)
                 {
                     console.log("Rewriteing head on server");
-                    res.writeHead(302, {location: '/login?next=' + req.url})
-                    res.end()
+                    if (typeof res.writeHead === 'function')
+                    {
+                        res.writeHead(302, {location: '/login?next=' + req.url});
+                        res.end()
+                    }
+
                     return {}; // Return nothing, since we should be redirecting.
                 }
                 else

@@ -51,7 +51,7 @@ module.exports = withCSS({
     return [
       {
         source: '/api/:path*',
-        destination: process.env.NEXT_PUBLIC_MSAPI_ENDPOINT + '/:path*',
+        destination: 'https://api.mikesshop.net/:path*',
       },
     ]
   },

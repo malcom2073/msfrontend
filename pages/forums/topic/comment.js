@@ -14,7 +14,6 @@ class CommentCreate2 extends React.Component {
         return (
             <>
                 Main Forum Index
-                Create Topic Here! ID: {this.props.query.forum}
                 <Container fluid>
                     <CreateTopic query={this.props.query}/>
 

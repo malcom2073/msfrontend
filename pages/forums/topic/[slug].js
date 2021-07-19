@@ -18,8 +18,13 @@ class Topic extends React.Component {
                     <TopicList query={this.props.query}/>
                 </div>
                 <div id="posttopic">
-                        Post new Comment here	
-                        <Link href={"/forums/topic/" + this.props.query.slug + "/create"}> Create post</Link>
+                        Post new Comment here
+                        {(this.props.query && this.props.query) ? (
+                            <Link href={"/forums/topic/" + this.props.query.slug + "/create"}> Create post</Link>
+                        ) : (
+                            <></>
+                        )}
+                        
                 </div>
             </>
         )

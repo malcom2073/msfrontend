@@ -29,7 +29,7 @@ class EditUser extends React.Component {
         console.log(this.props);
         return (
             <>
-            Editing user {this.props.query.slug}
+            Editing user
             <br/>
             <Form
                 name="basic"
