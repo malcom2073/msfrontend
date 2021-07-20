@@ -1,3 +1,4 @@
+import React from 'react';
 import { create } from 'apisauce'
 import nextCookie from 'next-cookies'
 import { render } from 'react-dom';
@@ -9,8 +10,8 @@ import Forum_Index from '../../../components/forums'
 //import Editor from '../../../components/markdowneditor'
 import { Row,Form, Input, Button, Checkbox, DatePicker,TimePicker } from 'antd';
 
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
+//import 'codemirror/lib/codemirror.css';
+//import '@toast-ui/editor/dist/toastui-editor.css';
 
 //import { Editor } from '@toast-ui/react-editor';
 import dynamic from 'next/dynamic';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { create } from 'apisauce'
 import nextCookie from 'next-cookies'
 import { render } from 'react-dom';
@@ -10,13 +11,13 @@ import Forum_Index from '../../components/forums'
 import { Row,Form, Input, Button, Checkbox } from 'antd';
 
 import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
+//import '@toast-ui/editor/dist/toastui-editor.css';
 
 //import { Editor } from '@toast-ui/react-editor';
 import dynamic from 'next/dynamic';
 //import EditorV2 from '../../../components/markdowneditorv2';
 
-import EditorV2 from '../../components/markdowneditorv2'
+//import EditorV2 from '../../components/markdowneditorv2'
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
@@ -82,7 +83,7 @@ class BlogCreate extends React.Component {
             <>
             <Form name="basic" onFinish={this.onSubmit}>
                 Title: <input onChange={(e) => {this.onTitleChange(e)}} ref={(myref) => {this.titleRef = myref}}/>
-                <EditorV2 ref={this.myRef} onChange={this.onEditorChange}/>
+                {/*<EditorV2 ref={this.myRef} onChange={this.onEditorChange}/>*/}
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">
                         Save

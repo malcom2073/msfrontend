@@ -10,7 +10,8 @@ const handle = app.getRequestHandler()
 
 const apiPaths = {
     '/api': {
-        target: 'http://backend:5000', 
+//        target: 'http://backend:5000', 
+        target: 'https://api.mikesshop.net',
         pathRewrite: {
             '^/api': '/api'
         },

@@ -1,3 +1,4 @@
+import React from 'react';
 import { create } from 'apisauce'
 import nextCookie from 'next-cookies'
 import { render } from 'react-dom';
@@ -5,9 +6,6 @@ import pageLayout from '../../components/pagelayout'
 import { AuthToken } from '../../services/auth_token'
 import Forum_Index from '../../components/forums'
 import { Row, Col, Button, Divider  } from 'antd';
-import remark from 'remark'
-import gfm from 'remark-gfm'
-import html from 'remark-html'
 import Link from 'next/link'
 import BlogApi from '../../modules/blog/lib/api'
 import { Typography, Space } from 'antd';
@@ -39,10 +37,12 @@ class BlogList extends React.Component {
             var arrayLength = response.length;
             for (var i = 0; i < arrayLength; i++) {
                 //Do something
-                var processedContent = await remark().use(html).use(gfm).process(response[i].content);
-                var contentHtml = processedContent.toString();
+//                var processedContent = await remark().use(html).use(gfm).process(response[i].content);
+//var contentHtml = processedContent.toString();
+///                retval.push({'id':response[i].id,'user':response[i].user,'published':response[i].published,'title':response[i].title,'content':contentHtml,'timestamp':response[i].timestamp});
+                var contentHtml = response[i].content;
                 retval.push({'id':response[i].id,'user':response[i].user,'published':response[i].published,'title':response[i].title,'content':contentHtml,'timestamp':response[i].timestamp});
-            }
+}
             }
         this.setState({bloglist: retval,loaded:true})
     }

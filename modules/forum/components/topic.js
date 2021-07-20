@@ -1,11 +1,10 @@
+import React from 'react';
 import { Row, Col } from 'antd';
 import ForumApi from '../../../modules/forum/lib/api'
 import { withRouter } from 'next/router'
 import pageLayout from '../../../components/pagelayout'
 import { Comment, Avatar, Form, Button, List, Input } from 'antd';
 import { Typography, Space } from 'antd';
-import remark from 'remark'
-import html from 'remark-html'
 
 
 const { Text, Link } = Typography;
@@ -26,17 +25,17 @@ class TopicList extends React.Component {
             var arrayLength = commentdata.length;
             for (var i = 0; i < arrayLength; i++) {
                 //Do something
-                var processedContent = await remark().use(html).process(commentdata[i].text);
-                var contentHtml = processedContent.toString();
-                retval.push({'user':commentdata[i].user,'text':contentHtml,'timestamp':commentdata[i].timestamp});
+                //var processedContent = await remark().use(html).process(commentdata[i].text);
+                //var contentHtml = processedContent.toString();
+                //retval.push({'user':commentdata[i].user,'text':contentHtml,'timestamp':commentdata[i].timestamp});
             }
-            var threadretval = {}
-            var processedContent = await remark().use(html).process(threaddata.content);
-            var contentHtml = processedContent.toString();
-            threadretval['content'] = contentHtml
-            threadretval['timestamp'] = threaddata.timestamp
-            threadretval['subject'] = threaddata.subject
-            threadretval['user'] = threaddata.user
+            //var threadretval = {}
+            //var processedContent = await remark().use(html).process(threaddata.content);
+            ///var contentHtml = processedContent.toString();
+            //threadretval['content'] = contentHtml
+            //threadretval['timestamp'] = threaddata.timestamp
+            //threadretval['subject'] = threaddata.subject
+            //threadretval['user'] = threaddata.user
             //retval.push({'user':commentdata[i].user,'text':contentHtml,'timestamp':commentdata[i].timestamp});
 
             

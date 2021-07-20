@@ -1,3 +1,4 @@
+import React from 'react';
 import {Container, Row, Col, Table} from 'react-bootstrap';
 import nextCookie from 'next-cookies'
 import { render } from 'react-dom';

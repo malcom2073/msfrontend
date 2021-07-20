@@ -1,7 +1,7 @@
-const withSass = require("@zeit/next-sass");
-const withLess = require("@zeit/next-less");
-const withCSS = require("@zeit/next-css");
-
+//const withSass = require("@zeit/next-sass");
+//const withLess = require("@zeit/next-less");
+//const withCSS = require("@zeit/next-css");
+const withAntdLess = require('next-plugin-antd-less');
 const isProd = process.env.NODE_ENV === "production";
 
 // fix: prevents error when .less files are required by node
@@ -9,7 +9,7 @@ if (typeof require !== "undefined") {
   require.extensions[".less"] = (file) => {};
 }
 
-module.exports = withCSS({
+module.exports = withAntdLess({
   //cssModules: true,
   //cssLoaderOptions: {
   //  importLoaders: 1,
@@ -18,7 +18,10 @@ module.exports = withCSS({
   env: {
     MSAPI_ENDPOINT: process.env.NEXT_PUBLIC_MSAPI_ENDPOINT
   },
-  webpack: (config) => {
+  webpack(config) {
+    return config;
+  },
+  /*webpack: (config) => {
     // Fixes npm packages that depend on `fs` module
     config.node = {
       fs: 'empty'
@@ -40,13 +43,13 @@ module.exports = withCSS({
       })
     return config
   },
-  ...withLess(
-    withSass({
-      lessLoaderOptions: {
-        javascriptEnabled: true,
-      },
-    })
-  ),
+//  ...withLess(
+//    withSass({
+//      lessLoaderOptions: {
+//        javascriptEnabled: true,
+//      },
+//    })
+//  ),*/
   async rewrites() {
     return [
       {

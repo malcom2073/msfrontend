@@ -1,3 +1,4 @@
+import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import MSNavbar from '../components/navbar'
 //import {getUserNavbar} from '../components/navbar'

@@ -1,3 +1,4 @@
+import React from 'react';
 import CreateAccountForm from '../components/createaccount'
 import { Row, Col} from 'antd';
 import pageLayout from '../components/pagelayout'

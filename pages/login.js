@@ -1,3 +1,4 @@
+import React from 'react';
 import pageLayout from '../components/pagelayout'
 import LoginForm from '../components/loginform'
 import { Space, Row, Col} from 'antd';

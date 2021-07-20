@@ -1,3 +1,4 @@
+import React from 'react';
 import SideNav, { Toggle, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { faHome, faCogs, faTools, faUsers } from '@fortawesome/free-solid-svg-icons'

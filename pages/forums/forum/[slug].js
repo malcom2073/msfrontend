@@ -1,3 +1,4 @@
+import React from 'react';
 import { Row, Col } from 'antd';
 import ForumApi from '../../../modules/forum/lib/api'
 import ForumList from '../../../modules/forum/components/forum'

@@ -1,3 +1,4 @@
+import React from 'react';
 import dynamic from 'next/dynamic'
 
 const Editor = dynamic(import('../modules/forum/components/editor'), {ssr: false})

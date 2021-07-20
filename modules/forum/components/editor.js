@@ -27,7 +27,7 @@ import 'hypermd/addon/mode-loader';
 import 'hypermd/addon/table-align';
 
 */
-import MDEditor from "rich-markdown-editor";
+//import MDEditor from "rich-markdown-editor";
 
 export default class Editor extends Component {
   constructor(...args) {
@@ -63,10 +63,10 @@ export default class Editor extends Component {
     //return <ReactCodeMirror value={defaultText} ref={this.codeMirrorRef} className="code-mirror_editor" options={options} />;
 
 return (
-<MDEditor
+{/*<MDEditor
  onChange={this.props.onEditorChange}
  defaultValue="Hello world!"
- />
+/>*/}
 );
   }
 }
