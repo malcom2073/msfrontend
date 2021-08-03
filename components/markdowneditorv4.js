@@ -129,8 +129,12 @@ export default class EditorV4 extends Component {
            //const src = UploadToServer(files[0]);
            console.log("handleImageUploadBefore");
            console.log(files[0]);
+           console.log(info);
            var form = new FormData();
             form.append(files[0].name, files[0], files[0].name);
+            form.append("inputWidth",info.inputWidth);
+            form.append("inputHeight",info.inputHeight);
+
             //form.append('image[image]', {
             //    name: 'omgitsme.jpg',
             //    blob: blob,
@@ -181,6 +185,8 @@ export default class EditorV4 extends Component {
                 console.log(info);
                 const anchor = this.editorRef.current.core.plugins.anchor.createAnchor.call(this.editorRef.current.core, contextAnchor, true);
                 info.anchor = anchor;
+                info.inputWidth=''
+                info.inputHeight=''    
                 this.editorRef.current.core.plugins.image.register.call(this.editorRef.current.core,info,response2);
                 uploadHandler();
                 //uploadHandler(files);
