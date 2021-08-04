@@ -172,14 +172,15 @@ class BlogEdit extends React.Component {
         if (result === true)
         {
             console.log("onsubmit success");
-        this.setState({savedtimestamp:this.state.timestamp,alertmsg: "Saved...",alerttype:"success",savedalert: true,changed: false,savedtext: this.state.posttext});
+            this.setState({savedtimestamp:this.state.timestamp,alertmsg: "Saved...",alerttype:"success",savedalert: true,changed: false,savedtext: this.state.posttext});
+            this.saveNotificaitonTimer = setTimeout(()=>this.setState({savedalert:false}),3000);
         }
         else
         {
             console.log("onsubmit failure");
-            this.setState({savedtimestamp:this.state.timestamp,alertmsg:"Error Saving: " + result,alerttype:"error",savedalert:true,changed: false,savedtext: this.state.posttext});
+            this.setState({savedtimestamp:this.state.timestamp,alertmsg:"Error Saving: " + result + ". Please click code-view and save your work externally",alerttype:"error",savedalert:true,changed: false,savedtext: this.state.posttext});
+            this.saveNotificaitonTimer = setTimeout(()=>this.setState({savedalert:false}),10000);
         }
-        this.saveNotificaitonTimer = setTimeout(()=>this.setState({savedalert:false}),3000);
         //Router.push('/blog/' + this.props.query.slug);
         return;
     }

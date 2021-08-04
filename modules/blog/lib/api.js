@@ -97,6 +97,10 @@ export default class BlogApi extends MsModuleApi {
         //alert('Unknown error');
         return "Unknown Error";
     }
+    if (response.data && response.data && response.data.status == "failure")
+    {
+        return response.data.error;
+    }
     return true;
 }
 
